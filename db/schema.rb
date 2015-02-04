@@ -39,15 +39,16 @@ ActiveRecord::Schema.define(version: 20150203202502) do
     t.string   "path",                limit: 255
     t.string   "uploaded_by_name",    limit: 255
     t.string   "uploaded_by_email",   limit: 255
+    t.datetime "upload_date"
     t.integer  "country_id",          limit: 4
-    t.integer  "yfu_organisation_id", limit: 4
+    t.integer  "yfu_organization_id", limit: 4
     t.integer  "status",              limit: 4,   default: 0
     t.datetime "created_at",                                  null: false
     t.datetime "updated_at",                                  null: false
   end
 
   add_index "photos", ["country_id"], name: "index_photos_on_country_id", using: :btree
-  add_index "photos", ["yfu_organisation_id"], name: "index_photos_on_yfu_organisation_id", using: :btree
+  add_index "photos", ["yfu_organization_id"], name: "index_photos_on_yfu_organization_id", using: :btree
 
   create_table "photos_categories", force: :cascade do |t|
     t.integer "photo_id",    limit: 4

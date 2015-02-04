@@ -310,7 +310,8 @@ keywords = [
     {word: 'fun'},
     {word: 'culture'},
     {word: 'architecture'},
-    {word: 'food'}
+    {word: 'food'},
+    {word: 'monuments'}
 ]
 
 countries.each do |country|

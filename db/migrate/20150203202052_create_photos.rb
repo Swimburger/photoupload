@@ -7,9 +7,10 @@ class CreatePhotos < ActiveRecord::Migration
       t.string :path
       t.string :uploaded_by_name
       t.string :uploaded_by_email
+      t.datetime :upload_date
 
       t.belongs_to :country, index: true
-      t.belongs_to :yfu_organisation, index: true
+      t.belongs_to :yfu_organization, index: true
 
       t.column :status, :integer, default:0
 

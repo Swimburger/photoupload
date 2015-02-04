@@ -117,6 +117,7 @@ GEM
       thread_safe (~> 0.1)
     tzinfo-data (1.2015.1)
       tzinfo (>= 1.0.0)
+    wannabe_bool (0.1.0)
     warden (1.2.3)
       rack (>= 1.0)
 
@@ -130,3 +131,4 @@ DEPENDENCIES
   rails-api
   spring
   tzinfo-data
+  wannabe_bool
