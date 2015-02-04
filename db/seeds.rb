@@ -297,10 +297,33 @@ organisations = [
     {name: 'Venezuela'},
     {name: 'Vietnam'}
 ]
+categories = [
+    {name: 'Host family'},
+    {name: 'YFU Students'},
+    {name: 'Volunteers'},
+    {name: 'Seminars and events'},
+    {name: 'School'},
+    {name: 'Travel'},
+    {name: 'Alumni'}
+]
+keywords = [
+    {word: 'fun'},
+    {word: 'culture'},
+    {word: 'architecture'},
+    {word: 'food'}
+]
 
 countries.each do |country|
     Country.find_or_create_by(name:country[:name])
 end
 organisations.each do |organisation|
     YfuOrganisation.find_or_create_by(name:organisation[:name])
+end
+categories.each do |category|
+    Category.find_or_create_by(name:category[:name])
+end
+keywords.each do |keyword|
+    keywordRecord = Keyword.find_or_create_by(word:keyword[:word])
+    keywordRecord[:is_predefined]=true
+    keywordRecord.save!
 end

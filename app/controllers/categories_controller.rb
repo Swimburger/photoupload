@@ -4,7 +4,7 @@ class CategoriesController < ApplicationController
   # GET /categories
   # GET /categories.json
   def index
-    @categories = Category.all
+    @categories = Category.select(:id,:name)
 
     render json: @categories
   end
@@ -50,7 +50,7 @@ class CategoriesController < ApplicationController
   private
 
     def set_category
-      @category = Category.find(params[:id])
+      @category = Category.select(:id,:name).find(params[:id])
     end
 
     def category_params

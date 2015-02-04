@@ -26,9 +26,10 @@ ActiveRecord::Schema.define(version: 20150203202502) do
   end
 
   create_table "keywords", force: :cascade do |t|
-    t.string   "word",       limit: 255
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.string   "word",          limit: 255
+    t.boolean  "is_predefined", limit: 1,   default: false
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
   end
 
   create_table "photos", force: :cascade do |t|

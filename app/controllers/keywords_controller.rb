@@ -4,7 +4,7 @@ class KeywordsController < ApplicationController
   # GET /keywords
   # GET /keywords.json
   def index
-    @keywords = Keyword.all
+    @keywords = Keyword.select(:id,:word, :is_predefined)
 
     render json: @keywords
   end
@@ -50,10 +50,10 @@ class KeywordsController < ApplicationController
   private
 
     def set_keyword
-      @keyword = Keyword.find(params[:id])
+      @keyword = Keyword.select(:id,:word,:is_predefined).find(params[:id])
     end
 
     def keyword_params
-      params.require(:keyword).permit(:word)
+      params.require(:keyword).permit(:word, :is_predefined)
     end
 end

@@ -4,7 +4,7 @@ class CountriesController < ApplicationController
   # GET /countries
   # GET /countries.json
   def index
-    @countries = Country.all
+    @countries = Country.select(:id,:name)
 
     render json: @countries
   end
@@ -50,7 +50,7 @@ class CountriesController < ApplicationController
   private
 
     def set_country
-      @country = Country.find(params[:id])
+      @country = Country.select(:id,:name).find(params[:id])
     end
 
     def country_params

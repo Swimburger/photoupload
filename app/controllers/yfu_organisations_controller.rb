@@ -4,7 +4,7 @@ class YfuOrganisationsController < ApplicationController
   # GET /yfu_organisations
   # GET /yfu_organisations.json
   def index
-    @yfu_organisations = YfuOrganisation.all
+    @yfu_organisations = YfuOrganisation.select(:id,:name)
 
     render json: @yfu_organisations
   end
@@ -50,7 +50,7 @@ class YfuOrganisationsController < ApplicationController
   private
 
     def set_yfu_organisation
-      @yfu_organisation = YfuOrganisation.find(params[:id])
+      @yfu_organisation = YfuOrganisation.select(:id,:name).find(params[:id])
     end
 
     def yfu_organisation_params
