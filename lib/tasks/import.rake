@@ -48,30 +48,48 @@ namespace :import do
         categories = get_categories
         keyword_records = get_keywords keywords
 
-        photo.id=id
-        photo.caption=caption
-        photo.year=year
-        photo.people_in_photo=people
-        #photo.path=path
-        photo.upload_date=uploaded
-        photo.uploaded_by_name=uploaded_by_name
-        photo.uploaded_by_email=uploaded_by_email
-        photo.country_id=country_record.id
-        photo.yfu_organization_id=yfu_organization.id
-        categories.each { |category| photo.categories << category }
-        #TODO: rename organisation to American organization
-        keyword_records.each { |keyword| photo.keywords << keyword }
-        photo.to_s
-        photo.save!
+        file = get_photofile id
 
-        puts 'force: '+force.to_s,'photo_does_not_exist_yet: '+photo_does_not_exist_yet.to_s
+        if !file.empty?
 
-        puts 'id: '+ id,'uploaded_by_name: '+ uploaded_by_name, 'uploaded_by_email: ' + uploaded_by_email, 'organization: ' + organization, 'uploaded: ' + uploaded.to_s,
-             'filename: ' + filename, 'filetype: ' + filetype, 'caption: ' + caption, 'country: ' + country, 'year: ' + year, 'people: ' + people, 'keywords: ' + keywords,
-             'category_hostfamily: ' + @category_hostfamily.to_s, 'category_student: ' + @category_student.to_s, 'category_volunteers: ' + @category_volunteers.to_s,
-             'category_events: ' + @category_events.to_s, 'category_school: ' + @category_school.to_s, 'category_travel: ' + @category_travel.to_s, 'category_alumni: ' + @category_alumni.to_s
+          puts 'old photo: '+file
 
-        puts '/////////////////////////////////photo inserted or updated/////////////////////////////////'
+          file_name = File.basename(file)
+
+          photo.id=id
+          photo.caption=caption
+          photo.year=year
+          photo.people_in_photo=people
+          photo.path=file_name
+          photo.upload_date=uploaded
+          photo.uploaded_by_name=uploaded_by_name
+          photo.uploaded_by_email=uploaded_by_email
+          photo.country_id=country_record.id
+          photo.yfu_organization_id=yfu_organization.id
+          categories.each { |category| photo.categories << category }
+          keyword_records.each { |keyword| photo.keywords << keyword }
+          photo.to_s
+          photo.save!
+
+
+          new_file = 'private/uploads/images/'+ file_name
+
+          FileUtils.cp(file,new_file)
+
+          puts 'new photo: '+ new_file
+
+          puts 'force: '+force.to_s,'photo_does_not_exist_yet: '+photo_does_not_exist_yet.to_s
+
+          puts 'id: '+ id,'uploaded_by_name: '+ uploaded_by_name, 'uploaded_by_email: ' + uploaded_by_email, 'organization: ' + organization, 'uploaded: ' + uploaded.to_s,
+               'filename: ' + filename, 'filetype: ' + filetype, 'caption: ' + caption, 'country: ' + country, 'year: ' + year, 'people: ' + people, 'keywords: ' + keywords,
+               'category_hostfamily: ' + @category_hostfamily.to_s, 'category_student: ' + @category_student.to_s, 'category_volunteers: ' + @category_volunteers.to_s,
+               'category_events: ' + @category_events.to_s, 'category_school: ' + @category_school.to_s, 'category_travel: ' + @category_travel.to_s, 'category_alumni: ' + @category_alumni.to_s
+
+          puts '/////////////////////////////////photo inserted or updated/////////////////////////////////'
+        else
+          puts 'no photo file found'
+        end
+
 
       else
 
@@ -128,5 +146,13 @@ namespace :import do
       categories.push Category.find_by_name 'Alumni'
     end
     return categories
+  end
+  def get_photofile(photo_id)
+    files =Dir.glob("php_to_ruby_migration/upload/#{photo_id}*.*")
+    if files.size > 1 || files.size < 1
+      return ''
+    else
+      return files[0]
+    end
   end
 end

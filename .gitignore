@@ -50,3 +50,4 @@ bower.json
 
 .idea/
 php_to_ruby_migration/upload/
+private/uploads/
