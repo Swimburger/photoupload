@@ -16,6 +16,8 @@ gem 'devise_token_auth'
 
 gem 'wannabe_bool'
 
+gem 'paperclip', '~> 4.2'
+
 # To use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

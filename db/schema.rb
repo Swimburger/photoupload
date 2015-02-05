@@ -36,15 +36,20 @@ ActiveRecord::Schema.define(version: 20150205142158) do
     t.string   "caption",             limit: 255
     t.integer  "year",                limit: 4
     t.string   "people_in_photo",     limit: 255
-    t.string   "path",                limit: 255
     t.string   "uploaded_by_name",    limit: 255
     t.string   "uploaded_by_email",   limit: 255
     t.datetime "upload_date"
+    t.string   "image_file_name",     limit: 255
+    t.string   "image_content_type",  limit: 255
+    t.integer  "image_file_size",     limit: 4
+    t.datetime "image_updated_at"
+    t.decimal  "height",                          precision: 10
+    t.decimal  "width",                           precision: 10
     t.integer  "country_id",          limit: 4
     t.integer  "yfu_organization_id", limit: 4
-    t.integer  "status",              limit: 4,   default: 0
-    t.datetime "created_at",                                  null: false
-    t.datetime "updated_at",                                  null: false
+    t.integer  "status",              limit: 4,                  default: 0
+    t.datetime "created_at",                                                 null: false
+    t.datetime "updated_at",                                                 null: false
   end
 
   add_index "photos", ["country_id"], name: "index_photos_on_country_id", using: :btree

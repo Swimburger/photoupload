@@ -54,13 +54,13 @@ namespace :import do
 
           puts 'old photo: '+file
 
-          file_name = File.basename(file)
+          #file_name = File.basename(file)
 
           photo.id=id
           photo.caption=caption
           photo.year=year
           photo.people_in_photo=people
-          photo.path=file_name
+          #photo.path=file_name
           photo.upload_date=uploaded
           photo.uploaded_by_name=uploaded_by_name
           photo.uploaded_by_email=uploaded_by_email
@@ -68,24 +68,35 @@ namespace :import do
           photo.yfu_organization_id=yfu_organization.id
           categories.each { |category| photo.categories << category }
           keyword_records.each { |keyword| photo.keywords << keyword }
-          photo.to_s
-          photo.save!
+
+          photo.image = File.open(file,'rb')
+
+          puts photo.to_s
+
+          begin
+            photo.save!
+
+            #new_file = 'private/uploads/'+ file_name
+
+            #FileUtils.cp(file,new_file)
+
+            #puts 'new photo: '+ new_file
+
+            puts 'force: '+force.to_s,'photo_does_not_exist_yet: '+photo_does_not_exist_yet.to_s
+
+            puts 'id: '+ id,'uploaded_by_name: '+ uploaded_by_name, 'uploaded_by_email: ' + uploaded_by_email, 'organization: ' + organization, 'uploaded: ' + uploaded.to_s,
+                 'filename: ' + filename, 'filetype: ' + filetype, 'caption: ' + caption, 'country: ' + country, 'year: ' + year, 'people: ' + people, 'keywords: ' + keywords,
+                 'category_hostfamily: ' + @category_hostfamily.to_s, 'category_student: ' + @category_student.to_s, 'category_volunteers: ' + @category_volunteers.to_s,
+                 'category_events: ' + @category_events.to_s, 'category_school: ' + @category_school.to_s, 'category_travel: ' + @category_travel.to_s, 'category_alumni: ' + @category_alumni.to_s
+
+            puts '/////////////////////////////////photo inserted or updated/////////////////////////////////'
+
+          rescue ActiveRecord::RecordInvalid => e
+               puts '////ERROR/////',e.message
+          end
 
 
-          new_file = 'private/uploads/'+ file_name
 
-          FileUtils.cp(file,new_file)
-
-          puts 'new photo: '+ new_file
-
-          puts 'force: '+force.to_s,'photo_does_not_exist_yet: '+photo_does_not_exist_yet.to_s
-
-          puts 'id: '+ id,'uploaded_by_name: '+ uploaded_by_name, 'uploaded_by_email: ' + uploaded_by_email, 'organization: ' + organization, 'uploaded: ' + uploaded.to_s,
-               'filename: ' + filename, 'filetype: ' + filetype, 'caption: ' + caption, 'country: ' + country, 'year: ' + year, 'people: ' + people, 'keywords: ' + keywords,
-               'category_hostfamily: ' + @category_hostfamily.to_s, 'category_student: ' + @category_student.to_s, 'category_volunteers: ' + @category_volunteers.to_s,
-               'category_events: ' + @category_events.to_s, 'category_school: ' + @category_school.to_s, 'category_travel: ' + @category_travel.to_s, 'category_alumni: ' + @category_alumni.to_s
-
-          puts '/////////////////////////////////photo inserted or updated/////////////////////////////////'
         else
           puts 'no photo file found'
         end

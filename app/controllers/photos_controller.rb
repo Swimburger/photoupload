@@ -4,7 +4,23 @@ class PhotosController < ApplicationController
   # GET /photos
   # GET /photos.json
   def index
-    @photos = Photo.select(:id,:caption,:people_in_photo,:path,:uploaded_by_name,:uploaded_by_email,:country_id,:yfu_organization_id,:status)
+    @photos = Photo.select(
+        :id,
+        :caption,
+        :year,
+        :people_in_photo,
+        :image_file_name,
+        :image_content_type,
+        :image_file_size,
+        :upload_date,
+        :uploaded_by_name,
+        :uploaded_by_email,
+        :height,
+        :width,
+        :country_id,
+        :yfu_organization_id,
+        :status
+    )
 
     render json: @photos
   end
@@ -47,13 +63,36 @@ class PhotosController < ApplicationController
     head :no_content
   end
 
+  # /photos/file/filename
+  def file
+    photo = Photo.find_by(image_file_name: params[:image_name] + '.' + params[:format])
+    path = photo.image.path(params[:size])
+    send_file path, :disposition => 'inline', :x_sendfile => true
+  end
+
   private
 
-    def set_photo
-      @photo = Photo.select(:id,:caption,:people_in_photo,:path,:uploaded_by_name,:uploaded_by_email,:country_id,:yfu_organization_id,:status).find(params[:id])
-    end
+  def set_photo
+    @photo = Photo.select(
+        :id,
+        :caption,
+        :year,
+        :people_in_photo,
+        :image_file_name,
+        :image_content_type,
+        :image_file_size,
+        :height,
+        :width,
+        :upload_date,
+        :uploaded_by_name,
+        :uploaded_by_email,
+        :country_id,
+        :yfu_organization_id,
+        :status
+    ).find(params[:id])
+  end
 
-    def photo_params
-      params.require(:photo).permit(:caption, :year, :people_in_photo, :path)
-    end
+  def photo_params
+    params.require(:photo).permit(:caption, :year, :people_in_photo, :path, :country_id, :yfu_organization_id, :status)
+  end
 end
