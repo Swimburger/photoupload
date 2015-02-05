@@ -4,7 +4,7 @@ require 'wannabe_bool'
 namespace :import do
   #TODO: write import
   desc 'This imports the old photos from the previous photouploader through a CSV dump'
-  task :import_old_photos,[:force] => [:environment] do |t, args|
+  task :old_photos,[:force] => [:environment] do |t, args|
 
     force = args.force.to_b
 
@@ -53,31 +53,32 @@ namespace :import do
         photo.year=year
         photo.people_in_photo=people
         #photo.path=path
+        photo.upload_date=uploaded
         photo.uploaded_by_name=uploaded_by_name
         photo.uploaded_by_email=uploaded_by_email
         photo.country_id=country_record.id
         photo.yfu_organization_id=yfu_organization.id
         categories.each { |category| photo.categories << category }
-        #TODO: fix keywords issue
         #TODO: rename organisation to American organization
-        #TODO: test
         keyword_records.each { |keyword| photo.keywords << keyword }
         photo.to_s
-        #photo.save!
+        photo.save!
+
+        puts 'force: '+force.to_s,'photo_does_not_exist_yet: '+photo_does_not_exist_yet.to_s
+
+        puts 'id: '+ id,'uploaded_by_name: '+ uploaded_by_name, 'uploaded_by_email: ' + uploaded_by_email, 'organization: ' + organization, 'uploaded: ' + uploaded.to_s,
+             'filename: ' + filename, 'filetype: ' + filetype, 'caption: ' + caption, 'country: ' + country, 'year: ' + year, 'people: ' + people, 'keywords: ' + keywords,
+             'category_hostfamily: ' + @category_hostfamily.to_s, 'category_student: ' + @category_student.to_s, 'category_volunteers: ' + @category_volunteers.to_s,
+             'category_events: ' + @category_events.to_s, 'category_school: ' + @category_school.to_s, 'category_travel: ' + @category_travel.to_s, 'category_alumni: ' + @category_alumni.to_s
 
         puts '/////////////////////////////////photo inserted or updated/////////////////////////////////'
 
       else
 
-        puts "///////////photo with id: #{id} already exists, if you do want to override this, call 'rake import:import_old_photos[true]'
-///////////" if force && !photo_does_not_exist_yet
+        puts "///////////photo with id: #{id} already exists, if you do want to override this, call 'rake import:old_photos[true]'
+///////////"
 
       end
-
-      puts 'id: '+ id,'uploaded_by_name: '+ uploaded_by_name, 'uploaded_by_email: ' + uploaded_by_email, 'organization: ' + organization, 'uploaded: ' + uploaded.to_s,
-           'filename: ' + filename, 'filetype: ' + filetype, 'caption: ' + caption, 'country: ' + country, 'year: ' + year, 'people: ' + people, 'keywords: ' + keywords,
-           'category_hostfamily: ' + category_hostfamily.to_s, 'category_student: ' + category_student.to_s, 'category_volunteers: ' + category_volunteers.to_s,
-           'category_events: ' + category_events.to_s, 'category_school: ' + category_school.to_s, 'category_travel: ' + category_travel.to_s, 'category_alumni: ' + category_alumni.to_s
 
 
 
@@ -91,7 +92,7 @@ namespace :import do
     name = name.to_s
     name.remove!('YFU') if name.start_with?('YFU')
     name = name.strip
-    return YfuOrganisation.find_or_create_by(name:name)
+    return YfuOrganization.find_or_create_by(name:name)
   end
   def get_keywords(words_string)
     words_array = words_string.to_s.split(',')
