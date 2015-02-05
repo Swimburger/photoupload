@@ -72,7 +72,7 @@ namespace :import do
           photo.save!
 
 
-          new_file = 'private/uploads/images/'+ file_name
+          new_file = 'private/uploads/'+ file_name
 
           FileUtils.cp(file,new_file)
 
