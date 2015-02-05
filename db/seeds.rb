@@ -241,7 +241,7 @@ countries = [
     {name: 'Zambia'},
     {name: 'Zimbabwe'}
 ]
-organisations = [
+organizations = [
     {name: 'Argentina'},
     {name: 'Australia'},
     {name: 'Austria'},
@@ -317,8 +317,8 @@ keywords = [
 countries.each do |country|
     Country.find_or_create_by(name:country[:name])
 end
-organisations.each do |organisation|
-    YfuOrganisation.find_or_create_by(name:organisation[:name])
+organizations.each do |organization|
+    YfuOrganization.find_or_create_by(name:organization[:name])
 end
 categories.each do |category|
     Category.find_or_create_by(name:category[:name])

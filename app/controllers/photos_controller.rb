@@ -4,7 +4,7 @@ class PhotosController < ApplicationController
   # GET /photos
   # GET /photos.json
   def index
-    @photos = Photo.select(:id,:caption,:people_in_photo,:path,:uploaded_by_name,:uploaded_by_email,:country_id,:yfu_organisation_id,:status)
+    @photos = Photo.select(:id,:caption,:people_in_photo,:path,:uploaded_by_name,:uploaded_by_email,:country_id,:yfu_organization_id,:status)
 
     render json: @photos
   end
@@ -50,7 +50,7 @@ class PhotosController < ApplicationController
   private
 
     def set_photo
-      @photo = Photo.select(:id,:caption,:people_in_photo,:path,:uploaded_by_name,:uploaded_by_email,:country_id,:yfu_organisation_id,:status).find(params[:id])
+      @photo = Photo.select(:id,:caption,:people_in_photo,:path,:uploaded_by_name,:uploaded_by_email,:country_id,:yfu_organization_id,:status).find(params[:id])
     end
 
     def photo_params

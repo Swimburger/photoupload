@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150203202502) do
+ActiveRecord::Schema.define(version: 20150205142158) do
 
   create_table "categories", force: :cascade do |t|
     t.string   "name",       limit: 255
@@ -51,22 +51,26 @@ ActiveRecord::Schema.define(version: 20150203202502) do
   add_index "photos", ["yfu_organization_id"], name: "index_photos_on_yfu_organization_id", using: :btree
 
   create_table "photos_categories", force: :cascade do |t|
-    t.integer "photo_id",    limit: 4
-    t.integer "category_id", limit: 4
+    t.integer  "photo_id",    limit: 4
+    t.integer  "category_id", limit: 4
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
   end
 
   add_index "photos_categories", ["category_id"], name: "index_photos_categories_on_category_id", using: :btree
   add_index "photos_categories", ["photo_id"], name: "index_photos_categories_on_photo_id", using: :btree
 
   create_table "photos_keywords", force: :cascade do |t|
-    t.integer "photo_id",   limit: 4
-    t.integer "keyword_id", limit: 4
+    t.integer  "photo_id",   limit: 4
+    t.integer  "keyword_id", limit: 4
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
   end
 
   add_index "photos_keywords", ["keyword_id"], name: "index_photos_keywords_on_keyword_id", using: :btree
   add_index "photos_keywords", ["photo_id"], name: "index_photos_keywords_on_photo_id", using: :btree
 
-  create_table "yfu_organisations", force: :cascade do |t|
+  create_table "yfu_organizations", force: :cascade do |t|
     t.string   "name",       limit: 255
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false

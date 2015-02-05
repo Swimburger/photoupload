@@ -16,15 +16,5 @@ class CreatePhotos < ActiveRecord::Migration
 
       t.timestamps null: false
     end
-
-    create_table :photos_categories do |t|
-      t.belongs_to :photo, index: true
-      t.belongs_to :category, index: true
-    end
-
-    create_table :photos_keywords do |t|
-      t.belongs_to :photo, index: true
-      t.belongs_to :keyword, index: true
-    end
   end
 end
