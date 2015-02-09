@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>YFU Photo Uploader</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+  <style>
+      .bs-callout {
+          padding: 20px;
+          margin: 20px 0;
+          border: 1px solid #eee;
+          border-left-width: 5px;
+          border-radius: 3px;
+      }
+
+      .bs-callout h4 {
+          margin-top: 0;
+          margin-bottom: 5px;
+      }
+
+      .bs-callout p:last-child {
+          margin-bottom: 0;
+      }
+
+      .bs-callout code {
+          border-radius: 3px;
+      }
+
+      .bs-callout + .bs-callout {
+          margin-top: -5px;
+      }
+
+      .bs-callout-default {
+          border-left-color: #777;
+      }
+
+      .bs-callout-default h4 {
+          color: #777;
+      }
+
+      .bs-callout-primary {
+          border-left-color: #428bca;
+      }
+
+      .bs-callout-primary h4 {
+          color: #428bca;
+      }
+
+      .bs-callout-success {
+          border-left-color: #5cb85c;
+      }
+
+      .bs-callout-success h4 {
+          color: #5cb85c;
+      }
+
+      .bs-callout-danger {
+          border-left-color: #d9534f;
+      }
+
+      .bs-callout-danger h4 {
+          color: #d9534f;
+      }
+
+      .bs-callout-warning {
+          border-left-color: #f0ad4e;
+      }
+
+      .bs-callout-warning h4 {
+          color: #f0ad4e;
+      }
+
+      .bs-callout-info {
+          border-left-color: #5bc0de;
+      }
+
+      .bs-callout-info h4 {
+          color: #5bc0de;
+      }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <div class="page-header">
+    <div class="row">
+      <div class="col-md-1">
+        <%= image_tag 'logo.png', alt: 'YFU Photo Uploader' %>
+      </div>
+      <div class="col-md-11">
+        <h1>YFU Photo Upload
+          <small></small>
+        </h1>
+      </div>
+    </div>
+  </div>
+  <p>Please only upload photos of which you own the copyright, i.e. photos that you photographed yourself or if the
+    copyright has been transferred to you.<br/>
+  </p>
+
+  <p>You can upload 3 photos at a time. Please identify who you are and provide us with details about the content of
+    each photo.<br/>
+  </p><br/>
+
+  <div class="row">
+    <div class="form-group col-md-4">
+      <label for="name">Your full name</label>
+      <input id="name" type="text" name="name" class="form-control name"/>
+    </div>
+    <div class="form-group col-md-4">
+      <label for="email">Your email</label>
+      <input id="email" type="email" name="email" class="form-control email"/>
+    </div>
+    <div class="form-group col-md-4">
+      <label for="group">Your YFU organization's name</label>
+      <input id="group" type="text" name="organization" class="form-control org"/>
+    </div>
+  </div>
+  <br/>
+  <div id="forms">
+
+  </div>
+  <button id="add-more" class="btn btn-default">Add another photo</button>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="bs-callout bs-callout-info col-md-12">
+        <h4><strong>Please note</strong></h4>
+
+        <p><strong>By uploading photos you are giving YFU International Educational Services, and all organizations
+          that use the YFU trademark, permission to use these files in all publications (e.g. web and print) for YFU
+          purposes.<br/>
+          You bear the responsibility to make sure that everyone depicted in your photos has agreed to publication of
+          the photo.</strong></p>
+
+        <div class="checkbox">
+          <label>
+            <input id="agree" name="agree" type="checkbox"/> I agree to these terms.
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br/>
+  <button id="upload" name="submit" class="btn btn-primary">Upload pictures</button>
+  <div class="row">
+    <div class="col-md-12">
+      <hr>
+      <p class="small"> @ YFU International Educational Services Inc</p>
+
+    </div>
+  </div>
+
+</div>
+<div id="form-template" class="panel panel-default" style="display:none;">
+  <form role="form" action="upload_photo" method="post" class="panel-body">
+    <h3>
+      <span class="glyphicon glyphicon-upload"></span> Photo
+      <span class="glyphicon glyphicon-remove-circle pull-right remove-photo" style="color:rgba(255, 113, 100, 0.71);cursor:hand;"></span>
+    </h3>
+    <div class="progress">
+      <div class="progress-bar" style="width:0">0%</div>
+    </div>
+    <div class="row">
+
+      <div class="form-group col-md-8">
+        <label for="file">Select your photo</label>
+        <br/>
+        <span class="btn btn-success fileinput-button">
+            <i class="glyphicon glyphicon-plus"></i>
+            <span>Add photo</span>
+            <!-- The file input field used as target for the file upload widget -->
+            <input id="file" type="file" name="file" class="file" style="opacity:0;position:absolute;left:0;right:0;top:0;bottom:0;">
+        </span>
+      </div>
+    </div>
+
+    <div class="row">
+
+      <div class="form-group col-md-4">
+        <label for="caption">Photo caption</label>
+        <input id="caption" type="text" name="caption" class="form-control caption"/>
+      </div>
+      <div class="form-group col-md-4">
+        <label for="country">Country where the photo was taken</label>
+        <input id="country" type="text" name="country" class="form-control country"/>
+      </div>
+
+
+      <div class="form-group col-md-4">
+        <label for="year">Year the photo was taken</label>
+        <input id="year" type="number" min="1951" max="2020" name="year" class="form-control year"/>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group col-md-4">
+        <label for="people">The names of the people in your picture</label>
+        <input id="people" type="text" name="people" class="form-control people"/>
+      </div>
+
+      <div class="form-group col-md-4">
+        <label for="keywords">Keywords for the photos</label>
+        <input id="keywords" type="text" name="keywords" class="form-control keywords" placeholder="enter multiple keywords by separating them with a comma"/>
+      </div>
+
+    </div>
+
+
+    <div class="row">
+      <div class="col-md-2">
+        <label>Categories</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-2">
+        <div class="checkbox">
+          <label>
+            <input name="hostfamily" type="checkbox"/> Host family
+          </label>
+        </div>
+        <div class="checkbox">
+          <label>
+            <input name="student" type="checkbox"/> YFU Students
+          </label>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <div class="checkbox">
+          <label>
+            <input name="volunteers" type="checkbox"/> Volunteers
+          </label>
+        </div>
+        <div class="checkbox">
+          <label>
+            <input name="events" type="checkbox"/> Seminars and events
+          </label>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <div class="checkbox">
+          <label>
+            <input name="school" type="checkbox"/> School
+          </label>
+        </div>
+        <div class="checkbox">
+          <label>
+            <input name="travel" type="checkbox"/> Travel
+          </label>
+        </div>
+        <div class="checkbox">
+          <label>
+            <input name="alumni" type="checkbox"/> Alumni
+          </label>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<%= javascript_include_tag 'jQuery-File-Upload/vendor/jquery.ui.widget',
+                           'jQuery-File-Upload/jquery.iframe-transport',
+                           'jQuery-File-Upload/jquery.fileupload',
+                           'photo_form' %>
+<script>
+    (function(){
+        var i = 1,
+                $template = $('#form-template'),
+                $forms = $('#forms'),
+                $name = $('.name'),
+                $email = $('.email'),
+                $org = $('.org'),
+                $addMore = $('#add-more'),
+                $agree = $('#agree'),
+                $upload = $('#upload'),
+                forms = [],
+                formsAreValid = false,
+            photoForm = function(id){
+                var self = this,
+                        $form = $template.clone(),
+                        $progressBar = $form.find('.progress .progress-bar'),
+                        $file = $form.find('.file'),
+                        $caption = $form.find('.caption'),
+                        $country = $form.find('.country'),
+                        $year = $form.find('.year'),
+                        $people = $form.find('.people'),
+                        $keywords = $form.find('.keywords'),
+                        $categories = $form.find('.categories'),
+                        $removePhoto = $form.find('.remove-photo');
+                this.id = id;
+                $form.attr('id','photo-form'+id);
+                $form.addClass('photo-form');
+
+                $.each([$file,$caption,$country,$year,$people,$keywords],function(index,item){
+                    formatIdAndLabel(item);
+                });
+
+                $file.fileupload({
+                    dataType: 'json',
+                    autoUpload: false,
+                    acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+                    add: function (e, data) {
+                        self.upload=function(){
+                            data.submit();
+                        };
+                    },
+                    progress: function (e, data) {
+                        var progress = parseInt(data.loaded / data.total * 100, 10)+"%";
+                        $progressBar.css(
+                                'width',
+                                progress
+                        );
+                        $progressBar.text(progress);
+                    },
+                    done: function(e, data){
+
+                    },
+                    fail: function(e, data){
+
+                    }
+                }).bind('fileuploadsubmit', function (e, data) {
+                    data.formData = {};
+                });
+
+                $removePhoto.click(function(){
+                    $form.remove();
+                    $.each(forms,function(index,element){
+                        if(element.id==id){
+                            forms.splice(index,1);
+                        }
+                    });
+                });
+                function formatIdAndLabel($el){
+                    var oldId = $el.attr('id'),
+                            elId = oldId+id,
+                            $parent;
+
+                    $parent = $el.parent();
+                    if(oldId=='file'){
+                        $parent = $parent.parent();
+                    }
+                    $parent.find('label').attr('for',elId);
+                    $el.attr('id',elId);
+                }
+                this.validate = function(){
+                    self.valid = true;
+                    if(false){
+                        self.valid = false;
+                    }
+
+                    if(self.valid){
+                        $form.addClass('panel-success');
+                        $form.removeClass('panel-danger');
+                    }else{
+                        $form.addClass('panel-danger');
+                        $form.removeClass('panel-success');
+                    }
+                    return self.valid;
+                };
+                this.upload = function(){
+
+                };
+                $form.appendTo($forms);
+                $form.show();
+                return this;
+            };
+        addForm();
+        $addMore.click(addForm);
+        function addForm(){
+            forms.push(photoForm(i));
+            i++;
+        }
+        $upload.click(function(event){
+            var i2,form;
+            formsAreValid=true;
+            for(i2=0;i2<forms.length;i2++){
+                form = forms[i2];
+                if(!form.validate()){
+                    formsAreValid=false;
+                }
+            }
+            if(formsAreValid){
+                for(i2=0;i2<forms.length;i2++){
+                    form = forms[i2];
+                    form.upload();
+                }
+            }
+        });
+    })();
+
+</script>
+</body>
+</html>

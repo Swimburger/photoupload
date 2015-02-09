@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  get '/', to:'photo_form#index'
+
+  post 'upload_photo', to:'photo_form#upload'
+
   scope '/api' do
     resources :yfu_organizations, except: [:new, :edit]
     resources :categories, except: [:new, :edit]
