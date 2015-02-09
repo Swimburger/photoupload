@@ -3,7 +3,7 @@
 <head>
   <title>YFU Photo Uploader</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-  <%= stylesheet_link_tag 'chosen/chosen.min' %>
+  <%= stylesheet_link_tag 'chosen/chosen.min', 'chosen/chosen-bootstrap' %>
   <style>
       .bs-callout {
           padding: 20px;
@@ -105,11 +105,11 @@
   <div class="row">
     <div class="form-group col-md-4">
       <label for="name">Your full name</label>
-      <input id="name" type="text" name="name" class="form-control name"/>
+      <input id="name" type="text" name="name" class="form-control name" placeholder="fe: Ann Arbor"/>
     </div>
     <div class="form-group col-md-4">
       <label for="email">Your email</label>
-      <input id="email" type="email" name="email" class="form-control email"/>
+      <input id="email" type="email" name="email" class="form-control email" placeholder="fe: aarbor@mail.com"/>
     </div>
     <div class="form-group col-md-4">
       <label for="group">Your YFU organization's name</label>
@@ -193,14 +193,14 @@
 
       <div class="form-group col-md-4">
         <label for="year">Year the photo was taken</label>
-        <input id="year" type="number" min="1951" max="2020" name="year" class="form-control year"/>
+        <select id="year" name="year" class="form-control year"></select>
       </div>
     </div>
 
     <div class="row">
       <div class="form-group col-md-4">
         <label for="people">The names of the people in your picture</label>
-        <input id="people" type="text" name="people" class="form-control people"/>
+        <input id="people" type="text" name="people" class="form-control people" placeholder="fe: André Bozere, Anton Kan"/>
       </div>
 
       <div class="form-group col-md-4">
@@ -467,6 +467,15 @@
                 keywordsLoaded=true;
                 checkCallback();
             });
+            (function addYears(){
+                var currentYear = new Date().getFullYear(),
+                        year,
+                        html='';
+                for(year=1951;year<=currentYear;year++){
+                    html+='<option value"'+year+'">'+year+'</option>'
+                }
+                $(html).appendTo($template.find('.year'));
+            })();
             function checkCallback(){
                 if(countriesLoaded&&keywordsLoaded){
                     templateReadyCback();
