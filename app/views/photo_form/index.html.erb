@@ -3,7 +3,7 @@
 <head>
   <title>YFU Photo Uploader</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-  <%= stylesheet_link_tag 'chosen/chosen.min', 'chosen/chosen-bootstrap' %>
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0-beta.3/css/select2.min.css" />
   <style>
       .bs-callout {
           padding: 20px;
@@ -114,8 +114,8 @@
     <div class="form-group col-md-4">
       <label for="group">Your YFU organization's name</label>
       <br/>
-      <select id="group" name="organization" class="form-control org chosen">
-
+      <select id="group" name="organization" class="form-control org selector" data-placeholder="Select a YFU organization">
+        <option></option>
       </select>
     </div>
   </div>
@@ -185,8 +185,8 @@
       <div class="form-group col-md-4">
         <label for="country">Country where the photo was taken</label>
         <br/>
-        <select id="country" name="country" class="form-control country chosen" data-placeholder="Select a country">
-
+        <select id="country" name="country" class="form-control country selector" data-placeholder="Select a country">
+          <option></option>
         </select>
       </div>
 
@@ -206,8 +206,8 @@
       <div class="form-group col-md-4">
         <label for="keywords">Keywords for the photos</label>
         <br/>
-        <select id="keywords" name="keywords" multiple class="form-control keywords chosen" data-placeholder="Select keywords">
-
+        <select id="keywords" name="keywords" multiple class="form-control keywords selector" data-placeholder="Select keywords" data-tags="true">
+          <option></option>
         </select>
       </div>
 
@@ -266,10 +266,10 @@
 </div>
 <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0-beta.3/js/select2.min.js"></script>
 <%= javascript_include_tag 'jQuery-File-Upload/vendor/jquery.ui.widget',
                            'jQuery-File-Upload/jquery.iframe-transport',
                            'jQuery-File-Upload/jquery.fileupload',
-                           'chosen/chosen.jquery.min',
                            'photo_form' %>
 <script>
     var api = (function(){
@@ -412,8 +412,8 @@
                 $form.appendTo($forms);
                 $form.show();
 
-                (function initChosenFields(){
-                    $form.find('.chosen').chosen();
+                (function initSelect2Fields(){
+                    $form.find('.selector').select2();
                 })();
                 return this;
             };
@@ -447,7 +447,7 @@
                     html+='<option value"'+org.id+'">'+org.name+'</option>';
                 });
                 $(html).appendTo($org);
-                $org.chosen();
+                $org.select2();
             });
             api.getCountries(function(countries){
                 var html = '';
