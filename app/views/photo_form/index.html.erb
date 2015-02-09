@@ -3,6 +3,7 @@
 <head>
   <title>YFU Photo Uploader</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+  <%= stylesheet_link_tag 'chosen/chosen.min' %>
   <style>
       .bs-callout {
           padding: 20px;
@@ -112,7 +113,10 @@
     </div>
     <div class="form-group col-md-4">
       <label for="group">Your YFU organization's name</label>
-      <input id="group" type="text" name="organization" class="form-control org"/>
+      <br/>
+      <select id="group" name="organization" class="form-control org chosen">
+
+      </select>
     </div>
   </div>
   <br/>
@@ -145,7 +149,6 @@
     <div class="col-md-12">
       <hr>
       <p class="small"> @ YFU International Educational Services Inc</p>
-
     </div>
   </div>
 
@@ -181,7 +184,10 @@
       </div>
       <div class="form-group col-md-4">
         <label for="country">Country where the photo was taken</label>
-        <input id="country" type="text" name="country" class="form-control country"/>
+        <br/>
+        <select id="country" name="country" class="form-control country chosen" data-placeholder="Select a country">
+
+        </select>
       </div>
 
 
@@ -199,7 +205,10 @@
 
       <div class="form-group col-md-4">
         <label for="keywords">Keywords for the photos</label>
-        <input id="keywords" type="text" name="keywords" class="form-control keywords" placeholder="enter multiple keywords by separating them with a comma"/>
+        <br/>
+        <select id="keywords" name="keywords" multiple class="form-control keywords chosen" data-placeholder="Select keywords">
+
+        </select>
       </div>
 
     </div>
@@ -260,9 +269,48 @@
 <%= javascript_include_tag 'jQuery-File-Upload/vendor/jquery.ui.widget',
                            'jQuery-File-Upload/jquery.iframe-transport',
                            'jQuery-File-Upload/jquery.fileupload',
+                           'chosen/chosen.jquery.min',
                            'photo_form' %>
 <script>
-    (function(){
+    var api = (function(){
+        var organizations,
+                countries,
+                keywords;
+        this.getOrganizations=function(cback){
+            if(organizations) {
+                cback(organizations);
+            }else{
+                $.getJSON('/api/yfu_organizations',function(data){
+                    organizations=data;
+                    cback(data);
+                })
+            }
+        };
+        this.getCountries=function(cback){
+            if(countries) {
+                cback(countries);
+            }else{
+                $.getJSON('/api/countries',function(data){
+                    countries=data;
+                    cback(data);
+                })
+            }
+        };
+        this.getKeywords=function(cback){
+            if(keywords) {
+                cback(keywords);
+            }else{
+                $.getJSON('/api/keywords',function(data){
+                    keywords=data;
+                    cback(data);
+                })
+            }
+        };
+        return this;
+    })();
+</script>
+<script>
+    (function(api){
         var i = 1,
                 $template = $('#form-template'),
                 $forms = $('#forms'),
@@ -294,32 +342,34 @@
                     formatIdAndLabel(item);
                 });
 
-                $file.fileupload({
-                    dataType: 'json',
-                    autoUpload: false,
-                    acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
-                    add: function (e, data) {
-                        self.upload=function(){
-                            data.submit();
-                        };
-                    },
-                    progress: function (e, data) {
-                        var progress = parseInt(data.loaded / data.total * 100, 10)+"%";
-                        $progressBar.css(
-                                'width',
-                                progress
-                        );
-                        $progressBar.text(progress);
-                    },
-                    done: function(e, data){
+                (function initFileUpload(){
+                    $file.fileupload({
+                        dataType: 'json',
+                        autoUpload: false,
+                        acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+                        add: function (e, data) {
+                            self.upload=function(){
+                                data.submit();
+                            };
+                        },
+                        progress: function (e, data) {
+                            var progress = parseInt(data.loaded / data.total * 100, 10)+"%";
+                            $progressBar.css(
+                                    'width',
+                                    progress
+                            );
+                            $progressBar.text(progress);
+                        },
+                        done: function(e, data){
 
-                    },
-                    fail: function(e, data){
+                        },
+                        fail: function(e, data){
 
-                    }
-                }).bind('fileuploadsubmit', function (e, data) {
-                    data.formData = {};
-                });
+                        }
+                    }).bind('fileuploadsubmit', function (e, data) {
+                        data.formData = {};
+                    });
+                })();
 
                 $removePhoto.click(function(){
                     $form.remove();
@@ -361,9 +411,12 @@
                 };
                 $form.appendTo($forms);
                 $form.show();
+
+                (function initChosenFields(){
+                    $form.find('.chosen').chosen();
+                })();
                 return this;
             };
-        addForm();
         $addMore.click(addForm);
         function addForm(){
             forms.push(photoForm(i));
@@ -385,7 +438,46 @@
                 }
             }
         });
-    })();
+        (function initData(templateReadyCback){
+            var countriesLoaded=false,
+                    keywordsLoaded=false;
+            api.getOrganizations(function(orgs){
+                var html = '';
+                $.each(orgs,function(index,org){
+                    html+='<option value"'+org.id+'">'+org.name+'</option>';
+                });
+                $(html).appendTo($org);
+                $org.chosen();
+            });
+            api.getCountries(function(countries){
+                var html = '';
+                $.each(countries,function(index,country){
+                    html+='<option value"'+country.id+'">'+country.name+'</option>';
+                });
+                $(html).appendTo($template.find('.country'));
+                countriesLoaded=true;
+                checkCallback();
+            });
+            api.getKeywords(function(keywords){
+                var html = '';
+                $.each(keywords,function(index,keyword){
+                    html+='<option value"'+keyword.id+'">'+keyword.word+'</option>';
+                });
+                $(html).appendTo($template.find('.keywords'));
+                keywordsLoaded=true;
+                checkCallback();
+            });
+            function checkCallback(){
+                if(countriesLoaded&&keywordsLoaded){
+                    templateReadyCback();
+                }
+            }
+        })(
+                function () {
+                    addForm();
+                }
+        );
+    })(api);
 
 </script>
 </body>
