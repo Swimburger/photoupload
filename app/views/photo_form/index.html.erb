@@ -219,48 +219,7 @@
         <label>Categories</label>
       </div>
     </div>
-    <div class="row">
-      <div class="col-md-2">
-        <div class="checkbox">
-          <label>
-            <input name="hostfamily" type="checkbox"/> Host family
-          </label>
-        </div>
-        <div class="checkbox">
-          <label>
-            <input name="student" type="checkbox"/> YFU Students
-          </label>
-        </div>
-      </div>
-      <div class="col-md-2">
-        <div class="checkbox">
-          <label>
-            <input name="volunteers" type="checkbox"/> Volunteers
-          </label>
-        </div>
-        <div class="checkbox">
-          <label>
-            <input name="events" type="checkbox"/> Seminars and events
-          </label>
-        </div>
-      </div>
-      <div class="col-md-2">
-        <div class="checkbox">
-          <label>
-            <input name="school" type="checkbox"/> School
-          </label>
-        </div>
-        <div class="checkbox">
-          <label>
-            <input name="travel" type="checkbox"/> Travel
-          </label>
-        </div>
-        <div class="checkbox">
-          <label>
-            <input name="alumni" type="checkbox"/> Alumni
-          </label>
-        </div>
-      </div>
+    <div class="row categories">
     </div>
   </form>
 </div>
@@ -275,7 +234,8 @@
     var api = (function(){
         var organizations,
                 countries,
-                keywords;
+                keywords,
+                categories;
         this.getOrganizations=function(cback){
             if(organizations) {
                 cback(organizations);
@@ -302,6 +262,16 @@
             }else{
                 $.getJSON('/api/keywords',function(data){
                     keywords=data;
+                    cback(data);
+                })
+            }
+        };
+        this.getCategories=function(cback){
+            if(categories) {
+                cback(categories);
+            }else{
+                $.getJSON('/api/categories',function(data){
+                    categories=data;
                     cback(data);
                 })
             }
@@ -335,6 +305,7 @@
                         $categories = $form.find('.categories'),
                         $removePhoto = $form.find('.remove-photo');
                 this.id = id;
+                this.values = {};
                 $form.attr('id','photo-form'+id);
                 $form.addClass('photo-form');
 
@@ -367,7 +338,7 @@
 
                         }
                     }).bind('fileuploadsubmit', function (e, data) {
-                        data.formData = {};
+                        data.formData = self.values;
                     });
                 })();
 
@@ -392,11 +363,11 @@
                     $el.attr('id',elId);
                 }
                 this.validate = function(){
+                    self.getValues();
                     self.valid = true;
                     if(false){
                         self.valid = false;
                     }
-
                     if(self.valid){
                         $form.addClass('panel-success');
                         $form.removeClass('panel-danger');
@@ -406,8 +377,16 @@
                     }
                     return self.valid;
                 };
-                this.upload = function(){
-
+                this.getValues=function(){
+                    self.values.name = $name.val();
+                    self.values.email = $email.val();
+                    self.values.organization = $org.val();
+                    self.values.caption = $caption.val();
+                    self.values.country = $country.val();
+                    self.values.year = $year.val();
+                    self.values.people = $people.val();
+                    self.values.keywords = $keywords.val();
+                    self.values.categories=$categories.find('input:checkbox:checked').map(function() {return this.value;}).get();
                 };
                 $form.appendTo($forms);
                 $form.show();
@@ -440,11 +419,12 @@
         });
         (function initData(templateReadyCback){
             var countriesLoaded=false,
-                    keywordsLoaded=false;
+                    keywordsLoaded=false,
+                    categoriesLoaded=false;
             api.getOrganizations(function(orgs){
                 var html = '';
                 $.each(orgs,function(index,org){
-                    html+='<option value"'+org.id+'">'+org.name+'</option>';
+                    html+='<option value"'+org.name+'">'+org.name+'</option>';
                 });
                 $(html).appendTo($org);
                 $org.select2();
@@ -452,7 +432,7 @@
             api.getCountries(function(countries){
                 var html = '';
                 $.each(countries,function(index,country){
-                    html+='<option value"'+country.id+'">'+country.name+'</option>';
+                    html+='<option value"'+country.name+'">'+country.name+'</option>';
                 });
                 $(html).appendTo($template.find('.country'));
                 countriesLoaded=true;
@@ -461,10 +441,19 @@
             api.getKeywords(function(keywords){
                 var html = '';
                 $.each(keywords,function(index,keyword){
-                    html+='<option value"'+keyword.id+'">'+keyword.word+'</option>';
+                    html+='<option value"'+keyword.word+'">'+keyword.word+'</option>';
                 });
                 $(html).appendTo($template.find('.keywords'));
                 keywordsLoaded=true;
+                checkCallback();
+            });
+            api.getCategories(function(categories){
+                var html = '';
+                $.each(categories,function(index,category){
+                    html+='<div class="col-sm-2"><label><input name="categories[]" class="category" type="checkbox" value="'+category.name+'"/> '+category.name+' </label></div>';
+                });
+                $(html).appendTo($template.find('.categories'));
+                categoriesLoaded=true;
                 checkCallback();
             });
             (function addYears(){
@@ -477,7 +466,7 @@
                 $(html).appendTo($template.find('.year'));
             })();
             function checkCallback(){
-                if(countriesLoaded&&keywordsLoaded){
+                if(countriesLoaded&&keywordsLoaded&&categoriesLoaded){
                     templateReadyCback();
                 }
             }
