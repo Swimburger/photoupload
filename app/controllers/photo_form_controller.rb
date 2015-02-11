@@ -30,7 +30,7 @@ class PhotoFormController < ActionController::Base
       puts photo
     rescue ActiveRecord::RecordInvalid => e
       puts '////ERROR when trying to create photo/////',e.message
-      render json: nil, status: :not_acceptable
+      render json: {error_message:e.message}, status: :not_acceptable
     else
       render json: photo, status: :created
     end
