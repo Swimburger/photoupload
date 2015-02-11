@@ -1,5 +1,6 @@
 class PhotosController < ApplicationController
   before_action :set_photo, only: [:show, :update, :destroy]
+  load_and_authorize_resource
 
   # GET /photos
   # GET /photos.json
@@ -22,12 +23,21 @@ class PhotosController < ApplicationController
         :status
     )
 
+    if @user.has_role? :admin
+    elsif @user.has_role? :reader
+      @photos.where!(status: :approved)
+    end
+
     render json: @photos
   end
 
   # GET /photos/1
   # GET /photos/1.json
   def show
+    if @user.has_role? :admin
+    elsif @user.has_role? :reader && @photo.status != :approved
+      return render text: 'Unauthorized to access this resource', status: :unauthorized
+    end
     render json: @photo
   end
 
@@ -63,7 +73,7 @@ class PhotosController < ApplicationController
     head :no_content
   end
 
-  # /photos/file/filename
+  # /photos/file/:size/filename.:format
   def file
     photo = Photo.find_by(image_file_name: params[:image_name] + '.' + params[:format])
     path = photo.image.path(params[:size])

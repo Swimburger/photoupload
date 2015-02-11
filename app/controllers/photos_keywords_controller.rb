@@ -1,5 +1,6 @@
 class PhotosKeywordsController < ApplicationController
   before_action :set_photos_keyword, only: [:show, :update, :destroy]
+  load_and_authorize_resource
 
   # GET /photos_keywords
   # GET /photos_keywords.json

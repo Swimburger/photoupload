@@ -1,5 +1,6 @@
 class YfuOrganizationsController < ApplicationController
   before_action :set_yfu_organization, only: [:show, :update, :destroy]
+  load_and_authorize_resource
 
   # GET /yfu_organizations
   # GET /yfu_organizations.json

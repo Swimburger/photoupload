@@ -1,5 +1,6 @@
 class PhotosCategoriesController < ApplicationController
   before_action :set_photos_category, only: [:show, :update, :destroy]
+  load_and_authorize_resource
 
   # GET /photos_categories
   # GET /photos_categories.json

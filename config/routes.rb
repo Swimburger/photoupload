@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  mount_devise_token_auth_for 'User', at: '/auth'
   get '/', to:'photo_form#index'
 
   post 'upload_photo', to:'photo_form#upload'

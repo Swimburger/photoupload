@@ -14,6 +14,10 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw]
 
 gem 'devise_token_auth'
 
+gem 'role_model'
+
+gem 'cancan'
+
 gem 'wannabe_bool'
 
 gem 'paperclip', '~> 4.2'
