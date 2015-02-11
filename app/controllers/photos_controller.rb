@@ -1,4 +1,4 @@
-class PhotosController < ApplicationController
+class PhotosController < ApiController
   before_action :set_photo, only: [:show, :update, :destroy]
   load_and_authorize_resource
 
@@ -23,8 +23,8 @@ class PhotosController < ApplicationController
         :status
     )
 
-    if @user.has_role? :admin
-    elsif @user.has_role? :reader
+    if current_user.has_role? :admin
+    elsif current_user.has_role? :reader
       @photos.where!(status: :approved)
     end
 
@@ -34,8 +34,8 @@ class PhotosController < ApplicationController
   # GET /photos/1
   # GET /photos/1.json
   def show
-    if @user.has_role? :admin
-    elsif @user.has_role? :reader && @photo.status != :approved
+    if current_user.has_role? :admin
+    elsif current_user.has_role? :reader && @photo.status != :approved
       return render text: 'Unauthorized to access this resource', status: :unauthorized
     end
     render json: @photo

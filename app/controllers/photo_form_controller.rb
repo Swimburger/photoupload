@@ -1,5 +1,6 @@
-class PhotoFormController < ActionController::Base
+class PhotoFormController < ApplicationController
   def index
+    render :layout => false
   end
 
   def upload

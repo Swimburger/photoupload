@@ -1,4 +1,4 @@
-class CountriesController < ApplicationController
+class CountriesController < ApiController
   before_action :set_country, only: [:show, :update, :destroy]
   load_and_authorize_resource
 

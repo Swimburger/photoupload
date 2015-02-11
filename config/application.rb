@@ -37,5 +37,8 @@ module Photoupload
     config.assets.paths << "#{Rails.root}/public/assets/stylesheets"
     config.assets.paths << "#{Rails.root}/public/assets/images"
     config.assets.paths << "#{Rails.root}/public/assets/javascripts"
+
+    #config.middleware.use ActionDispatch::Flash
+    config.api_only = false
   end
 end

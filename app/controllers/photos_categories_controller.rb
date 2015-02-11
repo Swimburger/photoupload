@@ -1,4 +1,4 @@
-class PhotosCategoriesController < ApplicationController
+class PhotosCategoriesController < ApiController
   before_action :set_photos_category, only: [:show, :update, :destroy]
   load_and_authorize_resource
 

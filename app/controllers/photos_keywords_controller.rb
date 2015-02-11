@@ -1,4 +1,4 @@
-class PhotosKeywordsController < ApplicationController
+class PhotosKeywordsController < ApiController
   before_action :set_photos_keyword, only: [:show, :update, :destroy]
   load_and_authorize_resource
 

@@ -1,4 +1,4 @@
-class YfuOrganizationsController < ApplicationController
+class YfuOrganizationsController < ApiController
   before_action :set_yfu_organization, only: [:show, :update, :destroy]
   load_and_authorize_resource
 

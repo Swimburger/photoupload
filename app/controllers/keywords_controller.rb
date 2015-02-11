@@ -1,5 +1,5 @@
 require 'wannabe_bool'
-class KeywordsController < ApplicationController
+class KeywordsController < ApiController
   before_action :set_keyword, only: [:show, :update, :destroy]
   load_and_authorize_resource
 

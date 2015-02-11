@@ -314,6 +314,11 @@ keywords = [
     {word: 'monuments'}
 ]
 
+users = [
+    {email:'nielsswimberghe@gmail.com', password: 'nielsswimberghe@gmail.com',roles:[:reader]},
+    {email:'nswimberghe@yfu-is.org', password: 'nswimberghe@yfu-is.org',roles:[:admin]}
+]
+
 countries.each do |country|
     Country.find_or_create_by(name:country[:name])
 end
@@ -324,7 +329,18 @@ categories.each do |category|
     Category.find_or_create_by(name:category[:name])
 end
 keywords.each do |keyword|
-    keywordRecord = Keyword.find_or_create_by(word:keyword[:word])
-    keywordRecord[:is_predefined]=true
-    keywordRecord.save!
+    keyword_record = Keyword.find_or_create_by(word:keyword[:word])
+    keyword_record[:is_predefined]=true
+    keyword_record.save!
+end
+users.each do |user|
+    user_record = User.find_by_email(user[:email])
+    if user_record.nil?
+        user_record = User.new
+        user_record.email=user[:email]
+        user_record.password=user[:password]
+        user_record.password_confirmation=user[:password]
+        user_record.roles << user[:roles]
+        user_record.save!
+    end
 end
