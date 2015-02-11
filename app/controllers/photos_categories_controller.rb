@@ -7,12 +7,21 @@ class PhotosCategoriesController < ApiController
   def index
     @photos_categories = PhotosCategory.select(:id,:photo_id,:category_id)
 
+    if current_user.has_role? :admin
+    elsif current_user.has_role? :reader
+      @photos_categories = @photos_categories.joins(:photo).where('photos.status = ?', Photo.statuses[:approved])
+    end
+
     render json: @photos_categories
   end
 
   # GET /photos_categories/1
   # GET /photos_categories/1.json
   def show
+    if current_user.has_role? :admin
+    elsif (current_user.has_role? :reader) && !@photos_category.photo.approved?
+      return render text: 'Unauthorized to access this resource', status: :unauthorized
+    end
     render json: @photos_category
   end
 

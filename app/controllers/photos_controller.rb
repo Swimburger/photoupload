@@ -35,7 +35,7 @@ class PhotosController < ApiController
   # GET /photos/1.json
   def show
     if current_user.has_role? :admin
-    elsif current_user.has_role? :reader && @photo.status != :approved
+    elsif (current_user.has_role? :reader) && !@photo.approved?
       return render text: 'Unauthorized to access this resource', status: :unauthorized
     end
     render json: @photo
