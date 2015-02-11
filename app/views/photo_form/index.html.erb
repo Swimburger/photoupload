@@ -77,6 +77,14 @@
       .bs-callout-info h4 {
           color: #5bc0de;
       }
+      /* Styling for Select2 with error */
+      div.has-error .select2-selection {
+          border-color: #d9534f !important;
+      }
+
+      div.has-success .select2-selection {
+          border-color: #5cb85c !important;
+      }
   </style>
 </head>
 <body>
@@ -105,11 +113,21 @@
   <div class="row">
     <div class="form-group col-md-4">
       <label for="name">Your full name</label>
-      <input id="name" type="text" name="name" class="form-control name" placeholder="fe: Rachel Andresen"/>
+      <input id="name" type="text" name="name" class="form-control name" placeholder="fe: Rachel Andresen" required/>
+      <div class="alert alert-danger" role="alert" style="display:none;">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        <span class="sr-only">Error:</span>
+        Enter your name
+      </div>
     </div>
     <div class="form-group col-md-4">
       <label for="email">Your email</label>
-      <input id="email" type="email" name="email" class="form-control email" placeholder="fe: randresen@mail.com"/>
+      <input id="email" type="email" name="email" class="form-control email" placeholder="fe: randresen@mail.com" required/>
+      <div class="alert alert-danger" role="alert" style="display:none;">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        <span class="sr-only">Error:</span>
+        Enter a valid email
+      </div>
     </div>
     <div class="form-group col-md-4">
       <label for="group">Your YFU organization's name</label>
@@ -117,6 +135,11 @@
       <select id="group" name="organization" class="form-control org selector" data-placeholder="Select a YFU organization">
         <option></option>
       </select>
+      <div class="alert alert-danger" role="alert" style="display:none;">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        <span class="sr-only">Error:</span>
+        Pick an organization
+      </div>
     </div>
   </div>
   <br/>
@@ -137,14 +160,19 @@
 
         <div class="checkbox">
           <label>
-            <input id="agree" name="agree" type="checkbox"/> I agree to these terms.
+            <input id="agree" name="agree" type="checkbox" required/> I agree to these terms.
           </label>
+          <div class="alert alert-danger" role="alert" style="display:none;">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Please agree to the terms to upload
+          </div>
         </div>
       </div>
     </div>
   </div>
   <br/>
-  <button id="upload" name="submit" class="btn btn-primary">Upload pictures</button>
+  <input type="submit" id="upload" name="submit" class="btn btn-primary" value="Upload pictures"/>
   <div class="row">
     <div class="col-md-12">
       <hr>
@@ -159,7 +187,7 @@
       <span class="glyphicon glyphicon-upload"></span> Photo
       <span class="glyphicon glyphicon-remove-circle pull-right remove-photo" style="color:rgba(255, 113, 100, 0.71);cursor:hand;"></span>
     </h3>
-    <div class="progress">
+    <div class="progress" style="display:none">
       <div class="progress-bar" style="width:0">0%</div>
     </div>
     <div class="row">
@@ -167,12 +195,17 @@
       <div class="form-group col-md-8">
         <label for="file">Select your photo</label>
         <br/>
-        <span class="btn btn-success fileinput-button">
+        <span class="btn btn-primary fileinput-button">
             <i class="glyphicon glyphicon-plus"></i>
             <span>Add photo</span>
             <!-- The file input field used as target for the file upload widget -->
-            <input id="file" type="file" name="file" class="file" style="opacity:0;position:absolute;left:0;right:0;top:0;bottom:0;">
+            <input accept="image/*" id="file" type="file" name="file" class="file" style="opacity:0;position:absolute;left:0;right:0;top:0;bottom:0;" required>
         </span>
+        <div class="alert alert-danger" role="alert" style="display:none;">
+          <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+          <span class="sr-only">Error:</span>
+          No photo selected
+        </div>
       </div>
     </div>
 
@@ -188,19 +221,24 @@
         <select id="country" name="country" class="form-control country selector" data-placeholder="Select a country">
           <option></option>
         </select>
+        <div class="alert alert-danger" role="alert" style="display:none;">
+          <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+          <span class="sr-only">Error:</span>
+          Please select a country
+        </div>
       </div>
 
 
       <div class="form-group col-md-4">
         <label for="year">Year the photo was taken</label>
-        <select id="year" name="year" class="form-control year"></select>
+        <select id="year" name="year" class="form-control year" required></select>
       </div>
     </div>
 
     <div class="row">
       <div class="form-group col-md-4">
         <label for="people">The names of the people in your picture</label>
-        <input id="people" type="text" name="people" class="form-control people" placeholder="fe: André Bozere, Anton Kan"/>
+        <input id="people" type="text" name="people" class="form-control people" placeholder="fe: André Bozere, Anton Kan" required/>
       </div>
 
       <div class="form-group col-md-4">
@@ -320,6 +358,9 @@
                         acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
                         add: function (e, data) {
                             self.upload=function(){
+                                $country.select2('enable',false);
+                                $keywords.select2('enable',false);
+                                $progressBar.parent().show();
                                 data.submit();
                             };
                         },
@@ -345,7 +386,7 @@
                 $removePhoto.click(function(){
                     $form.remove();
                     $.each(forms,function(index,element){
-                        if(element.id==id){
+                        if(element&&element.id==id){
                             forms.splice(index,1);
                         }
                     });
@@ -364,9 +405,19 @@
                 }
                 this.validate = function(){
                     self.getValues();
+                    var values = self.values;
                     self.valid = true;
-                    if(false){
+                    if(!values.country){
                         self.valid = false;
+                        makeInvalid($country);
+                    }else{
+                        makeValid($country);
+                    }
+                    if(!$file[0].files||$file[0].files.length!=1){
+                        self.valid=false;
+                        makeInvalid($file);
+                    }else{
+                        makeValid($file);
                     }
                     if(self.valid){
                         $form.addClass('panel-success');
@@ -389,7 +440,8 @@
                     self.values.categories=$categories.find('input:checkbox:checked').map(function() {return this.value;}).get();
                 };
                 $form.appendTo($forms);
-                $form.show();
+                //$form.css("opacity",0).show();
+                $form.fadeIn();
 
                 (function initSelect2Fields(){
                     $form.find('.selector').select2();
@@ -398,21 +450,53 @@
             };
         $addMore.click(addForm);
         function addForm(){
-            forms.push(photoForm(i));
+            forms.push(new photoForm(i));
             i++;
         }
         $upload.click(function(event){
             var i2,form;
             formsAreValid=true;
-            for(i2=0;i2<forms.length;i2++){
+            for(i2=0;i2<forms.length;i2++) {
                 form = forms[i2];
-                if(!form.validate()){
-                    formsAreValid=false;
+                if (!form.validate()) {
+                    formsAreValid = false;
+                }
+                if (!form.values.name && form.values.name.length < 2) {
+                    formsAreValid = false;
+                    makeInvalid($name);
+                } else {
+                    makeValid($name);
+                }
+                if (!new RegExp('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$', 'i').test(form.values.email)) {
+                    formsAreValid = false;
+                    makeInvalid($email);
+                } else {
+                    makeValid($email);
+                }
+                if (!form.values.organization) {
+                    formsAreValid = false;
+                    makeInvalid($org);
+                } else {
+                    makeValid($org);
+                }
+                var parent = $agree.closest('div');
+                if (!$agree.prop('checked')) {
+                    formsAreValid = false;
+                    parent.removeClass('has-success');
+                    parent.addClass('has-error');
+                    parent.find('.alert').show('fast');
+                } else {
+                    parent.addClass('has-success');
+                    parent.removeClass('has-error');
+                    parent.find('.alert').hide('fast');
                 }
             }
             if(formsAreValid){
                 for(i2=0;i2<forms.length;i2++){
                     form = forms[i2];
+                    $('input').attr('readonly','readonly');
+                    $('select').attr('readonly','readonly');
+                    $('.selector').select2('enable',false);
                     form.upload();
                 }
             }
@@ -475,6 +559,18 @@
                     addForm();
                 }
         );
+        function makeValid($el){
+            var formGroup = $el.closest('.form-group');
+            formGroup.addClass('has-success');
+            formGroup.removeClass('has-error');
+            formGroup.find('.alert').hide('fast');
+        }
+        function makeInvalid($el){
+            var formGroup = $el.closest('.form-group');
+            formGroup.removeClass('has-success');
+            formGroup.addClass('has-error');
+            formGroup.find('.alert').show('fast');
+        }
     })(api);
 
 </script>
