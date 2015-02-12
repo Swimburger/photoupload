@@ -1,0 +1,22 @@
+<!--<div masonry='{ "transitionDuration" : "0.4s" , "itemSelector" : ".tile","gutter":5, "columnWidth":60 }' ng-controller="PhotosController as photosCtrl">
+   <div masonry-tile ng-repeat="photo in photos | orderBy:'id':true | limitTo:5" style="background: #000;">
+        <img ng-src="/api/photos/{{photo.id}}/file/small"/>
+    </div>
+</div>-->
+<div style="margin:20px;">
+    <div masonry="{gutter:20,isFitWidth: true}" column-width="300"
+         ng-controller="PhotosController as photosCtrl"
+         style="display: block;margin:0 auto;">
+        <div class="masonry-brick photo" ng-class="photo.status"
+             ng-repeat="photo in photos| limitTo:10"
+             style="opacity: 0;width:300px;margin-bottom:20px;">
+            <md-card>
+                <img ng-src="/api/photos/{{photo.id}}/file/small" style="height:auto;width:auto;max-width:100%;" />
+                <span style="position: absolute;top: 20px;left:15px;padding:5px;color:white;background: rgba(0,0,0,0.5);">{{photo.height}}x{{photo.width}}</span>
+                <md-card-content>
+                    <span>{{photo.caption}}</span>
+                </md-card-content>
+            </md-card>
+        </div>
+    </div>
+</div>

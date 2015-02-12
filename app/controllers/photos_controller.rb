@@ -21,7 +21,7 @@ class PhotosController < ApiController
         :country_id,
         :yfu_organization_id,
         :status
-    )
+    ).where!('image_file_name IS NOT NULL')
 
     if current_user.has_role? :admin
     elsif current_user.has_role? :reader
@@ -81,7 +81,7 @@ class PhotosController < ApiController
       return render text: 'Unauthorized to access this resource', status: :unauthorized
     end
     path = photo.image.path(params[:size])
-    send_file path, :disposition => 'inline', :x_sendfile => true
+    send_file path, :type => photo.image_content_type
   end
 
   # /photos/:id/file/:size/
@@ -92,7 +92,7 @@ class PhotosController < ApiController
       return render text: 'Unauthorized to access this resource', status: :unauthorized
     end
     path = photo.image.path(params[:size])
-    send_file path, :disposition => 'inline', :x_sendfile => true
+    send_file path, :type => photo.image_content_type
   end
 
   private

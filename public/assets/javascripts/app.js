@@ -1,58 +1,24 @@
 /**
- * Created by Niels on 2/02/2015.
+ * Created by Niels on 12/02/2015.
  */
-'use strict';
-
-angular.module('fakeLunchHubApp',
-    [
-        'ngAnimate',
-        'ngCookies',
-        'ngResource',
-        'ngRoute',
-        'ngSanitize',
-        'ngTouch',
-        'ng-token-auth'
-    ])
-    .config(function($routeProvider){
-        $routeProvider
-            .when('/',{
-                templateUrl: 'assets/templates/home.html',
-                controller:'MainController'
-            })
-            .when('/about',{
-                templateUrl: 'assets/templates/about.html',
-                controller: 'AboutController'
-            })
-            .when('/groups',{
-                templateUrl: 'assets/templates/groups.html',
-                controller: 'GroupsController',
-                resolve: { auth:['$auth', function($auth) {
-                    return $auth.validateUser();
-                }] }
-                })
-            .when('/sign_in',{
-                templateUrl: 'assets/templates/login.html',
-                controller: 'UserSessionsController'
-            })
-            .otherwise({redirectTo:'/'});
-    })
-    .controller('MainController',function(){
-        console.log('test');
-    })
-    .controller('GroupsController',['$scope','Group',function($scope,Group){
-        $scope.groups = Group.query();
-    }]).controller('UserSessionsController', ['$scope','$auth', function ($scope,$auth) {
-        $scope.$on('auth:login-error', function(ev, reason) {
-            $scope.error = reason.errors[0];
-        });
-    }])
-    .factory('Group',['$resource',function($resource){
-        return $resource('/api/groups/:id.json',null,{
-            'update':{method:'PUT'}
-        });
-    }])
-    .run(['$rootScope','$location', function ($rootScope, $location) {
-        $rootScope.$on('auth:login-success', function () {
-            $location.path('/');
-        });
-    }]);
+angular.module('PhotoBrowser', ['ngMaterial','wu.masonry','PhotoAPI'])
+    .controller('RootController', ['$scope','Category', 'Keyword', 'Photo', 'PhotoKeyword', 'PhotoCategory', 'Roles',
+        function($scope, Category, Keyword, Photo, PhotoKeyword, PhotoCategory, Roles){
+            $scope.categories = Category.query();
+            $scope.keywords = Keyword.query();
+            $scope.photos = Photo.query();
+            $scope.photoKeywords = PhotoKeyword.query();
+            $scope.photoCategories = PhotoCategory.query();
+            $scope.roles = Roles.query();
+            var tabs = [
+                { title: 'Photos', template: "/assets/templates/photos.html"},
+                { title: 'Categories', template: "/assets/templates/categories.html"},
+                { title: 'Keywords', template: "/assets/templates/keywords.html"}
+            ];
+            $scope.tabs = tabs;
+        }])
+    .controller('PhotosController',['$scope','Photo','Category','Keyword','PhotoKeyword','PhotoCategory',
+        function($scope,Photo,Category,Keyword,PhotoKeyword,PhotoCategory){
+            $scope.photos=Photo.query();
+        }
+    ]);

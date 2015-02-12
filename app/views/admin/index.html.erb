@@ -1,47 +1,41 @@
 <html lang="en" ng-app="PhotoBrowser">
 <head>
   <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/angular_material/0.7.1/angular-material.min.css">
+  <style>
+        md-tabs{
+            overflow: hidden;
+        }
+        .md-tabs-content{
+            overflow: auto;
+        }
+        .photo.unreviewed > md-card{
+            border-top: solid #BBBBBB 5px;
+        }
+        .photo.approved > md-card{
+            border-top: solid #5cb85c 5px;
+        }
+        .photo.rejected > md-card{
+            border-top: solid #B00100 5px;
+        }
+        .photo.no_usage > md-card{
+            border-top: solid #730E15 5px;
+        }
+  </style>
 </head>
 <body layout="column" ng-controller="RootController as rootCtrl">
 <md-toolbar layout="row">
-  <button ng-click="toggleSidenav('left')" hide-gt-sm class="menuBtn">
-    <span class="visually-hidden">Menu</span>
-  </button>
-  <h1>Hello World</h1>
-</md-toolbar>
-<div layout="row" flex>
-  <md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$media('gt-sm')">
-
-  </md-sidenav>
-  <div layout="column" flex id="content">
-    <md-content layout="column" flex class="md-padding">
-      <h2>Categories</h2>
-      <ul>
-        <li ng-repeat="category in categories">{{category.name}}</li>
-      </ul>
-      <h2>Keywords</h2>
-      <ul>
-        <li ng-repeat="keyword in keywords">{{keyword.word}}</li>
-      </ul>
-      <h2>Photos</h2>
-      <ul>
-        <li ng-repeat="photo in photos">{{photo.id}}</li>
-      </ul>
-      <h2>PhotoKeywords</h2>
-      <ul>
-        <li ng-repeat="photoKeyword in photoKeywords">{{photoKeyword.id}}</li>
-      </ul>
-      <h2>PhotoCategories</h2>
-      <ul>
-        <li ng-repeat="photoCategory in photoCategories">{{photoCategory.id}}</li>
-      </ul>
-      <h2>Roles</h2>
-      <ul>
-        <li ng-repeat="role in roles">{{role}}</li>
-      </ul>
-    </md-content>
+  <div class="md-toolbar-tools">
+    <span class="md-flex">YFU Photo Browser</span>
   </div>
-</div>
+</md-toolbar>
+<md-tabs md-selected="selectedIndex">
+  <md-tab ng-repeat="tab in tabs" label="{{tab.title}}">
+    <div class="tab-content tab{{$index}}" layout="column" layout-fill layout-align="space-around center">
+      <ng-include src="tab.template" style="display:block;width:100%;"></ng-include>
+    </div>
+  </md-tab>
+</md-tabs>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <!-- Angular Material Dependencies -->
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular.min.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular-animate.min.js"></script>
@@ -50,22 +44,22 @@
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular-route.min.js"></script>
 
 <script src="//ajax.googleapis.com/ajax/libs/angular_material/0.7.1/angular-material.min.js"></script>
-<script src="assets/javascripts/PhotoAPI.js"></script>
-<script>
-    var app = angular.module('PhotoBrowser', ['ngMaterial','PhotoAPI'])
-            .controller('RootController', ['$scope','$mdSidenav','Category', 'Keyword', 'Photo', 'PhotoKeyword', 'PhotoCategory', 'Roles',
-                function($scope,$mdSidenav,Category, Keyword, Photo, PhotoKeyword, PhotoCategory, Roles){
-        $scope.categories = Category.query();
-        $scope.keywords = Keyword.query();
-        $scope.photos = Photo.query();
-        $scope.photoKeywords = PhotoKeyword.query();
-        $scope.photoCategories = PhotoCategory.query();
-        $scope.roles = Roles.query();
 
-        $scope.toggleSidenav = function(menuId) {
-            $mdSidenav(menuId).toggle();
-        };
-    }]);
-</script>
+<!-- Masonry -->
+<script src="/assets/bower_components/get-size/get-size.js"></script>
+<script src="/assets/bower_components/get-style-property/get-style-property.js"></script>
+<script src="/assets/bower_components/eventie/eventie.js"></script>
+<script src="/assets/bower_components/doc-ready/doc-ready.js"></script>
+<script src="/assets/bower_components/eventEmitter/EventEmitter.min.js"></script>
+<script src="/assets/bower_components/matches-selector/matches-selector.js"></script>
+<script src="/assets/bower_components/imagesloaded/imagesloaded.pkgd.min.js"></script>
+<script src="/assets/bower_components/masonry/dist/masonry.pkgd.min.js"></script>
+<script src="/assets/bower_components/outlayer/outlayer.js"></script>
+
+<script src="/assets/bower_components/angular-masonry/angular-masonry.js"></script>
+
+<!-- App -->
+<script src="/assets/javascripts/PhotoAPI.js"></script>
+<script src="/assets/javascripts/app.js"></script>
 </body>
 </html>
