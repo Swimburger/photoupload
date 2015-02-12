@@ -1,1 +1,11 @@
-Categories
+<div ng-controller="CategoriesController as categoriesCtrl" style="max-width: 1280px;margin:20px auto; text-align:center;">
+    <md-card ng-repeat="category in categories" style="display:inline-block;font-size:20px;padding:5px;" ng-init="category.mode='default'">
+        <md-card-content>
+            {{category.name}}
+            <i class="mdi mdi-edit" ng-show="category.mode=='default'" ng-click="category.mode='edit'"></i>
+            <i class="mdi mdi-close" ng-show="category.mode=='edit'" ng-click="category.mode='default'"></i>
+            <i class="mdi mdi-done" ng-show="category.mode=='edit'" ng-click="category.mode='default'"></i>
+        </md-card-content>
+    </md-card>
+</div>
+</div>
