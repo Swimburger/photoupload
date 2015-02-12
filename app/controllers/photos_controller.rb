@@ -73,9 +73,24 @@ class PhotosController < ApiController
     head :no_content
   end
 
-  # /photos/file/:size/filename.:format
+  # /photos/file/:size/:filename.:format
   def file
     photo = Photo.find_by(image_file_name: params[:image_name] + '.' + params[:format])
+    if current_user.has_role? :admin #a user could have a reader and admin role, so ignore being a reader if you're an admin
+    elsif (current_user.has_role? :reader) && !photo.approved?
+      return render text: 'Unauthorized to access this resource', status: :unauthorized
+    end
+    path = photo.image.path(params[:size])
+    send_file path, :disposition => 'inline', :x_sendfile => true
+  end
+
+  # /photos/:id/file/:size/
+  def file_by_id
+    photo = Photo.find_by(id:params[:id])
+    if current_user.has_role? :admin #a user could have a reader and admin role, so ignore being a reader if you're an admin
+    elsif (current_user.has_role? :reader) && !photo.approved?
+      return render text: 'Unauthorized to access this resource', status: :unauthorized
+    end
     path = photo.image.path(params[:size])
     send_file path, :disposition => 'inline', :x_sendfile => true
   end

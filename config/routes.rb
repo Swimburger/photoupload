@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  get 'admin/index'
 
   devise_for :users, :skip => [:registrations]
   as :user do
@@ -10,6 +9,7 @@ Rails.application.routes.draw do
   get '/', to:'photo_form#index'
 
   post 'upload_photo', to:'photo_form#upload'
+  get 'admin', to:'admin#index'
 
   scope '/api' do
     resources :yfu_organizations, except: [:new, :edit]
@@ -18,7 +18,9 @@ Rails.application.routes.draw do
     resources :countries, except: [:new, :edit]
     resources :photos, except: [:new, :edit]
     get '/photos/file/:size/:image_name', to:'photos#file'
+    get '/photos/:id/file/:size', to: 'photos#file_by_id'
     resources :photos_categories, except: [:new, :edit]
     resources :photos_keywords, except: [:new, :edit]
+    get '/my_roles', to:'roles#get_my_roles'
   end
 end
