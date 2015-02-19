@@ -9,7 +9,7 @@
         years.push(year);
     }
     var statuses = ['unreviewed','approved','rejected','no_usage'];
-    angular.module('PhotoBrowser', ['ngRoute','ngMaterial','wu.masonry','multi-select','PhotoAPI'])
+    angular.module('PhotoBrowser', ['ngRoute','ngAnimate','ngMaterial','wu.masonry','multi-select','PhotoAPI'])
         .config(['$routeProvider',function($routeProvider){
             $routeProvider
                 .when("/photos", {

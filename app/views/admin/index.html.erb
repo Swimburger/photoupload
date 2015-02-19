@@ -22,7 +22,7 @@
             top: 20px;
             background: rgba(0,0,0,0.5);
         }
-        .photo-dialog .actions > button{
+        .photo-dialog .actions > *{
             color:#fff;
         }
         .photo-dialog md-content ul{
@@ -34,25 +34,39 @@
             margin: 10px 0;
         }
         .photo-dialog > .mask{
-            height: 300px;
+            max-height: 300px;
             overflow: hidden;
+            -webkit-transition: max-height 750ms ease-in-out;
+            -moz-transition:    max-height 750ms ease-in-out;
+            -o-transition:      max-height 750ms ease-in-out;
+            transition:         max-height 750ms ease-in-out;
         }
         .photo-dialog.details > .mask{
-            height: auto;
+            max-height: 2000px;
         }
         .photo-dialog img{
             height: auto;
             width: 100%;
         }
-          .resolution{
-              position: absolute;
-              top: 20px;
-              left:15px;
-              padding:5px;
-              color:white;
-              background: rgba(0,0,0,0.5);
-          }
-
+        .photo-dialog .info{
+            -webkit-transition: all 750ms ease-in-out;
+            -moz-transition:    all 750ms ease-in-out;
+            -o-transition:      all 750ms ease-in-out;
+            transition:         all 750ms ease-in-out;
+            max-height: 1000px;
+        }
+        .photo-dialog.details .info{
+            max-height: 0;
+            padding:0;
+        }
+        .resolution{
+          position: absolute;
+          top: 20px;
+          left:15px;
+          padding:5px;
+          color:white;
+          background: rgba(0,0,0,0.5);
+        }
 
   </style>
 </head>

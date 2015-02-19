@@ -1,9 +1,9 @@
 <md-dialog class="photo-dialog" ng-class="[photo.status,mode]">
-    <div class="mask" style="">
+    <div class="mask">
         <span class="resolution">{{photo.height}}x{{photo.width}}</span>
         <div class="actions" ng-hide="mode=='edit'">
             <md-button ng-click="details()"><i class="mdi-image mdi-2x"></i></md-button>
-            <md-button ng-click="download(photo.id)"><i class="mdi-file-download mdi-2x"></i></md-button>
+            <md-button ng-href="{{'/api/photos/'+photo.id+'/file/original'}}" target="_blank" ng-click="download(photo.id)"><i class="mdi-file-download mdi-2x"></i></md-button>
             <md-button ng-click="edit()"><i class="mdi-mode-edit mdi-2x"></i></md-button>
             <md-button ng-click="closeDialog()"><i class="mdi-close mdi-2x"></i></md-button>
         </div>
@@ -13,8 +13,8 @@
         </div>
         <img ng-src="/api/photos/{{photo.id}}/file/large" alt="{{photo.caption}}"/>
     </div>
-    <md-content ng-switch="mode" ng-hide="mode=='details'">
-        <div ng-switch-when="default">
+    <md-content ng-switch="mode" class="info">
+        <div ng-switch-default>
             <h2>{{photo.caption}}</h2>
             <ul>
                 <li>Status: {{photo.status}}</li>
@@ -28,7 +28,7 @@
                 <li>Email: <a  ng-href="mailto:{{photo.uploaded_by_email}}">{{photo.uploaded_by_email}}</a> <span ng-hide="photo.uploaded_by_email">?</span></li>
             </ul>
         </div>
-        <form ng-switch-when="edit" name="photoForm">
+        <form ng-switch-when="edit" name="photoForm" class="info">
             <div layout layout-sm="column">
                 <md-input-container>
                     <label>Caption</label>
