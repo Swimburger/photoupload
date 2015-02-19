@@ -12,6 +12,10 @@ class PhotosKeywordsController < ApiController
       @photos_keywords = @photos_keywords.joins(:photo).where('photos.status = ?', Photo.statuses[:approved])
     end
 
+    if params.has_key? 'photo_id'
+      @photos_keywords.where!(photo_id:params[:photo_id])
+    end
+
     render json: @photos_keywords
   end
 
@@ -60,10 +64,14 @@ class PhotosKeywordsController < ApiController
   private
 
     def set_photos_keyword
-      @photos_keyword = PhotosKeyword.select(:id,:photo_id,:keyword_id).find(params[:id])
+      if params.has_key? :id
+        @photos_keyword = PhotosKeyword.select(:id,:photo_id,:keyword_id).find(params[:id])
+      elsif params.has_key?(:photo_id) && params.has_key?(:keyword_id)
+        @photos_keyword = PhotosKeyword.select(:id,:photo_id,:keyword_id).find_by(photo_id:params[:photo_id],keyword_id:params[:keyword_id])
+      end
     end
 
     def photos_keyword_params
-      params[:photos_keyword]
+      params.permit(:photo_id, :keyword_id)
     end
 end

@@ -56,23 +56,25 @@ ActiveRecord::Schema.define(version: 20150211195011) do
   add_index "photos", ["yfu_organization_id"], name: "index_photos_on_yfu_organization_id", using: :btree
 
   create_table "photos_categories", force: :cascade do |t|
-    t.integer  "photo_id",    limit: 4
-    t.integer  "category_id", limit: 4
+    t.integer  "photo_id",    limit: 4, null: false
+    t.integer  "category_id", limit: 4, null: false
     t.datetime "created_at",            null: false
     t.datetime "updated_at",            null: false
   end
 
   add_index "photos_categories", ["category_id"], name: "index_photos_categories_on_category_id", using: :btree
+  add_index "photos_categories", ["photo_id", "category_id"], name: "index_photos_categories_on_photo_id_and_category_id", unique: true, using: :btree
   add_index "photos_categories", ["photo_id"], name: "index_photos_categories_on_photo_id", using: :btree
 
   create_table "photos_keywords", force: :cascade do |t|
-    t.integer  "photo_id",   limit: 4
-    t.integer  "keyword_id", limit: 4
+    t.integer  "photo_id",   limit: 4, null: false
+    t.integer  "keyword_id", limit: 4, null: false
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
   end
 
   add_index "photos_keywords", ["keyword_id"], name: "index_photos_keywords_on_keyword_id", using: :btree
+  add_index "photos_keywords", ["photo_id", "keyword_id"], name: "index_photos_keywords_on_photo_id_and_keyword_id", unique: true, using: :btree
   add_index "photos_keywords", ["photo_id"], name: "index_photos_keywords_on_photo_id", using: :btree
 
   create_table "users", force: :cascade do |t|

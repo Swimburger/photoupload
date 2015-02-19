@@ -57,8 +57,16 @@ class PhotosController < ApiController
   # PATCH/PUT /photos/1.json
   def update
     @photo = Photo.find(params[:id])
-
     if @photo.update(photo_params)
+      if params.has_key? :keywords
+        PhotosKeyword.destroy_all(photo_id:params[:id])
+        params[:keywords].each { |keyword | PhotosKeyword.create(photo_id:params[:id],keyword_id:keyword[:id])}
+      end
+      if params.has_key? :categories
+
+        PhotosCategory.destroy_all(photo_id:params[:id])
+        params[:categories].each { |category|  PhotosCategory.create(photo_id:params[:id],category_id:category[:id])}
+      end
       head :no_content
     else
       render json: @photo.errors, status: :unprocessable_entity
@@ -118,6 +126,12 @@ class PhotosController < ApiController
   end
 
   def photo_params
-    params.permit(:caption, :year, :people_in_photo, :country_id, :yfu_organization_id, :status)
+    params.permit(:caption,
+                  :year,
+                  :people_in_photo,
+                  :country_id,
+                  :yfu_organization_id,
+                  :status
+    )
   end
 end

@@ -22,6 +22,9 @@
             top: 20px;
             background: rgba(0,0,0,0.5);
         }
+        .photo-dialog.edit .actions{
+            background: none;
+        }
         .photo-dialog .actions > *{
             color:#fff;
         }
@@ -59,15 +62,55 @@
             max-height: 0;
             padding:0;
         }
-        .resolution{
-          position: absolute;
-          top: 20px;
-          left:15px;
-          padding:5px;
-          color:white;
-          background: rgba(0,0,0,0.5);
+        .photo-dialog.default form{
+            display:none;
         }
-
+        .resolution {
+            position: absolute;
+            top: 20px;
+            left: 15px;
+            padding: 5px;
+            color: white;
+            background: rgba(0, 0, 0, 0.5);
+        }
+        .select-container{
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: flex;
+            position: relative;
+            -webkit-flex-direction: column;
+            -ms-flex-direction: column;
+            flex-direction: column;
+            overflow-x: hidden;
+            padding: 2px 2px 26px;
+        }
+        .select-container label{
+            color: rgba(0,0,0,0.54);
+            -webkit-order: 1;
+            -ms-flex-order: 1;
+            order: 1;
+            pointer-events: none;
+            -webkit-font-smoothing: antialiased;
+            padding-left: 2px;
+            z-index: 1;
+            -webkit-transform: translate3d(0,24px,0) scale(1);
+            transform: translate3d(0,24px,0) scale(1);
+            -webkit-transform-origin: left top;
+            transform-origin: left top;
+            transition: -webkit-transform cubic-bezier(.25,.8,.25,1) .25s;
+            transition: transform cubic-bezier(.25,.8,.25,1) .25s;
+            -webkit-transform: translate3d(0,4px,0) scale(.75);
+            transform: translate3d(0,4px,0) scale(.75);
+        }
+        .select-container md-select{
+            -webkit-flex: 1;
+            -ms-flex: 1;
+            flex: 1;
+            -webkit-order: 2;
+            -ms-flex-order: 2;
+            order: 2;
+            margin-top: 0;
+        }
   </style>
 </head>
 <body layout="column" ng-controller="RootController as rootCtrl">

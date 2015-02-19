@@ -11,6 +11,9 @@ class Photo < ActiveRecord::Base
   has_many :photos_keywords
   has_many :keywords, :through => :photos_keywords
 
+  accepts_nested_attributes_for :categories
+  accepts_nested_attributes_for :keywords
+
   enum status: [:unreviewed,:approved, :rejected, :no_usage]
 
   after_post_process :save_image_dimensions

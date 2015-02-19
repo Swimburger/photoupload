@@ -12,6 +12,10 @@ class PhotosCategoriesController < ApiController
       @photos_categories = @photos_categories.joins(:photo).where('photos.status = ?', Photo.statuses[:approved])
     end
 
+    if params.has_key? 'photo_id'
+      @photos_categories.where!(photo_id:params[:photo_id])
+    end
+
     render json: @photos_categories
   end
 
@@ -22,6 +26,7 @@ class PhotosCategoriesController < ApiController
     elsif (current_user.has_role? :reader) && !@photos_category.photo.approved?
       return render text: 'Unauthorized to access this resource', status: :unauthorized
     end
+
     render json: @photos_category
   end
 
@@ -60,10 +65,14 @@ class PhotosCategoriesController < ApiController
   private
 
     def set_photos_category
-      @photos_category = PhotosCategory.select(:id,:photo_id,:category_id).find(params[:id])
+      if params.has_key? :id
+        @photos_category = PhotosCategory.select(:id,:photo_id,:category_id).find(params[:id])
+      elsif params.has_key?(:photo_id) && params.has_key?(:category_id)
+        @photos_keyword = PhotosKeyword.select(:id,:photo_id,:category_id).find_by(photo_id:params[:photo_id],category_id:params[:category_id])
+      end
     end
 
     def photos_category_params
-      params[:photos_category]
+      params.permit(:photo_id, :category_id)
     end
 end

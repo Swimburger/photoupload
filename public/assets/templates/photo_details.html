@@ -21,41 +21,56 @@
                 <li>Country: {{photo.country.name}} <span ng-hide="photo.country">?</span></li>
                 <li>Year: {{photo.year}} <span ng-hide="photo.year">?</span></li>
                 <li>People in this picture: {{photo.people_in_photo}}</li>
-                <li>Keywords: <span ng-repeat="keyword in photo.keywords">{{keyword.word}}, </span></li>
-                <li>Categories: <span ng-repeat="category in photo.category">{{category.name}}, </span></li>
-                <li>YFU Organization: {{photo.yfu_category.name}} <span ng-hide="photo.yfu_category">?</span> </li>
+                <li>Keywords: {{joinKeywords(photo.keywords)}}</li>
+                <li>Categories: {{joinCategories(photo.categories)}}</li>
+                <li>YFU Organization: {{photo.yfu_organization.name}} <span ng-hide="photo.yfu_organization">?</span> </li>
                 <li>Uploaded by {{photo.uploaded_by_name}} <span ng-hide="photo.uploaded_by_name">?</span></li>
                 <li>Email: <a  ng-href="mailto:{{photo.uploaded_by_email}}">{{photo.uploaded_by_email}}</a> <span ng-hide="photo.uploaded_by_email">?</span></li>
             </ul>
         </div>
         <form ng-switch-when="edit" name="photoForm" class="info">
-            <div layout layout-sm="column">
-                <md-input-container>
+            <div layout layout-sm="column" layout-margin>
+                <md-input-container flex>
                     <label>Caption</label>
                     <input ng-model="photo.caption">
                 </md-input-container>
-                <md-select ng-model="photo.country" placeholder="Country">
-                    <md-select-label>{{photo.country.name}}</md-select-label>
-                    <md-option ng-value="country" ng-repeat="country in countries">{{country.name}}</md-option>
-                </md-select>
-                <md-select ng-model="photo.year" placeholder="Year">
-                    <md-option ng-value="year" ng-repeat="year in years">{{year}}</md-option>
-                </md-select>
+                <div class="select-container" flex>
+                    <label>Country</label>
+                    <md-select ng-model="photo.country" placeholder="Country" >
+                        <md-select-label>{{photo.country.name}}</md-select-label>
+                        <md-option ng-value="country" ng-repeat="country in countries">{{country.name}}</md-option>
+                    </md-select>
+                </div>
+                <div class="select-container" flex>
+                    <label>Year</label>
+                    <md-select ng-model="photo.year" placeholder="Year" flex>
+                        <md-option ng-value="year" ng-repeat="year in years">{{year}}</md-option>
+                    </md-select>
+                </div>
             </div>
-            <div layout layout-sm="column">
-                <md-input-container>
+            <div layout layout-sm="column" layout-margin>
+                <md-input-container flex>
                     <label>People in photo</label>
                     <input ng-model="photo.people_in_photo">
                 </md-input-container>
-                <md-select multiple ng-model="photo.keywords" placeholder="Keywords">
-                    <md-select-label>
-                        <span ng-if="photo.keywords.length<1">Choose keywords></span>
-                        <span ng-if="photo.keywords.length>0" ng-repeat="keyword in photo.keywords">{{keyword.word}},&nbsp;</span></md-select-label>
-                    <md-option ng-value="keyword" ng-repeat="keyword in keywords">{{keyword.word}}</md-option>
-                </md-select>
+                <div class="select-container" flex style="min-width: 200px;">
+                    <label>Keywords</label>
+                    <md-select multiple ng-model="photo.keywords" placeholder="Keywords">
+                        <md-select-label>
+                            <span ng-if="photo.keywords.length<1">Choose keywords></span>
+                            <span ng-if="photo.keywords.length>0">{{joinKeywords(photo.keywords)}}</span>
+                        </md-select-label>
+                        <md-optgroup label="Predefined">
+                            <md-option ng-value="keyword" ng-repeat="keyword in keywords | orderBy:'word' | filter: {is_predefined: true }">{{keyword.word}}</md-option>
+                        </md-optgroup>
+                        <md-optgroup label="Not Predefined">
+                            <md-option ng-value="keyword" ng-repeat="keyword in keywords | orderBy:'word' | filter: {is_predefined: false }">{{keyword.word}}</md-option>
+                        </md-optgroup>
+                    </md-select>
+                </div>
             </div>
-            <div>
-                <md-checkbox ng-model="category.checked" ng-repeat="category in categories">
+            <div layout="center center" layout-wrap>
+                <md-checkbox ng-model="category.checked" ng-repeat="category in categories" name="{{category.name}}" flex="25" ng-change="console.log(category)">
                     {{category.name}}
                 </md-checkbox>
             </div>
