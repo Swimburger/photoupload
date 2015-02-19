@@ -2,14 +2,14 @@
     <div class="mask" style="">
         <span class="resolution">{{photo.height}}x{{photo.width}}</span>
         <div class="actions" ng-hide="mode=='edit'">
-            <md-button class="md-fab" ng-click="details()">D</md-button>
-            <md-button class="md-fab" ng-click="download(photo.id)">D</md-button>
-            <md-button class="md-fab" ng-click="edit()">E</md-button>
-            <md-button class="md-fab" ng-click="closeDialog()">-</md-button>
+            <md-button ng-click="details()"><i class="mdi-image mdi-2x"></i></md-button>
+            <md-button ng-click="download(photo.id)"><i class="mdi-file-download mdi-2x"></i></md-button>
+            <md-button ng-click="edit()"><i class="mdi-mode-edit mdi-2x"></i></md-button>
+            <md-button ng-click="closeDialog()"><i class="mdi-close mdi-2x"></i></md-button>
         </div>
         <div class="actions" ng-hide="mode!='edit'">
-            <md-button class="md-fab" ng-click="save()"><i class="mdi-save mdi-2x"></i></md-button>
-            <md-button class="md-fab" ng-click="cancel()"><i class="mdi-cancel mdi-2x"></i></md-button>
+            <md-button class="md-primary md-raised" ng-click="save()"><i class="mdi-save mdi-2x"></i></md-button>
+            <md-button class="md-warn md-raised" ng-click="cancel()"><i class="mdi-cancel mdi-2x"></i></md-button>
         </div>
         <img ng-src="/api/photos/{{photo.id}}/file/large" alt="{{photo.caption}}"/>
     </div>
@@ -18,12 +18,12 @@
             <h2>{{photo.caption}}</h2>
             <ul>
                 <li>Status: {{photo.status}}</li>
-                <li>Country: {{country}} <span ng-hide="country">?</span></li>
+                <li>Country: {{photo.country.name}} <span ng-hide="photo.country">?</span></li>
                 <li>Year: {{photo.year}} <span ng-hide="photo.year">?</span></li>
                 <li>People in this picture: {{photo.people_in_photo}}</li>
-                <li>Keywords: {{keywords}}</li>
-                <li>Categories: {{categories}}</li>
-                <li>YFU Organization: {{yfu_organization}} </li>
+                <li>Keywords: <span ng-repeat="keyword in photo.keywords">{{keyword.word}}, </span></li>
+                <li>Categories: <span ng-repeat="category in photo.category">{{category.name}}, </span></li>
+                <li>YFU Organization: {{photo.yfu_category.name}} <span ng-hide="photo.yfu_category">?</span> </li>
                 <li>Uploaded by {{photo.uploaded_by_name}} <span ng-hide="photo.uploaded_by_name">?</span></li>
                 <li>Email: <a  ng-href="mailto:{{photo.uploaded_by_email}}">{{photo.uploaded_by_email}}</a> <span ng-hide="photo.uploaded_by_email">?</span></li>
             </ul>
@@ -34,40 +34,36 @@
                     <label>Caption</label>
                     <input ng-model="photo.caption">
                 </md-input-container>
-                <div
-                        multi-select
-                        input-model="countries"
-                        button-label="name"
-                        item-label="name"
-                        tick-property="ticked"
-                        >
-                </div>
-                <select name="">
-                    <option value="year">year</option>
-                </select>
+                <md-select ng-model="photo.country" placeholder="Country">
+                    <md-select-label>{{photo.country.name}}</md-select-label>
+                    <md-option ng-value="country" ng-repeat="country in countries">{{country.name}}</md-option>
+                </md-select>
+                <md-select ng-model="photo.year" placeholder="Year">
+                    <md-option ng-value="year" ng-repeat="year in years">{{year}}</md-option>
+                </md-select>
             </div>
             <div layout layout-sm="column">
                 <md-input-container>
                     <label>People in photo</label>
                     <input ng-model="photo.people_in_photo">
                 </md-input-container>
-                <select name="">
-                    <option value="keywords">keywords</option>
-                </select>
+                <md-select multiple ng-model="photo.keywords" placeholder="Keywords">
+                    <md-select-label>
+                        <span ng-if="photo.keywords.length<1">Choose keywords></span>
+                        <span ng-if="photo.keywords.length>0" ng-repeat="keyword in photo.keywords">{{keyword.word}},&nbsp;</span></md-select-label>
+                    <md-option ng-value="keyword" ng-repeat="keyword in keywords">{{keyword.word}}</md-option>
+                </md-select>
             </div>
             <div>
-                <md-checkbox ng-model="data.cb1" aria-label="Checkbox 1">
-                    Checkbox 1:
+                <md-checkbox ng-model="category.checked" ng-repeat="category in categories">
+                    {{category.name}}
                 </md-checkbox>
             </div>
             <div>
                 Status:
-                <select>
-                    <option value="unreviewed">unreviewed</option>
-                    <option value="approved">approved</option>
-                    <option value="rejected">rejected</option>
-                    <option value="no_rights">no rights</option>
-                </select>
+                <md-select ng-model="photo.status" placeholder="Status">
+                    <md-option ng-value="status" ng-repeat="status in statuses">{{status}}</md-option>
+                </md-select>
             </div>
         </form>
     </md-content>
