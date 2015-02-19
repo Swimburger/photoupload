@@ -32,6 +32,12 @@ angular.module('PhotoAPI',['ngResource'])
                 'update':{method:'PUT'}
             });
     }])
+    .factory('Country',['$resource',function($resource){
+        return $resource('/api/countries/:id');
+    }])
+    .factory('Organization',['$resource',function($resource){
+        return $resource('/api/yfu_organizations/:id');
+    }])
     .factory('Roles',['$resource', function ($resource) {
         return $resource('/api/my_roles');
     }]);

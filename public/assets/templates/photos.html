@@ -5,9 +5,9 @@
             <div class="masonry-brick photo" ng-class="photo.status"
                  ng-repeat="photo in photos | offset: currentPage*itemsPerPage | limitTo: itemsPerPage"
                  style="opacity: 0;width:300px;margin-bottom:20px;">
-                <md-card>
+                <md-card ng-click="showDetails(photo.id)">
                     <img ng-src="/api/photos/{{photo.id}}/file/small" style="height:auto;width:auto;max-width:100%;" />
-                    <span style="position: absolute;top: 20px;left:15px;padding:5px;color:white;background: rgba(0,0,0,0.5);">{{photo.height}}x{{photo.width}}</span>
+                    <span class="resolution">{{photo.height}}x{{photo.width}}</span>
                     <md-card-content ng-if="photo.caption">
                         <span>{{photo.caption}}</span>
                     </md-card-content>

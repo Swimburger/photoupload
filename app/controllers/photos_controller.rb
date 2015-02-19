@@ -81,7 +81,7 @@ class PhotosController < ApiController
       return render text: 'Unauthorized to access this resource', status: :unauthorized
     end
     path = photo.image.path(params[:size])
-    send_file path, :type => photo.image_content_type
+    send_file path, :type => photo.image_content_type, :disposition => 'inline'
   end
 
   # /photos/:id/file/:size/
@@ -92,7 +92,7 @@ class PhotosController < ApiController
       return render text: 'Unauthorized to access this resource', status: :unauthorized
     end
     path = photo.image.path(params[:size])
-    send_file path, :type => photo.image_content_type
+    send_file path, :type => photo.image_content_type, :disposition => 'inline'
   end
 
   private
@@ -118,6 +118,6 @@ class PhotosController < ApiController
   end
 
   def photo_params
-    params.require(:photo).permit(:caption, :year, :people_in_photo, :path, :country_id, :yfu_organization_id, :status)
+    params.permit(:caption, :year, :people_in_photo, :country_id, :yfu_organization_id, :status)
   end
 end

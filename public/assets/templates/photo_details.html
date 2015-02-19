@@ -1,0 +1,74 @@
+<md-dialog class="photo-dialog" ng-class="[photo.status,mode]">
+    <div class="mask" style="">
+        <span class="resolution">{{photo.height}}x{{photo.width}}</span>
+        <div class="actions" ng-hide="mode=='edit'">
+            <md-button class="md-fab" ng-click="details()">D</md-button>
+            <md-button class="md-fab" ng-click="download(photo.id)">D</md-button>
+            <md-button class="md-fab" ng-click="edit()">E</md-button>
+            <md-button class="md-fab" ng-click="closeDialog()">-</md-button>
+        </div>
+        <div class="actions" ng-hide="mode!='edit'">
+            <md-button class="md-fab" ng-click="save()"><i class="mdi-save mdi-2x"></i></md-button>
+            <md-button class="md-fab" ng-click="cancel()"><i class="mdi-cancel mdi-2x"></i></md-button>
+        </div>
+        <img ng-src="/api/photos/{{photo.id}}/file/large" alt="{{photo.caption}}"/>
+    </div>
+    <md-content ng-switch="mode" ng-hide="mode=='details'">
+        <div ng-switch-when="default">
+            <h2>{{photo.caption}}</h2>
+            <ul>
+                <li>Status: {{photo.status}}</li>
+                <li>Country: {{country}} <span ng-hide="country">?</span></li>
+                <li>Year: {{photo.year}} <span ng-hide="photo.year">?</span></li>
+                <li>People in this picture: {{photo.people_in_photo}}</li>
+                <li>Keywords: {{keywords}}</li>
+                <li>Categories: {{categories}}</li>
+                <li>YFU Organization: {{yfu_organization}} </li>
+                <li>Uploaded by {{photo.uploaded_by_name}} <span ng-hide="photo.uploaded_by_name">?</span></li>
+                <li>Email: <a  ng-href="mailto:{{photo.uploaded_by_email}}">{{photo.uploaded_by_email}}</a> <span ng-hide="photo.uploaded_by_email">?</span></li>
+            </ul>
+        </div>
+        <form ng-switch-when="edit" name="photoForm">
+            <div layout layout-sm="column">
+                <md-input-container>
+                    <label>Caption</label>
+                    <input ng-model="photo.caption">
+                </md-input-container>
+                <div
+                        multi-select
+                        input-model="countries"
+                        button-label="name"
+                        item-label="name"
+                        tick-property="ticked"
+                        >
+                </div>
+                <select name="">
+                    <option value="year">year</option>
+                </select>
+            </div>
+            <div layout layout-sm="column">
+                <md-input-container>
+                    <label>People in photo</label>
+                    <input ng-model="photo.people_in_photo">
+                </md-input-container>
+                <select name="">
+                    <option value="keywords">keywords</option>
+                </select>
+            </div>
+            <div>
+                <md-checkbox ng-model="data.cb1" aria-label="Checkbox 1">
+                    Checkbox 1:
+                </md-checkbox>
+            </div>
+            <div>
+                Status:
+                <select>
+                    <option value="unreviewed">unreviewed</option>
+                    <option value="approved">approved</option>
+                    <option value="rejected">rejected</option>
+                    <option value="no_rights">no rights</option>
+                </select>
+            </div>
+        </form>
+    </md-content>
+</md-dialog>

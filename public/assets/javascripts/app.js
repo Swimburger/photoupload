@@ -1,7 +1,24 @@
 /**
  * Created by Niels on 12/02/2015.
  */
-angular.module('PhotoBrowser', ['ngMaterial','wu.masonry','PhotoAPI'])
+angular.module('PhotoBrowser', ['ngRoute','ngMaterial','wu.masonry','multi-select','PhotoAPI'])
+    .config(['$routeProvider',function($routeProvider){
+        $routeProvider
+            .when("/photos", {
+
+            })
+            .when("/photos/:id", {
+                controller: 'PhotoPopupController',
+                template:' '
+            })
+            .when('/keywords',{
+
+            })
+            .when('/categories',{
+
+            })
+            .otherwise('/photos');
+    }])
     .controller('RootController', ['$scope','Category', 'Keyword', 'Photo', 'PhotoKeyword', 'PhotoCategory', 'Roles',
         function($scope, Category, Keyword, Photo, PhotoKeyword, PhotoCategory, Roles){
             $scope.categories = Category.query();
@@ -17,11 +34,16 @@ angular.module('PhotoBrowser', ['ngMaterial','wu.masonry','PhotoAPI'])
             ];
             $scope.tabs = tabs;
         }])
-    .controller('PhotosController',['$scope','Photo','Category','Keyword','PhotoKeyword','PhotoCategory',
-        function($scope,Photo,Category,Keyword,PhotoKeyword,PhotoCategory){
+    .controller('PhotosController',['$scope','$location','Photo','Category','Keyword','PhotoKeyword','PhotoCategory',
+        function($scope,$location,Photo,Category,Keyword,PhotoKeyword,PhotoCategory){
             $scope.photos=Photo.query();
             $scope.itemsPerPage = 10;
             $scope.currentPage = 0;
+
+            $scope.showDetails=function(id){
+                $location.path('/photos/'+id);
+            };
+
 
             $scope.range = function() {
                 var rangeSize = 5;
@@ -68,6 +90,43 @@ angular.module('PhotoBrowser', ['ngMaterial','wu.masonry','PhotoAPI'])
             };
         }
     ])
+    .controller('PhotoPopupController',['$mdDialog',function($mdDialog){
+        $mdDialog.show({
+            templateUrl:'/assets/templates/photo_details.html',
+            controller:'PhotoDetailsController',
+            controllerAs:'photoDetailsCtrl',
+            clickOutsideToClose:false
+        });
+    }])
+    .controller('PhotoDetailsController',['$scope','$routeParams','$location','$mdDialog','Photo','Category','Keyword','PhotoKeyword','PhotoCategory','Country','Organization',
+        function($scope,$routeParams,$location,$mdDialog,Photo,Category,Keyword,PhotoKeyword,PhotoCategory,Country,Organization){
+            $scope.photo = Photo.get({id:$routeParams.id});
+            $scope.photoCopy = {};
+            $scope.mode='default';//default|edit|detail
+            $scope.countries = Country.query();
+            $scope.organizations = Organization.query();
+            $scope.closeDialog=function(){
+                $mdDialog.hide();
+                $location.path('/photos');
+            };
+            $scope.edit=function(){
+                $scope.mode='edit';
+                angular.copy($scope.photo,$scope.photoCopy);
+            };
+            $scope.save=function(){
+                $scope.photo.$update({id:$scope.photo.id});
+                //TODO: save cats and keywords
+                $scope.mode='default';
+            };
+            $scope.cancel=function(){
+                $scope.mode='default';
+                $scope.photo = $scope.photoCopy;
+            };
+            $scope.details=function(){
+                $scope.mode=$scope.mode=='details'?'default':'details';
+            };
+        }]
+    )
     .controller('CategoriesController',['$scope','Category',function($scope,Category){
         $scope.categories = Category.query();
     }])
@@ -86,5 +145,15 @@ angular.module('PhotoBrowser', ['ngMaterial','wu.masonry','PhotoAPI'])
             for (var i=0; i<total; i++)
                 input.push(i);
             return input;
+        };
+    })
+    .directive('backImg', function(){
+        return function(scope, element, attrs){
+            attrs.$observe('backImg', function(value) {
+                element.css({
+                    'background-image': 'url(' + value +')',
+                    'background-size' : 'cover'
+                });
+            });
         };
     });
