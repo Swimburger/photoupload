@@ -9,7 +9,7 @@
         years.push(year);
     }
     var statuses = ['unreviewed','approved','rejected','no_usage'];
-    angular.module('PhotoBrowser', ['ngRoute','ngMaterial','wu.masonry','multi-select','PhotoAPI'])
+    angular.module('PhotoBrowser', ['ngRoute','ngMaterial','ngAnimate','ngFx','PhotoAPI'])
         .config(['$routeProvider',function($routeProvider){
             $routeProvider
                 .when("/photos", {
@@ -42,31 +42,72 @@
                 ];
                 $scope.tabs = tabs;
             }])
-        .controller('PhotosController',['$scope','$location','Photo','Category','Keyword','PhotoKeyword','PhotoCategory',
-            function($scope,$location,Photo,Category,Keyword,PhotoKeyword,PhotoCategory){
+        .controller('PhotosController',['$scope','$q','$location','Photo','Country','Organization','Category','Keyword','PhotoKeyword','PhotoCategory',
+            function($scope,$q,$location,Photo,Country,Organization,Category,Keyword,PhotoKeyword,PhotoCategory){
+                var countries= Country.query(),
+                    organizations = Organization.query(),
+                    categories = Category.query(),
+                    keywords = Keyword.query(),
+                    photoKeywords = PhotoKeyword.query(),
+                    photoCategories = PhotoCategory.query();
                 $scope.photos=Photo.query();
                 $scope.itemsPerPage = 10;
                 $scope.currentPage = 0;
+                $scope.search = '';
+                $scope.finalQuery='';
+                $scope.finalOrder='';
+                $scope.ascending=true;
+                $scope.finalAscending=true;
+                $scope.minRes=0;
+                $scope.finalMinRes=0;
+                $scope.properties=['all','caption','country','organization','year','people','keywords','categories','uploaded by'];
+                $scope.orderProperties=['caption','country','organization','year','people','uploaded by','height','width'];
+                $scope.propertyToSearch=$scope.properties[0];
+                function getFilter(query,property) {
+                    switch (property){
+                        case 'caption':
+                            return {caption: query};
+                        case 'country':
+                            return {country: query};
+                        case 'organization':
+                            return {organization:query};
+                        case 'year':
+                            return {year:query};
+                        case 'people':
+                            return {people_in_photo:query};
+                        case 'keywords':
+                            return {keywords:query};
+                        case 'categories':
+                            return {categories:query};
+                        case 'uploaded by':
+                            return {uploaded_by_name:query};
+                        default:
+                            return query;
+                    }
+                }
+
+                $scope.searchPhotos= function (search,propertyToSearch,propertyToOrder,ascending) {
+                    $scope.finalQuery=getFilter(search,propertyToSearch);
+                    $scope.finalOrder=propertyToOrder;
+                    $scope.finalAscending=ascending;
+                    $scope.finalMinRes=$scope.minRes;
+                    $scope.currentPage=0;
+                };
+
+                $scope.greaterThen=function(prop, val) {
+                    return function (item) {
+                        return item[prop] > val;
+                    }
+                }
+
+                $q.all([$scope.photos.$promise,countries.$promise]).then(initPhotosCountries);
+                $q.all([$scope.photos.$promise,organizations.$promise]).then(initPhotosOrganizations);
+                $q.all([$scope.photos.$promise,photoKeywords.$promise,keywords.$promise]).then(initPhotosKeywords);
+                $q.all([$scope.photos.$promise,photoCategories.$promise,categories.$promise]).then(initPhotosCategories);
+
 
                 $scope.showDetails=function(id){
                     $location.path('/photos/'+id);
-                };
-
-
-                $scope.range = function() {
-                    var rangeSize = 5;
-                    var ret = [];
-                    var start;
-
-                    start = $scope.currentPage;
-                    if ( start > $scope.pageCount()-rangeSize ) {
-                        start = $scope.pageCount()-rangeSize+1;
-                    }
-
-                    for (var i=start; i<start+rangeSize; i++) {
-                        ret.push(i);
-                    }
-                    return ret;
                 };
 
                 $scope.prevPage = function() {
@@ -79,23 +120,58 @@
                     return $scope.currentPage === 0 ? "disabled" : "";
                 };
 
-                $scope.pageCount = function() {
-                    return Math.ceil($scope.photos.length/$scope.itemsPerPage)-1;
-                };
+                $scope.pageCount = function(photos) {
+                    return Math.ceil(photos.length/$scope.itemsPerPage)-1;
+                }
 
-                $scope.nextPage = function() {
-                    if ($scope.currentPage < $scope.pageCount()) {
+                $scope.nextPage = function(photos) {
+                    if ($scope.currentPage < $scope.pageCount(photos)) {
                         $scope.currentPage++;
                     }
                 };
 
-                $scope.nextPageDisabled = function() {
-                    return $scope.currentPage === $scope.pageCount() ? "disabled" : "";
+                $scope.nextPageDisabled = function(photos) {
+                    return $scope.currentPage === $scope.pageCount(photos) ? "disabled" : "";
                 };
 
                 $scope.setPage = function(n) {
                     $scope.currentPage = n;
                 };
+
+                function initPhotosCountries() {
+                    doubleForEach($scope.photos,countries,function(photo,country){
+                        if(photo.country_id==country.id){
+                            photo.country=country.name;
+                        }
+                    });
+                }
+                function initPhotosOrganizations() {
+                    doubleForEach($scope.photos,organizations,function(photo,organization){
+                        if(photo.yfu_organization_id==organization.id){
+                            photo.organization=organization.name;
+                        }
+                    });
+                }
+                function initPhotosKeywords() {
+                    tripleForEach($scope.photos,photoKeywords,keywords,function(photo,photoKeyword,keyword){
+                        if(!photo.keywords){
+                            photo.keywords = '';
+                        }
+                        if(photo.id==photoKeyword.photo_id&&photoKeyword.keyword_id==keyword.id){
+                            photo.keywords+=keyword.word + ' ';
+                        }
+                    });
+                }
+                function initPhotosCategories() {
+                    tripleForEach($scope.photos,photoCategories,categories,function(photo,photoCategory,category){
+                        if(!photo.categories){
+                            photo.categories = '';
+                        }
+                        if(photo.id==photoCategory.photo_id&&photoCategory.category_id==category.id){
+                            photo.categories+=category.name + ' ';
+                        }
+                    });
+                }
             }
         ])
         .controller('PhotoPopupController',['$mdDialog',function($mdDialog){
@@ -135,25 +211,24 @@
                     angular.copy($scope.photo,$scope.photoCopy);
                 };
                 $scope.save=function(){
-                    var promises=[];
                     $scope.photo.categories.length=0;
                     angular.forEach($scope.categories,function(category){
                         if(category.checked){
                             $scope.photo.categories.push(category);
-                            promises.push(PhotoCategory.save({photo_id:$routeParams.id,category_id:category.id}).$promise);
                         }else{
 
                         }
                     });
                     angular.forEach($scope.photo.keywords,function(keyword){
-                        promises.push(PhotoKeyword.save({photo_id:$routeParams.id,keyword_id:keyword.id}).$promise);
-                    });
-                    promises.push($scope.photo.$update({id:$scope.photo.id}));
 
-                    $q.all(promises).then(function(){
+                    });
+
+                    $scope.photo.country_id=$scope.photo.country.id;
+
+                    $scope.photo.$update({id:$scope.photo.id}).then(function(){
                         $scope.mode='default';
                         $scope.error=false;
-                    }).catch(function(){
+                    }).catch(function () {
                         $scope.error=true;
                     });
                 };
@@ -173,7 +248,7 @@
                 }
                 function initPhotoOrganization(){
                     angular.forEach($scope.organizations,function(organization,key){
-                        if(organization.id==$scope.photo.organization_id){
+                        if(organization.id==$scope.photo.yfu_organization_id){
                             $scope.photo.organization=organization;
                         }
                     });
@@ -184,7 +259,6 @@
                         if(keyword.id==photoKeyword.keyword_id){
                             $scope.photo.keywords.push(keyword);
                         }
-                        photoKeyword.existsInDb
                     });
                 }
                 function initPhotoCategories(){
@@ -196,7 +270,6 @@
                         }else{
                             category.checked=false;
                         }
-                        photoCategory.existsInDb=true;
                     });
                     angular.forEach($scope.photo.categories,function(category){
                         category.checked=true;
@@ -255,6 +328,19 @@
             for(i2 = 0;i2<collection2.length;i2++){
                 item2=collection2[i2];
                 callback(item1,item2,i1,i2);
+            }
+        }
+    }
+    function tripleForEach(collection1,collection2,collection3,callback){
+        var i1,i2,i3,item1,item2,item3;
+        for(i1 = 0;i1<collection1.length;i1++){
+            item1=collection1[i1];
+            for(i2 = 0;i2<collection2.length;i2++){
+                item2=collection2[i2];
+                for(i3 = 0;i3<collection3.length;i3++){
+                    item3=collection3[i3];
+                    callback(item1,item2,item3,i1,i2,i3);
+                }
             }
         }
     }

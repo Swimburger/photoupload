@@ -12,23 +12,25 @@
             <md-button class="md-warn md-raised" ng-click="cancel()"><i class="mdi-cancel mdi-2x"></i></md-button>
         </div>
         <img ng-src="/api/photos/{{photo.id}}/file/large" alt="{{photo.caption}}"/>
+
+        <h2 layout="row"><span flex>{{photo.caption}}</span><small>{{photo.status}}</small></h2>
     </div>
     <md-content ng-switch="mode" class="info">
-        <div ng-switch-default>
-            <h2>{{photo.caption}}</h2>
-            <ul>
-                <li>Status: {{photo.status}}</li>
+        <div ng-switch-default layout="row">
+            <ul flex>
                 <li>Country: {{photo.country.name}} <span ng-hide="photo.country">?</span></li>
                 <li>Year: {{photo.year}} <span ng-hide="photo.year">?</span></li>
                 <li>People in this picture: {{photo.people_in_photo}}</li>
                 <li>Keywords: {{joinKeywords(photo.keywords)}}</li>
+            </ul>
+            <ul flex>
                 <li>Categories: {{joinCategories(photo.categories)}}</li>
-                <li>YFU Organization: {{photo.yfu_organization.name}} <span ng-hide="photo.yfu_organization">?</span> </li>
+                <li>YFU Organization: {{photo.organization.name}} <span ng-hide="photo.organization">?</span> </li>
                 <li>Uploaded by {{photo.uploaded_by_name}} <span ng-hide="photo.uploaded_by_name">?</span></li>
                 <li>Email: <a  ng-href="mailto:{{photo.uploaded_by_email}}">{{photo.uploaded_by_email}}</a> <span ng-hide="photo.uploaded_by_email">?</span></li>
             </ul>
         </div>
-        <form ng-switch-when="edit" name="photoForm" class="info">
+        <form ng-switch-when="edit" name="photoForm" class="info" ng-class="{error:error}">
             <div layout layout-sm="column" layout-margin>
                 <md-input-container flex>
                     <label>Caption</label>

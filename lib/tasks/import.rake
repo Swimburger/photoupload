@@ -2,7 +2,6 @@ require 'csv'
 require 'wannabe_bool'
 
 namespace :import do
-  #TODO: write import
   desc 'This imports the old photos from the previous photouploader through a CSV dump'
   task :old_photos,[:force] => [:environment] do |t, args|
 
