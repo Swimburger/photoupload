@@ -38,6 +38,6 @@ angular.module('PhotoAPI',['ngResource'])
     .factory('Organization',['$resource',function($resource){
         return $resource('/api/yfu_organizations/:id');
     }])
-    .factory('Roles',['$resource', function ($resource) {
+    .factory('Role',['$resource', function ($resource) {
         return $resource('/api/my_roles');
     }]);

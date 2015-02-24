@@ -1,6 +1,6 @@
 class PhotosController < ApiController
   before_action :set_photo, only: [:show, :update, :destroy]
-  load_and_authorize_resource
+  load_and_authorize_resource :except => [:file,:file_by_id]
 
   # GET /photos
   # GET /photos.json
@@ -25,7 +25,7 @@ class PhotosController < ApiController
 
     if current_user.has_role? :admin
     elsif current_user.has_role? :reader
-      @photos.where!(status: :approved)
+      @photos.where!(status: 1)
     end
 
     render json: @photos
@@ -60,12 +60,15 @@ class PhotosController < ApiController
     if @photo.update(photo_params)
       if params.has_key? :keywords
         PhotosKeyword.destroy_all(photo_id:params[:id])
-        params[:keywords].each { |keyword | PhotosKeyword.create(photo_id:params[:id],keyword_id:keyword[:id])}
+        if !params[:keywords].nil?
+          params[:keywords].each { |keyword | PhotosKeyword.create(photo_id:params[:id],keyword_id:keyword[:id])}
+        end
       end
       if params.has_key? :categories
-
         PhotosCategory.destroy_all(photo_id:params[:id])
-        params[:categories].each { |category|  PhotosCategory.create(photo_id:params[:id],category_id:category[:id])}
+        if !params[:categories].nil?
+          params[:categories].each { |category|  PhotosCategory.create(photo_id:params[:id],category_id:category[:id])}
+        end
       end
       head :no_content
     else
@@ -83,7 +86,16 @@ class PhotosController < ApiController
 
   # /photos/file/:size/:filename.:format
   def file
-    photo = Photo.find_by(image_file_name: params[:image_name] + '.' + params[:format])
+    if !user_signed_in?
+      return render text: 'Unauthorized to access this resource', status: :unauthorized
+    end
+    photo = Photo.select(
+        :id,
+        :image_file_name,
+        :image_content_type,
+        :image_file_size,
+        :status
+    ).find_by(image_file_name: params[:image_name] + '.' + params[:format])
     if current_user.has_role? :admin #a user could have a reader and admin role, so ignore being a reader if you're an admin
     elsif (current_user.has_role? :reader) && !photo.approved?
       return render text: 'Unauthorized to access this resource', status: :unauthorized
@@ -94,7 +106,17 @@ class PhotosController < ApiController
 
   # /photos/:id/file/:size/
   def file_by_id
-    photo = Photo.find_by(id:params[:id])
+    if !user_signed_in?
+      return render text: 'Unauthorized to access this resource', status: :unauthorized
+    end
+    photo = Photo.select(
+        :id,
+        :image_file_name,
+        :image_content_type,
+        :image_file_size,
+        :status
+    ).find(params[:id])
+    puts photo.approved?.to_s
     if current_user.has_role? :admin #a user could have a reader and admin role, so ignore being a reader if you're an admin
     elsif (current_user.has_role? :reader) && !photo.approved?
       return render text: 'Unauthorized to access this resource', status: :unauthorized
@@ -126,12 +148,13 @@ class PhotosController < ApiController
   end
 
   def photo_params
-    params.permit(:caption,
-                  :year,
-                  :people_in_photo,
-                  :country_id,
-                  :yfu_organization_id,
-                  :status
+    params.permit(
+        :caption,
+        :year,
+        :people_in_photo,
+        :country_id,
+        :yfu_organization_id,
+        :status
     )
   end
 end

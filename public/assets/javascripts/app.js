@@ -27,23 +27,21 @@
                 })
                 .otherwise('/photos');
         }])
-        .controller('RootController', ['$scope','Category', 'Keyword', 'Photo', 'PhotoKeyword', 'PhotoCategory', 'Roles',
-            function($scope, Category, Keyword, Photo, PhotoKeyword, PhotoCategory, Roles){
-                $scope.categories = Category.query();
-                $scope.keywords = Keyword.query();
-                $scope.photos = Photo.query();
-                $scope.photoKeywords = PhotoKeyword.query();
-                $scope.photoCategories = PhotoCategory.query();
-                $scope.roles = Roles.query();
-                var tabs = [
+        .controller('RootController', ['$scope','$location', 'Role',
+            function($scope,$location, Role){
+                Role.query().$promise.then(function(roles){
+                    $scope.isAdmin = roles.indexOf('admin')>-1;
+                    $scope.$root=$scope.isAdmin;
+                });
+                $scope.tabs = [
                     { title: 'Photos', template: "/assets/templates/photos.html"},
                     { title: 'Categories', template: "/assets/templates/categories.html"},
                     { title: 'Keywords', template: "/assets/templates/keywords.html"}
                 ];
-                $scope.tabs = tabs;
+                $scope.showSearch=$location.search().showSearch?true:false;
             }])
-        .controller('PhotosController',['$scope','$q','$location','Photo','Country','Organization','Category','Keyword','PhotoKeyword','PhotoCategory',
-            function($scope,$q,$location,Photo,Country,Organization,Category,Keyword,PhotoKeyword,PhotoCategory){
+        .controller('PhotosController',['$scope','$q','$route','$routeParams','$location','Photo','Country','Organization','Category','Keyword','PhotoKeyword','PhotoCategory',
+            function($scope,$q,$route,$routeParams,$location,Photo,Country,Organization,Category,Keyword,PhotoKeyword,PhotoCategory){
                 var countries= Country.query(),
                     organizations = Organization.query(),
                     categories = Category.query(),
@@ -52,17 +50,23 @@
                     photoCategories = PhotoCategory.query();
                 $scope.photos=Photo.query();
                 $scope.itemsPerPage = 10;
-                $scope.currentPage = 0;
-                $scope.search = '';
+                $scope.currentPage = $routeParams.page?$routeParams.page:0;
+                $scope.search = $routeParams.search? $routeParams.search: '';
                 $scope.finalQuery='';
                 $scope.finalOrder='';
-                $scope.ascending=true;
-                $scope.finalAscending=true;
-                $scope.minRes=0;
-                $scope.finalMinRes=0;
+                $scope.ascending=$routeParams.ascending? $routeParams.ascending:true;
+                $scope.finalAscending=$scope.ascending;
+                $scope.minRes=$routeParams.minRes? $routeParams.minRes:0;
+                $scope.finalMinRes=$scope.minRes;
                 $scope.properties=['all','caption','country','organization','year','people','keywords','categories','uploaded by'];
                 $scope.orderProperties=['caption','country','organization','year','people','uploaded by','height','width'];
-                $scope.propertyToSearch=$scope.properties[0];
+                if($routeParams.propertyToOrder){
+                    $scope.propertyToOrder=$routeParams.propertyToOrder;
+                }
+                $scope.propertyToSearch=$routeParams.propertyToSearch? $routeParams.propertyToSearch:$scope.properties[0];
+                $scope.statuses = statuses;
+                $scope.selectedStatus=$routeParams.status? $routeParams.status:'';
+                $scope.finalStatus=$scope.selectedStatus;
                 function getFilter(query,property) {
                     switch (property){
                         case 'caption':
@@ -86,19 +90,22 @@
                     }
                 }
 
-                $scope.searchPhotos= function (search,propertyToSearch,propertyToOrder,ascending) {
+                $scope.searchPhotos= function (search,propertyToSearch,propertyToOrder,ascending,minRes,selectedStatus,page) {
                     $scope.finalQuery=getFilter(search,propertyToSearch);
                     $scope.finalOrder=propertyToOrder;
                     $scope.finalAscending=ascending;
-                    $scope.finalMinRes=$scope.minRes;
-                    $scope.currentPage=0;
+                    $scope.finalMinRes=minRes;
+                    $scope.finalStatus=selectedStatus;
+                    $scope.currentPage=page?page:0;
+                    setRouteParams();
                 };
+                $scope.searchPhotos($scope.search,$scope.propertyToSearch,$scope.propertyToOrder,$scope.ascending,$scope.minRes,$scope.selectedStatus,$scope.currentPage);
 
                 $scope.greaterThen=function(prop, val) {
                     return function (item) {
                         return item[prop] > val;
                     }
-                }
+                };
 
                 $q.all([$scope.photos.$promise,countries.$promise]).then(initPhotosCountries);
                 $q.all([$scope.photos.$promise,organizations.$promise]).then(initPhotosOrganizations);
@@ -113,6 +120,7 @@
                 $scope.prevPage = function() {
                     if ($scope.currentPage > 0) {
                         $scope.currentPage--;
+                        $route.updateParams({page:$scope.currentPage});
                     }
                 };
 
@@ -122,11 +130,12 @@
 
                 $scope.pageCount = function(photos) {
                     return Math.ceil(photos.length/$scope.itemsPerPage)-1;
-                }
+                };
 
                 $scope.nextPage = function(photos) {
                     if ($scope.currentPage < $scope.pageCount(photos)) {
                         $scope.currentPage++;
+                        $route.updateParams({page:$scope.currentPage});
                     }
                 };
 
@@ -136,6 +145,7 @@
 
                 $scope.setPage = function(n) {
                     $scope.currentPage = n;
+                    $route.updateParams({page:n});
                 };
 
                 function initPhotosCountries() {
@@ -170,6 +180,19 @@
                         if(photo.id==photoCategory.photo_id&&photoCategory.category_id==category.id){
                             photo.categories+=category.name + ' ';
                         }
+                    });
+                }
+                function setRouteParams(){
+                    $route.updateParams({
+                        search:$scope.search,
+                        propertyToSearch:$scope.propertyToSearch,
+                        propertyToOrder:$scope.propertyToOrder,
+                        order:$scope.finalOrder,
+                        ascending:$scope.finalAscending,
+                        minRes:$scope.finalMinRes,
+                        status:$scope.finalStatus,
+                        page:$scope.currentPage,
+                        showSearch:$scope.showSearch?'true':'false'
                     });
                 }
             }

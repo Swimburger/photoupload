@@ -51,6 +51,9 @@
             transition:         max-height 750ms ease-in-out;
             position: relative;
         }
+        .photo-dialog.edit > .mask{
+            max-height: 300px;
+        }
         .photo-dialog.details > .mask{
             max-height: 2000px;
         }
@@ -140,53 +143,44 @@
         .slider-container md-slider{
             margin-top: -10px;
         }
+        .search-form .select-container{
+            width: 120px;
+        }
   </style>
 </head>
 <body layout="column" ng-controller="RootController as rootCtrl">
-<md-toolbar layout="row">
-  <div class="md-toolbar-tools">
-    <span class="md-flex">YFU Photo Browser</span>
-    <span flex></span>
-    <md-button ng-click="showSearch=!showSearch"><i class="mdi-2x mdi-search"></i></md-button>
-  </div>
-</md-toolbar>
-<md-tabs md-selected="selectedIndex">
-  <md-tab ng-repeat="tab in tabs" label="{{tab.title}}">
-    <div class="tab-content tab{{$index}}" layout="column" layout-fill>
-      <ng-include src="tab.template" style="display:block;width:100%;"></ng-include>
+    <md-toolbar layout="row">
+      <div class="md-toolbar-tools">
+        <span class="md-flex">YFU Photo Browser</span>
+        <span flex></span>
+        <md-button ng-click="showSearch=!showSearch"><i class="mdi-2x mdi-search"></i></md-button>
+      </div>
+    </md-toolbar>
+    <div ng-if="isAdmin">
+      <md-tabs  md-selected="selectedIndex">
+        <md-tab ng-repeat="tab in tabs" label="{{tab.title}}">
+          <div class="tab-content tab{{$index}}" layout="column" layout-fill>
+            <ng-include src="tab.template" style="display:block;width:100%;"></ng-include>
+          </div>
+        </md-tab>
+      </md-tabs>
     </div>
-  </md-tab>
-</md-tabs>
-<div ng-view></div>
-<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>-->
-<!-- Angular Material Dependencies -->
-<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.13/angular.min.js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.13/angular-animate.min.js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.13/angular-aria.min.js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.13/angular-resource.min.js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.13/angular-route.min.js"></script>
+    <div ng-if="!isAdmin">
+      <ng-include src="'/assets/templates/photos.html'" style="display:block;width:100%;"></ng-include>
+    </div>
+    <div ng-view></div>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.13/angular.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.13/angular-animate.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.13/angular-aria.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.13/angular-resource.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.13/angular-route.min.js"></script>
 
-<script src="/assets/bower_components/angular-material/angular-material.min.js"></script>
+    <script src="/assets/bower_components/angular-material/angular-material.min.js"></script>
+    
+    <script src="/assets/bower_components/ngFx/dist/ngFx.min.js"></script>
 
-<!-- Masonry -->
-<!--<script src="/assets/bower_components/get-size/get-size.js"></script>
-<script src="/assets/bower_components/get-style-property/get-style-property.js"></script>
-<script src="/assets/bower_components/eventie/eventie.js"></script>
-<script src="/assets/bower_components/doc-ready/doc-ready.js"></script>
-<script src="/assets/bower_components/eventEmitter/EventEmitter.min.js"></script>
-<script src="/assets/bower_components/matches-selector/matches-selector.js"></script>
-<script src="/assets/bower_components/imagesloaded/imagesloaded.pkgd.min.js"></script>
-<script src="/assets/bower_components/masonry/dist/masonry.pkgd.min.js"></script>
-<script src="/assets/bower_components/outlayer/outlayer.js"></script>
-
-<script src="/assets/bower_components/angular-masonry/angular-masonry.js"></script>-->
-
-<!--<script src="/assets/bower_components/isteven-angular-multiselect/angular-multi-select.js"></script>-->
-
-<script src="/assets/bower_components/ngFx/dist/ngFx.min.js"></script>
-
-<!-- App -->
-<script src="/assets/javascripts/PhotoAPI.js"></script>
-<script src="/assets/javascripts/app.js"></script>
+    <!-- App -->
+    <script src="/assets/javascripts/PhotoAPI.js"></script>
+    <script src="/assets/javascripts/app.js"></script>
 </body>
 </html>

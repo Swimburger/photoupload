@@ -1,5 +1,5 @@
 <div ng-controller="PhotosController as photosCtrl" >
-    <div ng-show="showSearch" class="fx-zoom-normal fx-speed-800" layout="column" layout-margin style="max-width: 960px;margin: 0 auto;">
+    <div ng-show="showSearch" class="fx-zoom-normal fx-speed-800 search-form" layout="column" layout-margin style="max-width: 960px;margin: 0 auto;">
         <div layout="row" layout-align="center end" layout-margin>
             <md-input-container flex style="margin:0;">
                 <label>Search</label>
@@ -11,6 +11,13 @@
                     <md-option ng-value="property" ng-repeat="property in properties">{{ property }}</md-option>
                 </md-select>
             </div>
+            <div class="select-container" ng-show="isAdmin">
+                <label>Status</label>
+                <md-select ng-model="selectedStatus" placeholder="Status">
+                    <md-option ng-value="''">All</md-option>
+                    <md-option ng-value="status" ng-repeat="status in statuses">{{ status }}</md-option>
+                </md-select>
+            </div>
             <div class="select-container">
                 <label>Order by</label>
                 <md-select ng-model="propertyToOrder" placeholder="Sort">
@@ -20,13 +27,16 @@
             <md-checkbox ng-model="ascending" style="padding-bottom:20px;">
                 Ascending
             </md-checkbox>
-            <md-button ng-click="searchPhotos(search,propertyToSearch,propertyToOrder,ascending,minRes)" class="md-primary" style="margin-bottom: 24px;"><i class="mdi-search mdi-2x"></i></md-button>
         </div>
-        <div class="slider-container">
-            <label>Minimum Resolution (width)</label>
-            <md-slider flex md-discrete ng-model="minRes" step="90" min="0" max="3000" aria-label="Minimum resolution">
-            </md-slider>
+        <div layout="row">
+            <div class="slider-container" flex>
+                <label>Minimum Resolution (width)</label>
+                <md-slider flex md-discrete ng-model="minRes" step="90" min="0" max="3000" aria-label="Minimum resolution">
+                </md-slider>
+            </div>
+            <md-button ng-click="searchPhotos(search,propertyToSearch,propertyToOrder,ascending,minRes,selectedStatus)" class="md-primary" style="margin-bottom: 24px;"><i class="mdi-search mdi-2x"></i></md-button>
         </div>
+
     </div>
     <div layout="row" layout-align="space-around center" layout-wrap style="margin: 0 auto;max-width: 1620px; padding: 0 20px;">
         <!--<div masonry="{gutter:20,isFitWidth: true}" load-images="false"
@@ -48,7 +58,7 @@
         </div>-->
         <div flex="20"
              class="photo fx-fade-down fx-speed-800" ng-class="photo.status"
-             ng-repeat="photo in (filteredPhotos = (photos | filter:finalQuery |filter:greaterThen('width',finalMinRes) | orderBy:finalOrder:!finalAscending)) | offset: currentPage*itemsPerPage | limitTo: itemsPerPage"
+             ng-repeat="photo in (filteredPhotos = (photos | filter:finalQuery | filter:{status:finalStatus} |filter:greaterThen('width',finalMinRes) | orderBy:finalOrder:!finalAscending)) | offset: currentPage*itemsPerPage | limitTo: itemsPerPage"
              style="width:300px;margin-bottom:20px;position:relative;">
             <md-card ng-click="showDetails(photo.id)">
                 <div class="mask" ng-style="{'background-image':'url(/api/photos/{{photo.id}}/file/small)'}">
@@ -56,13 +66,13 @@
                 <span class="resolution">{{photo.height}}x{{photo.width}}</span>
                 <md-card-content>
                     <span>{{photo.caption|limitTo:30}}</span>
-                    <span ng-if="photo.caption.length>30">...</span>
-                    <span ng-if="!photo.caption">No caption</span>
+                    <span ng-show="photo.caption.length>30">...</span>
+                    <span ng-hide="photo.caption">No caption</span>
                 </md-card-content>
             </md-card>
         </div>
     </div>
-    <div class="pagination" ng-if="pageCount(filteredPhotos?filteredPhotos:photos)>1" style="text-align:center;position:fixed;bottom:25px;width:100%;">
+    <div class="pagination" ng-show="pageCount(filteredPhotos?filteredPhotos:photos)>1" style="text-align:center;position:fixed;bottom:25px;width:100%;">
         <md-button class="md-fab" ng-class="prevPageDisabled()" ng-click="prevPage()">
             &lt;
         </md-button>

@@ -4,7 +4,7 @@
         <div class="actions" ng-hide="mode=='edit'">
             <md-button ng-click="details()"><i class="mdi-image mdi-2x"></i></md-button>
             <md-button ng-href="{{'/api/photos/'+photo.id+'/file/original'}}" target="_blank" ng-click="download(photo.id)"><i class="mdi-file-download mdi-2x"></i></md-button>
-            <md-button ng-click="edit()"><i class="mdi-mode-edit mdi-2x"></i></md-button>
+            <md-button ng-if="isAdmin" ng-click="edit()"><i class="mdi-mode-edit mdi-2x"></i></md-button>
             <md-button ng-click="closeDialog()"><i class="mdi-close mdi-2x"></i></md-button>
         </div>
         <div class="actions" ng-hide="mode!='edit'">
@@ -13,7 +13,7 @@
         </div>
         <img ng-src="/api/photos/{{photo.id}}/file/large" alt="{{photo.caption}}"/>
 
-        <h2 layout="row"><span flex>{{photo.caption}}</span><small>{{photo.status}}</small></h2>
+        <h2 layout="row"><span flex>{{photo.caption}}</span><small ng-if="isAdmin">{{photo.status}}</small></h2>
     </div>
     <md-content ng-switch="mode" class="info">
         <div ng-switch-default layout="row">
