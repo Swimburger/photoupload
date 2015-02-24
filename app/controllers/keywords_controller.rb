@@ -58,6 +58,6 @@ class KeywordsController < ApiController
     end
 
     def keyword_params
-      params.require(:keyword).permit(:word, :is_predefined)
+      params.permit(:word, :is_predefined)
     end
 end

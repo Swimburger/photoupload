@@ -9,6 +9,11 @@
         years.push(year);
     }
     var statuses = ['unreviewed','approved','rejected','no_usage'];
+    var msgs={
+        keywordCreated:'keywordCreated',
+        categoryCreated:'categoryCreated',
+        photoCreated:'photoCreated'
+    };
     angular.module('PhotoBrowser', ['ngRoute','ngMaterial','ngAnimate','ngFx','PhotoAPI'])
         .config(['$routeProvider',function($routeProvider){
             $routeProvider
@@ -27,8 +32,8 @@
                 })
                 .otherwise('/photos');
         }])
-        .controller('RootController', ['$scope','$location', 'Role',
-            function($scope,$location, Role){
+        .controller('RootController', ['$scope','$location','$mdDialog', 'Role',
+            function($scope,$location,$mdDialog, Role){
                 Role.query().$promise.then(function(roles){
                     $scope.isAdmin = roles.indexOf('admin')>-1;
                     $scope.$root=$scope.isAdmin;
@@ -38,7 +43,27 @@
                     { title: 'Categories', template: "/assets/templates/categories.html"},
                     { title: 'Keywords', template: "/assets/templates/keywords.html"}
                 ];
+                $scope.rootCtrl.selectedIndex=0;
                 $scope.showSearch=$location.search().showSearch?true:false;
+
+                $scope.create=function(){
+                    switch($scope.rootCtrl.selectedIndex){
+                        case 1:
+                            $mdDialog.show({
+                                templateUrl:'/assets/templates/category_create.html',
+                                controller:'CreateCategoryController',
+                                controllerAs:'createCategoryCtrl'
+                            });
+                            break;
+                        case 2:
+                            $mdDialog.show({
+                                templateUrl:'/assets/templates/keyword_create.html',
+                                controller:'CreateKeywordController',
+                                controllerAs:'createKeywordsCtrl'
+                            });
+                            break;
+                    }
+                }
             }])
         .controller('PhotosController',['$scope','$q','$route','$routeParams','$location','Photo','Country','Organization','Category','Keyword','PhotoKeyword','PhotoCategory',
             function($scope,$q,$route,$routeParams,$location,Photo,Country,Organization,Category,Keyword,PhotoKeyword,PhotoCategory){
@@ -312,14 +337,110 @@
                     });
                     return string;
                 }
-            }]
-    )
-        .controller('CategoriesController',['$scope','Category',function($scope,Category){
+            }])
+        .controller('CategoriesController',['$scope','$mdDialog','Category',function($scope,$mdDialog,Category){
             $scope.categories = Category.query();
+            $scope.edit=function(category){
+                $mdDialog.show({
+                    templateUrl:'/assets/templates/category_details.html',
+                    locals:{
+                        category:category
+                    },
+                    controller:'CategoryDetailsController',
+                    controllerAs:'CategoryDetailsCtrl'
+                });
+            };
+            $scope.$on(msgs.categoryCreated,function(event,category){
+                $scope.categories.push(category);
+            });
+
         }])
-        .controller('KeywordsController',['$scope','Keyword',function($scope,Keyword){
+        .controller('CategoryDetailsController',['$scope','$mdDialog','category',
+            function($scope,$mdDialog,category){
+                $scope.category=angular.copy(category);
+                $scope.save=function(){
+                    $scope.category.$update({id:$scope.category.id}).then(function(){
+                        category.name=$scope.category.name;
+                        $mdDialog.hide();
+                    }).catch(function () {
+                        $scope.error=true;
+                    });
+                };
+                $scope.cancel=function(){
+                    $mdDialog.hide();
+                }
+            }])
+        .controller('CreateCategoryController',['$scope','$rootScope','$mdDialog','Category',
+            function($scope,$rootScope,$mdDialog,Category){
+                $scope.category = new Category({
+                    name:''
+                });
+                $scope.save=function(){
+                    if($scope.category.name.length>1){
+                        $scope.category.$save().then(function(){
+                            $rootScope.$broadcast(msgs.categoryCreated,$scope.category);
+                            $mdDialog.hide();
+                        }).catch(function(){
+                            $scope.error=true;
+                        });
+                    }
+                };
+                $scope.cancel=function(){
+                    $mdDialog.hide();
+                };
+            }])
+        .controller('KeywordsController',['$scope','$mdDialog','Keyword',function($scope,$mdDialog,Keyword){
             $scope.keywords = Keyword.query();
+            $scope.edit=function(keyword){
+                $mdDialog.show({
+                    templateUrl:'/assets/templates/keyword_details.html',
+                    locals:{
+                        keyword:keyword
+                    },
+                    controller:'KeywordDetailsController',
+                    controllerAs:'keywordDetailsCtrl'
+                });
+            };
+            $scope.$on(msgs.keywordCreated,function(event,keyword){
+               $scope.keywords.push(keyword);
+            });
         }])
+        .controller('KeywordDetailsController',['$scope','$mdDialog','keyword',
+            function($scope,$mdDialog,keyword){
+                $scope.keyword=angular.copy(keyword);
+                $scope.save=function(){
+                    $scope.keyword.$update({id:$scope.keyword.id}).then(function(){
+                        keyword.word=$scope.keyword.word;
+                        keyword.is_predefined=$scope.keyword.is_predefined;
+                        $mdDialog.hide();
+                    }).catch(function () {
+                        $scope.error=true;
+                    });
+                };
+                $scope.cancel=function(){
+                    $mdDialog.hide();
+                };
+            }])
+        .controller('CreateKeywordController',['$scope','$rootScope','$mdDialog','Keyword',
+            function($scope,$rootScope,$mdDialog,Keyword){
+                $scope.keyword = new Keyword({
+                    word:'',
+                    is_predefined:true
+                });
+                $scope.save=function(){
+                    if($scope.keyword.word.length>1){
+                        $scope.keyword.$save().then(function(){
+                            $rootScope.$broadcast(msgs.keywordCreated,$scope.keyword);
+                            $mdDialog.hide();
+                        }).catch(function(){
+                            $scope.error=true;
+                        });
+                    }
+                };
+                $scope.cancel=function(){
+                    $mdDialog.hide();
+                };
+            }])
         .filter('offset', function() {
             return function (input, start) {
                 start = parseInt(start, 10);

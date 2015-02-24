@@ -1,20 +1,16 @@
 <div ng-controller="KeywordsController as keywordsCtrl" style="max-width: 1280px;margin:20px auto; text-align:center;">
     <h2>Predefined keywords</h2>
-    <md-card ng-repeat="keyword in keywords | filter : {is_predefined:true}" style="display:inline-block;font-size:20px;padding:5px;" ng-init="keyword.mode='default'">
+    <md-card ng-repeat="keyword in keywords | filter : {is_predefined:true}" style="display:inline-block;font-size:20px;padding:5px;" class="keyword predefined"  ng-click="edit(keyword)">
         <md-card-content>
             {{keyword.word}}
-            <i class="mdi mdi-edit" ng-show="keyword.mode=='default'" ng-click="keyword.mode='edit'"></i>
-            <i class="mdi mdi-close" ng-show="keyword.mode=='edit'" ng-click="keyword.mode='default'"></i>
-            <i class="mdi mdi-done" ng-show="keyword.mode=='edit'" ng-click="keyword.mode='default'"></i>
+            <i class="mdi mdi-edit"></i>
         </md-card-content>
     </md-card>
     <h2>Other keywords</h2>
-    <md-card ng-repeat="keyword in keywords | filter : {is_predefined:false}" style="display:inline-block;padding:5px;" ng-init="keyword.mode='default'">
+    <md-card ng-repeat="keyword in keywords | filter : {is_predefined:false}" style="display:inline-block;padding:5px;" class="keyword"  ng-click="edit(keyword)">
         <md-card-content>
             {{keyword.word}}
-            <i class="mdi mdi-edit" ng-show="keyword.mode=='default'" ng-click="keyword.mode='edit'"></i>
-            <i class="mdi mdi-close" ng-show="keyword.mode=='edit'" ng-click="keyword.mode='default'"></i>
-            <i class="mdi mdi-done" ng-show="keyword.mode=='edit'" ng-click="keyword.mode='default'"></i>
+            <i class="mdi mdi-edit"></i>
         </md-card-content>
     </md-card>
 </div>
