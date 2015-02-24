@@ -36,7 +36,7 @@
             function($scope,$location,$mdDialog, Role){
                 Role.query().$promise.then(function(roles){
                     $scope.isAdmin = roles.indexOf('admin')>-1;
-                    $scope.$root=$scope.isAdmin;
+                    $scope.$root.isAdmin=$scope.isAdmin;
                 });
                 $scope.tabs = [
                     { title: 'Photos', template: "/assets/templates/photos.html"},
@@ -233,6 +233,7 @@
         }])
         .controller('PhotoDetailsController',['$scope','$routeParams','$location','$q','$mdDialog','Photo','Category','Keyword','PhotoKeyword','PhotoCategory','Country','Organization',
             function($scope,$routeParams,$location,$q,$mdDialog,Photo,Category,Keyword,PhotoKeyword,PhotoCategory,Country,Organization){
+                $scope.isAdmin=$scope.$root.isAdmin;
                 $scope.photo = Photo.get({id:$routeParams.id});
                 $scope.photoCopy = {};
                 $scope.mode='default';//default|edit|detail
