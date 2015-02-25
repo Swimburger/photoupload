@@ -36,7 +36,9 @@ class PhotosCategoriesController < ApiController
     @photos_category = PhotosCategory.new(photos_category_params)
 
     if @photos_category.save
-      render json: @photos_category, status: :created, location: @photos_category
+      render json: {id:@photos_category.id,
+                    photo_id:@photos_category.photo_id,
+                    category_id:@photos_category.category_id}, status: :created, location: @photos_category
     else
       render json: @photos_category.errors, status: :unprocessable_entity
     end

@@ -22,7 +22,7 @@ class CountriesController < ApiController
     @country = Country.new(country_params)
 
     if @country.save
-      render json: @country, status: :created, location: @country
+      render json: {id:@country.id,name:@country.name}, status: :created, location: @country
     else
       render json: @country.errors, status: :unprocessable_entity
     end
@@ -55,6 +55,6 @@ class CountriesController < ApiController
     end
 
     def country_params
-      params.require(:country).permit(:name)
+      params.permit(:name)
     end
 end

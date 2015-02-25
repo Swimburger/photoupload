@@ -55,6 +55,6 @@ class YfuOrganizationsController < ApiController
     end
 
     def yfu_organization_params
-      params.require(:yfu_organization).permit(:name)
+      params.permit(:name)
     end
 end

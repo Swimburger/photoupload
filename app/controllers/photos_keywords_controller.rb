@@ -35,7 +35,9 @@ class PhotosKeywordsController < ApiController
     @photos_keyword = PhotosKeyword.new(photos_keyword_params)
 
     if @photos_keyword.save
-      render json: @photos_keyword, status: :created, location: @photos_keyword
+      render json: {id:@photos_keyword.id,
+                    photo_id:@photos_keyword.photo_id,
+                    keyword_id:@photos_keyword.keyword_id}, status: :created, location: @photos_keyword
     else
       render json: @photos_keyword.errors, status: :unprocessable_entity
     end

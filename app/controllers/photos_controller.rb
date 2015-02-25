@@ -41,17 +41,7 @@ class PhotosController < ApiController
     render json: @photo
   end
 
-  # POST /photos
-  # POST /photos.json
-  def create
-    @photo = Photo.new(photo_params)
 
-    if @photo.save
-      render json: @photo, status: :created, location: @photo
-    else
-      render json: @photo.errors, status: :unprocessable_entity
-    end
-  end
 
   # PATCH/PUT /photos/1
   # PATCH/PUT /photos/1.json
@@ -126,6 +116,18 @@ class PhotosController < ApiController
   end
 
   private
+
+  # POST /photos
+  # POST /photos.json
+  def create
+    @photo = Photo.new(photo_params)
+
+    if @photo.save
+      render json: @photo, status: :created, location: @photo
+    else
+      render json: @photo.errors, status: :unprocessable_entity
+    end
+  end
 
   def set_photo
     @photo = Photo.select(

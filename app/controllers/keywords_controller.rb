@@ -25,7 +25,7 @@ class KeywordsController < ApiController
     @keyword = Keyword.new(keyword_params)
 
     if @keyword.save
-      render json: @keyword, status: :created, location: @keyword
+      render json: {id:@keyword.id,word:@keyword.word}, status: :created, location: @keyword
     else
       render json: @keyword.errors, status: :unprocessable_entity
     end
