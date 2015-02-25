@@ -74,18 +74,29 @@
                         }catch(err){}
                     },
                     progress: function (e, data) {
-                        var progress = parseInt(data.loaded / data.total * 100, 10)+"%";
+                        var progress = parseInt(data.loaded / data.total * 100, 10);
+                        progress= progress<70?progress:70;
+                        var progressText = progress+"%";
                         $progressBar.css(
                             'width',
-                            progress
+                            progressText
                         );
-                        $progressBar.text(progress);
+                        $progressBar.text(progressText);
+                        if(progress==70){
+                            $progressBar.addClass('progress-bar-striped active');
+                        }
                     },
                     done: function(e, data){
                         $form.addClass('panel-success');
                         $form.removeClass('panel-danger');
+                        $progressBar.css(
+                            'width',
+                            '100%'
+                        );
+                        $progressBar.text('100%');
+                        $progressBar.addClass('progress-bar-success');
                         $form.css('background','#5cb85c');
-                        $form.delay(500).hide(1000,function(){
+                        $form.delay(1000).hide(1000,function(){
                             $form.remove();
                         });
                         $error.hide('fast');
@@ -264,7 +275,7 @@
                 year,
                 html='';
             for(year=1951;year<=currentYear;year++){
-                html+='<option value"'+year+'">'+year+'</option>'
+                html+='<option '+(currentYear==year?'selected':'')+' value"'+year+'">'+year+'</option>';
             }
             $(html).appendTo($template.find('.year'));
         })();

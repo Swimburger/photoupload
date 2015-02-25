@@ -1,5 +1,6 @@
-<html lang="en" ng-app="PhotoBrowser">
+<html lang="en" ng-app="PhotoBrowser"  ng-controller="RootController as rootCtrl">
 <head>
+  <title>YFU Photo Browser | {{title}}</title>
   <link rel="stylesheet" href="/assets/bower_components/angular-material/angular-material.min.css">
   <link rel="stylesheet" href="/assets/bower_components/material-design-iconic-font/css/icons.css"/>
   <style>
@@ -174,7 +175,7 @@
           }
   </style>
 </head>
-<body layout="column" ng-controller="RootController as rootCtrl">
+<body layout="column">
     <md-toolbar layout="row">
       <div class="md-toolbar-tools" layout-margin>
         <span class="md-flex">YFU Photo Browser</span>
@@ -185,7 +186,7 @@
     </md-toolbar>
     <div ng-if="isAdmin">
       <md-tabs md-selected="rootCtrl.selectedIndex">
-        <md-tab ng-repeat="tab in tabs" label="{{tab.title}}">
+        <md-tab ng-repeat="tab in tabs" label="{{tab.title}}" md-on-select="onTabSelected(tab)">
           <div class="tab-content tab{{$index}}" layout="column" layout-fill>
             <ng-include src="tab.template" style="display:block;width:100%;"></ng-include>
           </div>

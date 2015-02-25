@@ -43,7 +43,31 @@
                     { title: 'Categories', template: "/assets/templates/categories.html"},
                     { title: 'Keywords', template: "/assets/templates/keywords.html"}
                 ];
-                $scope.rootCtrl.selectedIndex=0;
+                var path =$location.path();
+                if(path=='/categories'){
+                    $scope.rootCtrl.selectedIndex=1;
+                }else if(path=='/keywords'){
+                    $scope.rootCtrl.selectedIndex=2;
+                }else{
+                    $scope.rootCtrl.selectedIndex=0;
+                }
+                $scope.onTabSelected=function(tab){
+                    switch($scope.tabs.indexOf(tab)){
+                        case 0:
+                            $location.path('/photos');
+                            $scope.title='Photos';
+                            break;
+                        case 1:
+                            $location.path('/categories');
+                            $scope.title='Categories';
+                            break;
+                        case 2:
+                            $location.path('/keywords');
+                            $scope.title='Keywords';
+                            break;
+                    }
+                };
+
                 $scope.showSearch=$location.search().showSearch=='true';
 
                 $scope.create=function(){
