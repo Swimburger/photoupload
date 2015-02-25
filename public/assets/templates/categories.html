@@ -1,5 +1,5 @@
-<div ng-controller="CategoriesController as categoriesCtrl" style="max-width: 1280px;margin:20px auto; text-align:center;">
-    <md-card ng-repeat="category in categories" style="display:inline-block;font-size:20px;padding:5px;" class="category"  ng-click="edit(category)">
+<div class="categories" ng-controller="CategoriesController as categoriesCtrl">
+    <md-card ng-repeat="category in categories" class="category"  ng-click="edit(category)">
         <md-card-content>
             {{category.name}}
             <i class="mdi mdi-edit"></i>

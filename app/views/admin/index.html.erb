@@ -3,177 +3,7 @@
   <title>YFU Photo Browser | {{title}}</title>
   <link rel="stylesheet" href="/assets/bower_components/angular-material/angular-material.min.css">
   <link rel="stylesheet" href="/assets/bower_components/material-design-iconic-font/css/icons.css"/>
-  <style>
-        html{
-            overflow:hidden;
-        }
-        .md-tab-content{
-            overflow:auto;
-        }
-        .photo .mask{
-            height: 280px;
-            background-position: center;
-            background-size: cover;
-            background-repeat: no-repeat;
-        }
-        .photo.unreviewed > md-card, .photo-dialog.unreviewed > div{
-            border-top: solid #BBBBBB 5px;
-        }
-        .photo.approved > md-card, .photo-dialog.approved > div{
-            border-top: solid #5cb85c 5px;
-        }
-        .photo.rejected > md-card, .photo-dialog.rejected > div{
-            border-top: solid #B00100 5px;
-        }
-        .photo.no_usage > md-card, .photo-dialog.no_usage > div{
-            border-top: solid #730E15 5px;
-        }
-        .photo-dialog .actions {
-            position: absolute;
-            right: 20px;
-            top: 20px;
-            background: rgba(0,0,0,0.5);
-        }
-        .photo-dialog.edit .actions{
-            background: none;
-        }
-        .photo-dialog .actions > *{
-            color:#fff;
-        }
-        .photo-dialog md-content ul{
-            margin: 0;
-            padding: 0;
-            list-style: none;
-        }
-        .photo-dialog md-content li{
-            margin: 10px 0;
-        }
-        .photo-dialog > .mask{
-            max-height: 450px;
-            overflow: hidden;
-            -webkit-transition: max-height 750ms ease-in-out;
-            -moz-transition:    max-height 750ms ease-in-out;
-            -o-transition:      max-height 750ms ease-in-out;
-            transition:         max-height 750ms ease-in-out;
-            position: relative;
-        }
-        .photo-dialog.edit > .mask{
-            max-height: 300px;
-        }
-        .photo-dialog.details > .mask{
-            max-height: 2000px;
-        }
-        .photo-dialog img{
-            height: auto;
-            width: 100%;
-        }
-        .photo-dialog .info{
-            -webkit-transition: all 750ms ease-in-out;
-            -moz-transition:    all 750ms ease-in-out;
-            -o-transition:      all 750ms ease-in-out;
-            transition:         all 750ms ease-in-out;
-            max-height: 1000px;
-        }
-        .photo-dialog.details .info{
-            max-height: 0;
-            padding:0;
-        }
-        .photo-dialog.default form{
-            display:none;
-        }
-        .photo-dialog .mask h2{
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            background: rgba(0,0,0,0.5);
-            padding: 10px 24px 10px 24px;
-            margin: 0;
-            width: 100%;
-            color: #fff;
-        }
-        .resolution {
-            position: absolute;
-            top: 20px;
-            left: 15px;
-            padding: 5px;
-            color: white;
-            background: rgba(0, 0, 0, 0.5);
-        }
-        .select-container{
-            display: -webkit-flex;
-            display: -ms-flexbox;
-            display: flex;
-            position: relative;
-            -webkit-flex-direction: column;
-            -ms-flex-direction: column;
-            flex-direction: column;
-            overflow-x: hidden;
-            padding: 2px 2px 26px;
-        }
-        .select-container label{
-            color: rgba(0,0,0,0.54);
-            -webkit-order: 1;
-            -ms-flex-order: 1;
-            order: 1;
-            pointer-events: none;
-            -webkit-font-smoothing: antialiased;
-            padding-left: 2px;
-            z-index: 1;
-            -webkit-transform: translate3d(0,24px,0) scale(1);
-            transform: translate3d(0,24px,0) scale(1);
-            -webkit-transform-origin: left top;
-            transform-origin: left top;
-            transition: -webkit-transform cubic-bezier(.25,.8,.25,1) .25s;
-            transition: transform cubic-bezier(.25,.8,.25,1) .25s;
-            -webkit-transform: translate3d(0,4px,0) scale(.75);
-            transform: translate3d(0,4px,0) scale(.75);
-        }
-        .select-container md-select{
-            -webkit-flex: 1;
-            -ms-flex: 1;
-            flex: 1;
-            -webkit-order: 2;
-            -ms-flex-order: 2;
-            order: 2;
-            margin-top: 0;
-        }
-        .slider-container{
-            padding: 5px;
-        }
-        .slider-container label{
-            font-size: 13px;
-            color: rgba(0,0,0,0.54);
-            -webkit-font-smoothing: antialiased;
-            padding-left: 3px;
-        }
-        .slider-container md-slider{
-            margin-top: -10px;
-        }
-        .search-form .select-container{
-            width: 120px;
-        }
-        .keyword i, .category i{
-            -webkit-transition: opacity 250ms ease-in-out;
-            -moz-transition:    opacity 250ms ease-in-out;
-            -o-transition:      opacity 250ms ease-in-out;
-            transition:         opacity 250ms ease-in-out;
-            opacity:0;
-        }
-        .keyword:hover i, .category:hover i{
-            opacity:1;
-        }
-          .md-toolbar-tools button {
-              margin-left: 6px;
-          }
-          .crud-dialog > h2{
-              font-size: 18px;
-              color: #444;
-              padding: 15px 24px 10px;
-              margin: 0;
-              background: #eee;
-              font-weight: 400;
-          }
-  </style>
+  <link rel="stylesheet" href="/assets/stylesheets/app.css"/>
 </head>
 <body layout="column">
     <md-toolbar layout="row">
@@ -182,6 +12,7 @@
         <span flex></span>
         <md-button aria-label="Add categories or keywords" ng-hide="rootCtrl.selectedIndex==0" ng-click="create()"><i class="mdi-2x mdi-add"></i></md-button>
         <md-button aria-label="Search photos" ng-show="rootCtrl.selectedIndex==0" ng-click="showSearch=!showSearch"><i class="mdi-2x mdi-search"></i></md-button>
+        <md-button aria-label="Show Help" ng-click="toggleHelp()"><i class="mdi-2x mdi-help"></i></md-button>
       </div>
     </md-toolbar>
     <div ng-if="isAdmin">
@@ -196,6 +27,25 @@
     <div ng-if="!isAdmin">
       <ng-include src="'/assets/templates/photos.html'" style="display:block;width:100%;"></ng-include>
     </div>
+    <md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="help">
+      <md-toolbar class="md-theme-light">
+        <div class="md-toolbar-tools">
+          <span>Help</span>
+          <span flex></span>
+          <md-button aria-label="Close Help" ng-click="toggleHelp()"><i class="mdi-2x mdi-close"></i></md-button>
+        </div>
+      </md-toolbar>
+      <md-content class="md-padding center-text" layout="column" layout-align="start center">
+        <p>
+          If you encounter any issues or have questions, please contact the helpdesk.
+        </p>
+        <md-button href="https://helpdesk.yfu-is.org/" target="_blank">Go to helpdesk</md-button>
+      </md-content>
+      <div class="credits">
+        <p>This application is developed by <br/><a href="https://www.linkedin.com/in/nielsswimberghe/" target="_blank">Niels Swimberghe</a> for YFU-IS as part of an internship for NMCT.</p>
+        <a href="http://www.nmct.be" target="_blank"><%= image_tag 'nmct.png', alt: 'NMCT' %></a>
+      </div>
+    </md-sidenav>
     <div ng-view></div>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.13/angular.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.13/angular-animate.min.js"></script>

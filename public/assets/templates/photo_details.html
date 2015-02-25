@@ -59,7 +59,7 @@
                     <label>People in photo</label>
                     <input ng-model="photo.people_in_photo">
                 </md-input-container>
-                <div class="select-container" flex style="min-width: 200px;">
+                <div class="select-container" flex>
                     <label>Keywords</label>
                     <md-select multiple ng-model="photo.keywords" placeholder="Keywords">
                         <md-select-label>
@@ -87,7 +87,7 @@
                 </md-select>
             </div>
         </form>
-        <div ng-switch-when="remove-warning" style="height: 100px" >
+        <div ng-switch-when="remove-warning" class="remove-warning" >
             <h3 style="text-align: center;">Are you sure you want to delete this photo?</h3>
             <div layout layout-align="center center">
                 <md-button class="md-warn" ng-click="remove()">

@@ -1,7 +1,7 @@
 <div ng-controller="PhotosController as photosCtrl" >
-    <div ng-show="showSearch" class="fx-zoom-normal fx-speed-800 search-form" layout="column" layout-margin style="max-width: 960px;margin: 0 auto;">
+    <div ng-show="showSearch" class="fx-zoom-normal fx-speed-800 search-form" layout="column" layout-margin>
         <div layout="row" layout-align="center end" layout-margin>
-            <md-input-container flex style="margin:0;">
+            <md-input-container flex>
                 <label>Search</label>
                 <input ng-model="search"/>
             </md-input-container>
@@ -24,7 +24,7 @@
                     <md-option ng-value="property" ng-repeat="property in orderProperties">{{ property }}</md-option>
                 </md-select>
             </div>
-            <md-checkbox ng-model="ascending" style="padding-bottom:20px;">
+            <md-checkbox ng-model="ascending">
                 Ascending
             </md-checkbox>
         </div>
@@ -34,32 +34,14 @@
                 <md-slider flex md-discrete ng-model="minRes" step="90" min="0" max="3000" aria-label="Minimum resolution">
                 </md-slider>
             </div>
-            <md-button aria-label="Search photos" ng-click="searchPhotos(search,propertyToSearch,propertyToOrder,ascending,minRes,selectedStatus)" class="md-primary" style="margin-bottom: 24px;"><i class="mdi-search mdi-2x"></i></md-button>
+            <md-button aria-label="Search photos" ng-click="searchPhotos(search,propertyToSearch,propertyToOrder,ascending,minRes,selectedStatus)" class="md-primary"><i class="mdi-search mdi-2x"></i></md-button>
         </div>
 
     </div>
-    <div layout="row" layout-align="space-around center" layout-wrap style="margin: 0 auto;max-width: 1620px; padding: 0 20px;">
-        <!--<div masonry="{gutter:20,isFitWidth: true}" load-images="false"
-             column-width="300"
-             style="display: block;margin:0 auto;">
-            <div class="masonry-brick photo" ng-class="photo.status"
-                 ng-repeat="photo in (filteredPhotos = (photos | filter:finalQuery  | orderBy:finalOrder:!finalAscending)) | offset: currentPage*itemsPerPage | limitTo: itemsPerPage"
-                 style="opacity: 0;width:300px;margin-bottom:20px;">
-                <md-card ng-click="showDetails(photo.id)">
-                    <div class="mask" ng-style="{'background-image':'url(/api/photos/{{photo.id}}/file/small)'}">
-                    </div>
-                    <span class="resolution">{{photo.height}}x{{photo.width}}</span>
-                    <md-card-content>
-                        <span>{{photo.caption|limitTo:30}}</span>
-                        <span ng-if="photo.caption.length>30">...</span>
-                    </md-card-content>
-                </md-card>
-            </div>
-        </div>-->
+    <div layout="row" layout-align="space-around center" layout-wrap class="photos">
         <div flex="20" flex-lg="30" flex-md="40" flex-sm="90"
              class="photo fx-fade-down fx-speed-800" ng-class="photo.status"
-             ng-repeat="photo in (filteredPhotos = (photos | filter:finalQuery | filter:{status:finalStatus} |filter:greaterThen('width',finalMinRes) | orderBy:finalOrder:!finalAscending)) | offset: currentPage*itemsPerPage | limitTo: itemsPerPage"
-             style="width:300px;margin-bottom:20px;position:relative;">
+             ng-repeat="photo in (filteredPhotos = (photos | filter:finalQuery | filter:{status:finalStatus} |filter:greaterThen('width',finalMinRes) | orderBy:finalOrder:!finalAscending)) | offset: currentPage*itemsPerPage | limitTo: itemsPerPage">
             <md-card ng-click="showDetails(photo.id)">
                 <div class="mask" ng-style="{'background-image':'url(/api/photos/{{photo.id}}/file/small)'}">
                 </div>
@@ -71,7 +53,7 @@
             </md-card>
         </div>
     </div>
-    <div class="pagination" ng-show="pageCount(filteredPhotos?filteredPhotos:photos)>1" style="text-align:center;position:fixed;bottom:25px;width:100%;">
+    <div class="pagination" ng-show="pageCount(filteredPhotos?filteredPhotos:photos)>1">
         <md-button aria-label="Previous page" class="md-fab" ng-class="prevPageDisabled()" ng-click="prevPage()">
             &lt;
         </md-button>

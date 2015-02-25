@@ -32,8 +32,8 @@
                 })
                 .otherwise('/photos');
         }])
-        .controller('RootController', ['$scope','$location','$mdDialog', 'Role',
-            function($scope,$location,$mdDialog, Role){
+        .controller('RootController', ['$scope','$location','$mdDialog','$mdSidenav', 'Role',
+            function($scope,$location,$mdDialog,$mdSidenav, Role){
                 Role.query().$promise.then(function(roles){
                     $scope.isAdmin = roles.indexOf('admin')>-1;
                     $scope.$root.isAdmin=$scope.isAdmin;
@@ -88,6 +88,10 @@
                             break;
                     }
                 }
+
+                $scope.toggleHelp = function() {
+                    $mdSidenav('help').toggle();
+                };
             }])
         .controller('PhotosController',['$scope','$q','$route','$routeParams','$location','Photo','Country','Organization','Category','Keyword','PhotoKeyword','PhotoCategory',
             function($scope,$q,$route,$routeParams,$location,Photo,Country,Organization,Category,Keyword,PhotoKeyword,PhotoCategory){
