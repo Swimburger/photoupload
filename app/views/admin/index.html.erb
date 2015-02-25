@@ -155,8 +155,16 @@
         .keyword:hover i, .category:hover i{
             opacity:1;
         }
-          .md-toolbar-tools button{
-              margin-left:6px;
+          .md-toolbar-tools button {
+              margin-left: 6px;
+          }
+          .crud-dialog > h2{
+              font-size: 18px;
+              color: #444;
+              padding: 15px 24px 10px;
+              margin: 0;
+              background: #eee;
+              font-weight: 400;
           }
   </style>
 </head>
@@ -165,8 +173,8 @@
       <div class="md-toolbar-tools" layout-margin>
         <span class="md-flex">YFU Photo Browser</span>
         <span flex></span>
-        <md-button ng-hide="rootCtrl.selectedIndex==0" ng-click="create()"><i class="mdi-2x mdi-add"></i></md-button>
-        <md-button ng-show="rootCtrl.selectedIndex==0" ng-click="showSearch=!showSearch"><i class="mdi-2x mdi-search"></i></md-button>
+        <md-button aria-label="Add categories or keywords" ng-hide="rootCtrl.selectedIndex==0" ng-click="create()"><i class="mdi-2x mdi-add"></i></md-button>
+        <md-button aria-label="Search photos" ng-show="rootCtrl.selectedIndex==0" ng-click="showSearch=!showSearch"><i class="mdi-2x mdi-search"></i></md-button>
       </div>
     </md-toolbar>
     <div ng-if="isAdmin">

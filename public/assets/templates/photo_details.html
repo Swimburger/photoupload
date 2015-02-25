@@ -2,18 +2,22 @@
     <div class="mask">
         <span class="resolution">{{photo.height}}x{{photo.width}}</span>
         <div class="actions" ng-hide="mode=='edit'">
-            <md-button ng-click="details()"><i class="mdi-image mdi-2x"></i></md-button>
-            <md-button ng-href="{{'/api/photos/'+photo.id+'/file/original'}}" target="_blank" ng-click="download(photo.id)"><i class="mdi-file-download mdi-2x"></i></md-button>
-            <md-button ng-if="isAdmin" ng-click="edit()"><i class="mdi-mode-edit mdi-2x"></i></md-button>
-            <md-button ng-click="closeDialog()"><i class="mdi-close mdi-2x"></i></md-button>
+            <md-button aria-label="Show photo" ng-click="details()"><i class="mdi-image mdi-2x"></i></md-button>
+            <md-button aria-label="Go to photo" ng-href="{{'/api/photos/'+photo.id+'/file/original'}}" target="_blank" ng-click="download(photo.id)"><i class="mdi-file-download mdi-2x"></i></md-button>
+            <md-button aria-label="Edit photo" ng-if="isAdmin" ng-click="edit()"><i class="mdi-mode-edit mdi-2x"></i></md-button>
+            <md-button aria-label="Delete photo" ng-if="isAdmin" ng-click="showRemoveWarning()"><i class="mdi-delete mdi-2x"></i></md-button>
+            <md-button aria-label="Close dialog" ng-click="closeDialog()"><i class="mdi-close mdi-2x"></i></md-button>
         </div>
         <div class="actions" ng-hide="mode!='edit'">
-            <md-button class="md-primary md-raised" ng-click="save()"><i class="mdi-save mdi-2x"></i></md-button>
-            <md-button class="md-warn md-raised" ng-click="cancel()"><i class="mdi-cancel mdi-2x"></i></md-button>
+            <md-button aria-label="Save edits" class="md-primary md-raised" ng-click="save()"><i class="mdi-save mdi-2x"></i></md-button>
+            <md-button aria-label="Cancel edits" class="md-warn md-raised" ng-click="cancel()"><i class="mdi-cancel mdi-2x"></i></md-button>
         </div>
         <img ng-src="/api/photos/{{photo.id}}/file/large" alt="{{photo.caption}}"/>
-
-        <h2 layout="row"><span flex>{{photo.caption}}</span><small ng-if="isAdmin">{{photo.status}}</small></h2>
+        <h2 layout="row">
+            <span flex ng-show="photo.caption">{{photo.caption}}</span>
+            <span flex ng-hide="photo.caption">No caption</span>
+            <small ng-if="isAdmin">{{photo.status}}</small>
+        </h2>
     </div>
     <md-content ng-switch="mode" class="info">
         <div ng-switch-default layout="row">
@@ -83,5 +87,16 @@
                 </md-select>
             </div>
         </form>
+        <div ng-switch-when="remove-warning" style="height: 100px" >
+            <h3 style="text-align: center;">Are you sure you want to delete this photo?</h3>
+            <div layout layout-align="center center">
+                <md-button class="md-warn" ng-click="remove()">
+                    Delete photo
+                </md-button>
+                <md-button ng-click="cancelRemove()">
+                    Cancel
+                </md-button>
+            </div>
+        </div>
     </md-content>
 </md-dialog>

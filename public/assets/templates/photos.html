@@ -34,7 +34,7 @@
                 <md-slider flex md-discrete ng-model="minRes" step="90" min="0" max="3000" aria-label="Minimum resolution">
                 </md-slider>
             </div>
-            <md-button ng-click="searchPhotos(search,propertyToSearch,propertyToOrder,ascending,minRes,selectedStatus)" class="md-primary" style="margin-bottom: 24px;"><i class="mdi-search mdi-2x"></i></md-button>
+            <md-button aria-label="Search photos" ng-click="searchPhotos(search,propertyToSearch,propertyToOrder,ascending,minRes,selectedStatus)" class="md-primary" style="margin-bottom: 24px;"><i class="mdi-search mdi-2x"></i></md-button>
         </div>
 
     </div>
@@ -72,15 +72,15 @@
         </div>
     </div>
     <div class="pagination" ng-show="pageCount(filteredPhotos?filteredPhotos:photos)>1" style="text-align:center;position:fixed;bottom:25px;width:100%;">
-        <md-button class="md-fab" ng-class="prevPageDisabled()" ng-click="prevPage()">
+        <md-button aria-label="Previous page" class="md-fab" ng-class="prevPageDisabled()" ng-click="prevPage()">
             &lt;
         </md-button>
-        <md-button class="md-fab"
+        <md-button aria-label="Go to page {{n+1}}" class="md-fab"
                    ng-repeat="n in []|range:pageCount(filteredPhotos?filteredPhotos:photos)"
                    ng-class="{active: n == currentPage}" ng-click="setPage(n)">
             {{n+1}}
         </md-button>
-        <md-button class="md-fab" ng-class="nextPageDisabled(filteredPhotos?filteredPhotos:photos)" ng-click="nextPage(filteredPhotos?filteredPhotos:photos)">
+        <md-button aria-label="Next page" class="md-fab" ng-class="nextPageDisabled(filteredPhotos?filteredPhotos:photos)" ng-click="nextPage(filteredPhotos?filteredPhotos:photos)">
             &gt;
         </md-button>
     </div>

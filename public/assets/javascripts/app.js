@@ -14,7 +14,7 @@
         categoryCreated:'categoryCreated',
         photoCreated:'photoCreated'
     };
-    angular.module('PhotoBrowser', ['ngRoute','ngMaterial','ngAnimate','ngFx','PhotoAPI'])
+    angular.module('PhotoBrowser', ['ngRoute','ngAria','ngMaterial','ngAnimate','ngFx','PhotoAPI'])
         .config(['$routeProvider',function($routeProvider){
             $routeProvider
                 .when("/photos", {
@@ -44,7 +44,7 @@
                     { title: 'Keywords', template: "/assets/templates/keywords.html"}
                 ];
                 $scope.rootCtrl.selectedIndex=0;
-                $scope.showSearch=$location.search().showSearch?true:false;
+                $scope.showSearch=$location.search().showSearch=='true';
 
                 $scope.create=function(){
                     switch($scope.rootCtrl.selectedIndex){
@@ -288,6 +288,18 @@
                 $scope.details=function(){
                     $scope.mode=$scope.mode=='details'?'default':'details';
                 };
+                $scope.showRemoveWarning=function(){
+                    $scope.mode='remove-warning'
+                };
+                $scope.remove=function() {
+                    $scope.photo.$delete({id:$scope.photo.id}).then(function(){
+                        $mdDialog.hide();
+                        $location.path('/photos');
+                    });
+                };
+                $scope.cancelRemove= function () {
+                    $scope.mode='default';
+                }
                 function initPhotoCountry() {
                     angular.forEach($scope.countries,function(country,key){
                         if(country.id==$scope.photo.country_id){
