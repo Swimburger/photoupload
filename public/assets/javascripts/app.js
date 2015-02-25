@@ -12,7 +12,8 @@
     var msgs={
         keywordCreated:'keywordCreated',
         categoryCreated:'categoryCreated',
-        photoCreated:'photoCreated'
+        photoUpdated:'photoUpdated',
+        photoRemoved:'photoRemoved'
     };
     angular.module('PhotoBrowser', ['ngRoute','ngAria','ngMaterial','ngAnimate','ngFx','PhotoAPI'])
         .config(['$routeProvider',function($routeProvider){
@@ -54,7 +55,11 @@
                 $scope.onTabSelected=function(tab){
                     switch($scope.tabs.indexOf(tab)){
                         case 0:
-                            $location.path('/photos');
+                            var newPath = $location.path();
+                            if(newPath.indexOf('/photos')<0)
+                            {
+                                $location.path('/photos');
+                            }
                             $scope.title='Photos';
                             break;
                         case 1:
@@ -101,25 +106,28 @@
                     keywords = Keyword.query(),
                     photoKeywords = PhotoKeyword.query(),
                     photoCategories = PhotoCategory.query();
-                $scope.photos=Photo.query();
-                $scope.itemsPerPage = 10;
-                $scope.currentPage = $routeParams.page?$routeParams.page:0;
-                $scope.search = $routeParams.search? $routeParams.search: '';
-                $scope.finalQuery='';
-                $scope.finalOrder='';
-                $scope.ascending=$routeParams.ascending? $routeParams.ascending:true;
-                $scope.finalAscending=$scope.ascending;
-                $scope.minRes=$routeParams.minRes? $routeParams.minRes:0;
-                $scope.finalMinRes=$scope.minRes;
-                $scope.properties=['all','caption','country','organization','year','people','keywords','categories','uploaded by'];
-                $scope.orderProperties=['caption','country','organization','year','people','uploaded by','height','width'];
-                if($routeParams.propertyToOrder){
-                    $scope.propertyToOrder=$routeParams.propertyToOrder;
-                }
-                $scope.propertyToSearch=$routeParams.propertyToSearch? $routeParams.propertyToSearch:$scope.properties[0];
-                $scope.statuses = statuses;
-                $scope.selectedStatus=$routeParams.status? $routeParams.status:'';
-                $scope.finalStatus=$scope.selectedStatus;
+                (function initScope(){
+                    $scope.photos=Photo.query();
+                    $scope.itemsPerPage = 10;
+                    $scope.currentPage = $routeParams.page?$routeParams.page:0;
+                    $scope.search = $routeParams.search? $routeParams.search: '';
+                    $scope.finalQuery='';
+                    $scope.finalOrder='';
+                    $scope.ascending=$routeParams.ascending? $routeParams.ascending:true;
+                    $scope.finalAscending=$scope.ascending;
+                    $scope.minRes=$routeParams.minRes? $routeParams.minRes:0;
+                    $scope.finalMinRes=$scope.minRes;
+                    $scope.properties=['all','caption','country','organization','year','people','keywords','categories','uploaded by'];
+                    $scope.orderProperties=['caption','country','organization','year','people','uploaded by','height','width'];
+                    if($routeParams.propertyToOrder){
+                        $scope.propertyToOrder=$routeParams.propertyToOrder;
+                    }
+                    $scope.propertyToSearch=$routeParams.propertyToSearch? $routeParams.propertyToSearch:$scope.properties[0];
+                    $scope.statuses = statuses;
+                    $scope.selectedStatus=$routeParams.status? $routeParams.status:'';
+                    $scope.finalStatus=$scope.selectedStatus;
+                })();
+
                 function getFilter(query,property) {
                     switch (property){
                         case 'caption':
@@ -160,46 +168,78 @@
                     }
                 };
 
-                $q.all([$scope.photos.$promise,countries.$promise]).then(initPhotosCountries);
-                $q.all([$scope.photos.$promise,organizations.$promise]).then(initPhotosOrganizations);
-                $q.all([$scope.photos.$promise,photoKeywords.$promise,keywords.$promise]).then(initPhotosKeywords);
-                $q.all([$scope.photos.$promise,photoCategories.$promise,categories.$promise]).then(initPhotosCategories);
-
-
                 $scope.showDetails=function(id){
                     $location.path('/photos/'+id);
                 };
 
-                $scope.prevPage = function() {
-                    if ($scope.currentPage > 0) {
-                        $scope.currentPage--;
-                        $route.updateParams({page:$scope.currentPage});
-                    }
-                };
+                (function initPagination(){
 
-                $scope.prevPageDisabled = function() {
-                    return $scope.currentPage === 0 ? "disabled" : "";
-                };
+                    $scope.prevPage = function() {
+                        if ($scope.currentPage > 0) {
+                            $scope.currentPage--;
+                            $route.updateParams({page:$scope.currentPage});
+                        }
+                    };
 
-                $scope.pageCount = function(photos) {
-                    return Math.ceil(photos.length/$scope.itemsPerPage)-1;
-                };
+                    $scope.prevPageDisabled = function() {
+                        return $scope.currentPage === 0 ? "disabled" : "";
+                    };
 
-                $scope.nextPage = function(photos) {
-                    if ($scope.currentPage < $scope.pageCount(photos)) {
-                        $scope.currentPage++;
-                        $route.updateParams({page:$scope.currentPage});
-                    }
-                };
+                    $scope.pageCount = function(photos) {
+                        return Math.ceil(photos.length/$scope.itemsPerPage)-1;
+                    };
 
-                $scope.nextPageDisabled = function(photos) {
-                    return $scope.currentPage === $scope.pageCount(photos) ? "disabled" : "";
-                };
+                    $scope.nextPage = function(photos) {
+                        if ($scope.currentPage < $scope.pageCount(photos)) {
+                            $scope.currentPage++;
+                            $route.updateParams({page:$scope.currentPage});
+                        }
+                    };
 
-                $scope.setPage = function(n) {
-                    $scope.currentPage = n;
-                    $route.updateParams({page:n});
-                };
+                    $scope.nextPageDisabled = function(photos) {
+                        return $scope.currentPage === $scope.pageCount(photos) ? "disabled" : "";
+                    };
+
+                    $scope.setPage = function(n) {
+                        $scope.currentPage = n;
+                        $route.updateParams({page:n});
+                    };
+                })();
+
+                $scope.$on(msgs.photoUpdated, function (event,photo) {
+                    angular.forEach($scope.photos,function(otherPhoto){
+                        if(photo.id==otherPhoto.id){
+                            otherPhoto.caption=photo.caption;
+                            otherPhoto.year=photo.year;
+                            otherPhoto.people_in_photo=photo.people_in_photo;
+                            otherPhoto.country_id=photo.country_id;
+                            otherPhoto.country=photo.country.name;
+                            otherPhoto.yfu_organization_id=photo.yfu_organization_id;
+                            otherPhoto.organization=photo.organization.name;
+                            otherPhoto.categories='';
+                            otherPhoto.keywords='';
+                            otherPhoto.status=photo.status;
+                            angular.forEach(photo.categories,function(category){
+                                otherPhoto.categories+=category.name + ' ';
+                            });
+                            angular.forEach(photo.keywords,function(keyword){
+                                otherPhoto.keywords+=keyword.word + ' ';
+                            })
+                        }
+                    });
+                });
+                $scope.$on(msgs.photoRemoved, function (event,photo){
+                    angular.forEach($scope.photos,function(otherPhoto,key){
+                        if(otherPhoto.id==photo.id){
+                            $scope.photos.splice(key,1);
+                        }
+                    });
+                });
+
+                $q.all([$scope.photos.$promise,countries.$promise]).then(initPhotosCountries);
+                $q.all([$scope.photos.$promise,organizations.$promise]).then(initPhotosOrganizations);
+                $q.all([$scope.photos.$promise,photoKeywords.$promise,keywords.$promise]).then(initPhotosKeywords);
+                $q.all([$scope.photos.$promise,photoCategories.$promise,categories.$promise]).then(initPhotosCategories);
 
                 function initPhotosCountries() {
                     doubleForEach($scope.photos,countries,function(photo,country){
@@ -259,75 +299,77 @@
                 escapeToClose:false
             });
         }])
-        .controller('PhotoDetailsController',['$scope','$routeParams','$location','$q','$mdDialog','Photo','Category','Keyword','PhotoKeyword','PhotoCategory','Country','Organization',
-            function($scope,$routeParams,$location,$q,$mdDialog,Photo,Category,Keyword,PhotoKeyword,PhotoCategory,Country,Organization){
-                $scope.isAdmin=$scope.$root.isAdmin;
-                $scope.photo = Photo.get({id:$routeParams.id});
-                $scope.photoCopy = {};
-                $scope.mode='default';//default|edit|detail
-                $scope.countries = Country.query();
-                $scope.organizations = Organization.query();
-                $scope.keywords= Keyword.query();
-                $scope.photoKeywords = PhotoKeyword.query({photo_id:$routeParams.id});
-                $scope.categories= Category.query();
-                $scope.photoCategories = PhotoCategory.query({photo_id:$routeParams.id});
-                $scope.years = years;
-                $scope.statuses = statuses;
+        .controller('PhotoDetailsController',['$scope','$rootScope','$routeParams','$location','$q','$mdDialog','Photo','Category','Keyword','PhotoKeyword','PhotoCategory','Country','Organization',
+            function($scope,$rootScope,$routeParams,$location,$q,$mdDialog,Photo,Category,Keyword,PhotoKeyword,PhotoCategory,Country,Organization){
+                (function initScope(){
+                    $scope.isAdmin=$scope.$root.isAdmin;
+                    $scope.photo = Photo.get({id:$routeParams.id});
+                    $scope.photoCopy = {};
+                    $scope.mode='default';//default|edit|detail
+                    $scope.countries = Country.query();
+                    $scope.organizations = Organization.query();
+                    $scope.keywords= Keyword.query();
+                    $scope.photoKeywords = PhotoKeyword.query({photo_id:$routeParams.id});
+                    $scope.categories= Category.query();
+                    $scope.photoCategories = PhotoCategory.query({photo_id:$routeParams.id});
+                    $scope.years = years;
+                    $scope.statuses = statuses;
+                })();
 
                 $q.all([$scope.photo.$promise,$scope.countries.$promise]).then(initPhotoCountry);
                 $q.all([$scope.photo.$promise,$scope.organizations.$promise]).then(initPhotoOrganization);
                 $q.all([$scope.keywords.$promise,$scope.photoKeywords.$promise]).then(initPhotoKeywords);
                 $q.all([$scope.categories.$promise,$scope.photoCategories.$promise]).then(initPhotoCategories);
 
-                $scope.closeDialog=function(){
-                    $mdDialog.hide();
-                    $location.path('/photos');
-                };
-                $scope.edit=function(){
-                    $scope.mode='edit';
-                    angular.copy($scope.photo,$scope.photoCopy);
-                };
-                $scope.save=function(){
-                    $scope.photo.categories.length=0;
-                    angular.forEach($scope.categories,function(category){
-                        if(category.checked){
-                            $scope.photo.categories.push(category);
-                        }else{
-
-                        }
-                    });
-                    angular.forEach($scope.photo.keywords,function(keyword){
-
-                    });
-
-                    $scope.photo.country_id=$scope.photo.country.id;
-
-                    $scope.photo.$update({id:$scope.photo.id}).then(function(){
-                        $scope.mode='default';
-                        $scope.error=false;
-                    }).catch(function () {
-                        $scope.error=true;
-                    });
-                };
-                $scope.cancel=function(){
-                    $scope.mode='default';
-                    $scope.photo = $scope.photoCopy;
-                };
-                $scope.details=function(){
-                    $scope.mode=$scope.mode=='details'?'default':'details';
-                };
-                $scope.showRemoveWarning=function(){
-                    $scope.mode='remove-warning'
-                };
-                $scope.remove=function() {
-                    $scope.photo.$delete({id:$scope.photo.id}).then(function(){
+                (function initActions(){
+                    $scope.closeDialog=function(){
                         $mdDialog.hide();
                         $location.path('/photos');
-                    });
-                };
-                $scope.cancelRemove= function () {
-                    $scope.mode='default';
-                }
+                    };
+                    $scope.edit=function(){
+                        $scope.mode='edit';
+                        $scope.photoCopy=angular.copy($scope.photo);
+                    };
+                    $scope.save=function(){
+                        $scope.photo.categories.length=0;
+                        angular.forEach($scope.categories,function(category){
+                            if(category.checked){
+                                $scope.photo.categories.push(category);
+                            }
+                        });
+
+                        $scope.photo.country_id=$scope.photo.country.id;
+
+                        $scope.photo.$update({id:$scope.photo.id}).then(function(){
+                            $rootScope.$broadcast(msgs.photoUpdated,$scope.photo);
+                            $scope.mode='default';
+                            $scope.error=false;
+                        }).catch(function () {
+                            $scope.error=true;
+                        });
+                    };
+                    $scope.cancel=function(){
+                        $scope.mode='default';
+                        $scope.photo = $scope.photoCopy;
+                    };
+                    $scope.details=function(){
+                        $scope.mode=$scope.mode=='details'?'default':'details';
+                    };
+                    $scope.showRemoveWarning=function(){
+                        $scope.mode='remove-warning'
+                    };
+                    $scope.remove=function() {
+                        $scope.photo.$delete({id:$scope.photo.id}).then(function(){
+                            $rootScope.$broadcast(msgs.photoRemoved,$scope.photo);
+                            $mdDialog.hide();
+                            $location.path('/photos');
+                        });
+                    };
+                    $scope.cancelRemove= function () {
+                        $scope.mode='default';
+                    };
+                })();
+
                 function initPhotoCountry() {
                     angular.forEach($scope.countries,function(country,key){
                         if(country.id==$scope.photo.country_id){
