@@ -404,6 +404,7 @@
             }])
         .controller('KeywordsController',['$scope','$mdDialog','Keyword',function($scope,$mdDialog,Keyword){
             $scope.keywords = Keyword.query();
+            $scope.showUndefinedKeywords=false;
             $scope.edit=function(keyword){
                 $mdDialog.show({
                     templateUrl:'/assets/templates/keyword_details.html',

@@ -56,7 +56,7 @@
                 </md-card>
             </div>
         </div>-->
-        <div flex="20"
+        <div flex="20" flex-lg="30" flex-md="40" flex-sm="90"
              class="photo fx-fade-down fx-speed-800" ng-class="photo.status"
              ng-repeat="photo in (filteredPhotos = (photos | filter:finalQuery | filter:{status:finalStatus} |filter:greaterThen('width',finalMinRes) | orderBy:finalOrder:!finalAscending)) | offset: currentPage*itemsPerPage | limitTo: itemsPerPage"
              style="width:300px;margin-bottom:20px;position:relative;">
