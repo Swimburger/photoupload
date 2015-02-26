@@ -58,5 +58,5 @@ You can access the browser at the '/admin' route but you will need to be logged 
 
 ## JSON API
 These apps both use a REST JSON API built with (rails-api)[https://github.com/rails-api/rails-api).
-You can find out how to consume the api at the [API Wiki page](wiki/API).
-You can read more about the models and their relations at the [Models Wiki page](wiki/models).
+You can find out how to consume the api at the [API Wiki page](https://github.com/yfu-is/photoupload/wiki/API).
+You can read more about the models and their relations at the [Models Wiki page](https://github.com/yfu-is/photoupload/wiki/models).
