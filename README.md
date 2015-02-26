@@ -8,7 +8,7 @@ The application exists out of two parts
 ## Set Up
 Before you get started you need to set up some things.
 
-1. Update config/database.yml to your database params, [example](http://stackoverflow.com/questions/7304576/how-do-i-set-up-the-database-yml-file-in-rails)
+1. Update config/database.yml to your database params, [example](http://stackoverflow.com/a/7306399/2919731).
 2. Create database, migrate, seed data, (if you have photos from the old uploader you can import them, see wiki import)   
   ```
   >rake db:create   
@@ -30,3 +30,28 @@ Before you get started you need to set up some things.
   ```
   >rails s  
   ```  
+
+## Photo Upload Form
+The upload form is created using the following frameworks/libraries
+* [JQuery](http://jquery.com/)
+* [Bootstrap](http://getbootstrap.com/)
+* [Select2](https://select2.github.io/) for the select boxes with search and tag support
+* [jQuery-File-Upload](https://github.com/blueimp/jQuery-File-Upload) for the progress ajax file upload
+
+The form has its own controller (app/controllers/photo_form_controller) but also uses the api to get the countries, organizations, keywords and categories.
+The view can be found at app/views/photo_form/index.html.erb.
+The javascript can be found at public/assets/javascripts/photo_form.js | JQApi.js
+
+You can access to the form at the '/' root route.
+
+## Photo Browser
+The Photo Browser has been created with [AngularJS](https://angularjs.org/) and [Material Angular](https://material.angularjs.org).   
+AngularJS is an MVC/MVVM/MVW javascript framework for creating high performance web apps.   
+Material Angular is a GUI framework that provides GUI components implemented with the [Material Design](http://www.google.com/design/) language.  
+
+The browser has its own controller (app/controlles/admin) but uses all the api controllers.  
+The view can be found at app/views/admin/index.html.erb and the templates at public/assets/templates/*.   
+The javascript can be found at public/assets/javacripts/app.js | PhotoAPI.js.   
+The css can be found at public/assets/stylesheets/app.css.   
+
+You can access the browser at the '/admin' route but you will need to be logged in.
