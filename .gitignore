@@ -50,3 +50,5 @@ bower.json
 .idea/
 php_to_ruby_migration/upload/
 private/uploads/
+public/assets/bower_components/
+!public/assets/bower_components/material-design-iconic-font

@@ -10,9 +10,30 @@
       <div class="md-toolbar-tools" layout-margin>
         <span class="md-flex">YFU Photo Browser</span>
         <span flex></span>
-        <md-button aria-label="Add categories or keywords" ng-hide="rootCtrl.selectedIndex==0" ng-click="create()"><i class="mdi-2x mdi-add"></i></md-button>
-        <md-button aria-label="Search photos" ng-show="rootCtrl.selectedIndex==0" ng-click="showSearch=!showSearch"><i class="mdi-2x mdi-search"></i></md-button>
-        <md-button aria-label="Show Help" ng-click="toggleHelp()"><i class="mdi-2x mdi-help"></i></md-button>
+        <md-button aria-label="Add categories or keywords" ng-hide="rootCtrl.selectedIndex==0" ng-click="create()">
+          <i class="mdi-2x mdi-add"></i>
+          <md-tooltip>
+            Add
+          </md-tooltip>
+        </md-button>
+        <md-button aria-label="Search photos" ng-show="rootCtrl.selectedIndex==0" ng-click="showSearch=!showSearch">
+          <i class="mdi-2x mdi-search"></i>
+          <md-tooltip>
+            Search
+          </md-tooltip>
+        </md-button>
+        <md-button aria-label="Upload photo" href="/">
+          <i class="mdi-2x mdi-file-upload"></i>
+          <md-tooltip>
+            Go to Photo Uploader
+          </md-tooltip>
+        </md-button>
+        <md-button aria-label="Show Help" ng-click="toggleHelp()">
+          <i class="mdi-2x mdi-help"></i>
+          <md-tooltip>
+            Help
+          </md-tooltip>
+        </md-button>
       </div>
     </md-toolbar>
     <div ng-if="isAdmin">
@@ -43,7 +64,7 @@
       </md-content>
       <div class="credits">
         <p>This application is developed by <br/><a href="https://www.linkedin.com/in/nielsswimberghe/" target="_blank">Niels Swimberghe</a> for YFU-IS as part of an internship for NMCT.</p>
-        <a href="http://www.nmct.be" target="_blank"><%= image_tag 'nmct.png', alt: 'NMCT' %></a>
+        <a href="http://www.nmct.be" target="_blank"><img src="/assets/images/nmct.png" alt="NMCT" /></a>
       </div>
     </md-sidenav>
     <div ng-view></div>

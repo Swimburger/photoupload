@@ -93,11 +93,14 @@
   <div class="page-header">
     <div class="row">
       <div class="col-md-1">
-        <%= image_tag 'logo.png', alt: 'YFU Photo Uploader' %>
+        <img src="/assets/images/logo.png" alt="YFU Photo Uploader"/>
       </div>
       <div class="col-md-11">
-        <h1>YFU Photo Upload
-          <small></small>
+        <h1>
+          YFU Photo Upload
+          <% if user_signed_in? %>
+            <a class="btn btn-link pull-right" href="/admin"><span class="glyphicon glyphicon-globe" style="font-size: 40px;"></span></a>
+          <% end %>
         </h1>
       </div>
     </div>
@@ -271,11 +274,11 @@
 <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0-beta.3/js/select2.min.js"></script>
-<%= javascript_include_tag 'jQuery-File-Upload/vendor/jquery.ui.widget',
-                           'jQuery-File-Upload/jquery.iframe-transport',
-                           'jQuery-File-Upload/jquery.fileupload',
-                           'JQApi',
-                           'photo_form' %>
+<script src="/assets/javascripts/jQuery-File-Upload/vendor/jquery.ui.widget.js"></script>
+<script src="/assets/javascripts/jQuery-File-Upload/jquery.iframe-transport.js"></script>
+<script src="/assets/javascripts/jQuery-File-Upload/jquery.fileupload.js"></script>
+<script src="/assets/javascripts/JQApi.js"></script>
+<script src="/assets/javascripts/photo_form.js"></script>
 </body>
 </html>
 <% #TODO: Give me credit checkbox %>

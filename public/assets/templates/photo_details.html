@@ -2,15 +2,50 @@
     <div class="mask">
         <span class="resolution">{{photo.height}}x{{photo.width}}</span>
         <div class="actions" ng-hide="mode=='edit'">
-            <md-button aria-label="Show photo" ng-click="details()"><i class="mdi-image mdi-2x"></i></md-button>
-            <md-button aria-label="Go to photo" ng-href="{{'/api/photos/'+photo.id+'/file/original'}}" target="_blank" ng-click="download(photo.id)"><i class="mdi-file-download mdi-2x"></i></md-button>
-            <md-button aria-label="Edit photo" ng-if="isAdmin" ng-click="edit()"><i class="mdi-mode-edit mdi-2x"></i></md-button>
-            <md-button aria-label="Delete photo" ng-if="isAdmin" ng-click="showRemoveWarning()"><i class="mdi-delete mdi-2x"></i></md-button>
-            <md-button aria-label="Close dialog" ng-click="closeDialog()"><i class="mdi-close mdi-2x"></i></md-button>
+            <md-button aria-label="Show photo" ng-click="details()">
+                <i class="mdi-image mdi-2x"></i>
+                <md-tooltip>
+                    Show Image
+                </md-tooltip>
+            </md-button>
+            <md-button aria-label="Go to photo" ng-href="{{'/api/photos/'+photo.id+'/file/original'}}" target="_blank" ng-click="download(photo.id)">
+                <i class="mdi-file-download mdi-2x"></i>
+                <md-tooltip>
+                    Open Photo
+                </md-tooltip>
+            </md-button>
+            <md-button aria-label="Edit photo" ng-if="isAdmin" ng-click="edit()">
+                <i class="mdi-mode-edit mdi-2x"></i>
+                <md-tooltip>
+                    Edit Details
+                </md-tooltip>
+            </md-button>
+            <md-button aria-label="Delete photo" ng-if="isAdmin" ng-click="showRemoveWarning()">
+                <i class="mdi-delete mdi-2x"></i>
+                <md-tooltip>
+                    Delete Photo
+                </md-tooltip>
+            </md-button>
+            <md-button aria-label="Close dialog" ng-click="closeDialog()">
+                <i class="mdi-close mdi-2x"></i>
+                <md-tooltip>
+                    Minimize
+                </md-tooltip>
+            </md-button>
         </div>
         <div class="actions" ng-hide="mode!='edit'">
-            <md-button aria-label="Save edits" class="md-primary md-raised" ng-click="save()"><i class="mdi-save mdi-2x"></i></md-button>
-            <md-button aria-label="Cancel edits" class="md-warn md-raised" ng-click="cancel()"><i class="mdi-cancel mdi-2x"></i></md-button>
+            <md-button aria-label="Save edits" class="md-primary md-raised" ng-click="save()">
+                <i class="mdi-save mdi-2x"></i>
+                <md-tooltip>
+                    Save
+                </md-tooltip>
+            </md-button>
+            <md-button aria-label="Cancel edits" class="md-warn md-raised" ng-click="cancel()">
+                <i class="mdi-cancel mdi-2x"></i>
+                <md-tooltip>
+                    Cancel
+                </md-tooltip>
+            </md-button>
         </div>
         <img ng-src="/api/photos/{{photo.id}}/file/large" alt="{{photo.caption}}"/>
         <h2 layout="row">
