@@ -60,3 +60,20 @@ You can access the browser at the '/admin' route but you will need to be logged 
 These apps both use a REST JSON API built with [rails-api](https://github.com/rails-api/rails-api).
 You can find out how to consume the api at the [API Wiki page](https://github.com/yfu-is/photoupload/wiki/API).
 You can read more about the models and their relations at the [Models Wiki page](https://github.com/yfu-is/photoupload/wiki/models).
+
+## Authentication   
+For this application we use Devise as an authentication provider.   
+You can log in by browsing to '/users/sign_in'.    
+To create a user please use the Rails command line. There is no user CRUD provided.   
+Use the following as an example to create users.
+```
+>rails console
+irb>user = User.new
+irb>user.email = 'your.email@example.com'
+irb>user.password = 'yourpwd'
+irb>user.password_confirmation = 'yourpwd'
+irb>user.roles << :admin
+OR
+irb>user.roles << :reader
+irb>user.save
+```
