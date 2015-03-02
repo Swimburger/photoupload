@@ -8,8 +8,14 @@ The application exists out of two parts
 ## Set Up
 Before you get started you need to set up some things.
 
-1. Update config/database.yml to your database params, [example](http://stackoverflow.com/a/7306399/2919731).
-2. Create database, migrate, seed data, (if you have photos from the old uploader you can import them, see wiki import)   
+1. Install ruby packages listed in the gemfile   
+  ```
+  >bundle install  
+  ```    
+  One of the packages is ['paperclip'](https://github.com/thoughtbot/paperclip).   
+  Please mind that ImageMagick needs to be installed as explained on their readme.   
+2. Update config/database.yml to your database params, [example](http://stackoverflow.com/a/7306399/2919731).
+3. Create database, migrate, seed data, (if you have photos from the old uploader you can import them, see wiki import)   
   ```
   >rake db:create   
   ```   
@@ -22,11 +28,11 @@ Before you get started you need to set up some things.
   ```
   >[rake import:old_photos]   
   ```   
-3. Bower install components in public/assets   
+4. Bower install components in public/assets   
   ```
   public/assets>bower install
   ```  
-4. Run rails   
+5. Run rails   
   ```
   >rails s  
   ```  
