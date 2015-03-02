@@ -16,7 +16,7 @@
         photoRemoved:'photoRemoved'
     };
     angular.module('PhotoBrowser', ['ngRoute','ngAria','ngMaterial','ngAnimate','ngFx','PhotoAPI'])
-        .config(['$routeProvider',function($routeProvider){
+        .config(['$routeProvider','$mdThemingProvider',function($routeProvider,$mdThemingProvider){
             $routeProvider
                 .when("/photos", {
 
@@ -32,6 +32,18 @@
 
                 })
                 .otherwise('/photos');
+            var purple =$mdThemingProvider.extendPalette('purple', {
+                    '500': '682f75'
+                });
+            var orange = $mdThemingProvider.extendPalette('orange', {
+                    'A200': 'f7941e',
+                    '500': 'dc8527'
+                });
+            $mdThemingProvider.definePalette('YFUMain',purple);
+            $mdThemingProvider.definePalette('YFUHost',orange);
+            $mdThemingProvider.theme('default')
+                .primaryPalette('YFUMain')
+                .accentPalette('YFUHost');
         }])
         .controller('RootController', ['$scope','$location','$mdDialog','$mdSidenav', 'Role',
             function($scope,$location,$mdDialog,$mdSidenav, Role){
