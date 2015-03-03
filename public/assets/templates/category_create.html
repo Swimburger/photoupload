@@ -1,0 +1,18 @@
+<md-dialog class="category-create-dialog crud-dialog" ng-class="{error:error}">
+    <h2>Create Category: {{category.name}}</h2>
+    <md-content>
+        <md-input-container>
+            <label>Name</label>
+            <input ng-model="category.name">
+        </md-input-container>
+    </md-content>
+    <div class="md-actions" layout="row">
+        <span flex></span>
+        <md-button aria-label="Create category" ng-click="save()" class="md-primary">
+            Create
+        </md-button>
+        <md-button aria-label="Cancel" ng-click="cancel()">
+            Cancel
+        </md-button>
+    </div>
+</md-dialog>

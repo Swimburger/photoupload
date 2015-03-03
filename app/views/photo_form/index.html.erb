@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>YFU Photo Uploader</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0-beta.3/css/select2.min.css" />
+  <style>
+      .bs-callout {
+          padding: 20px;
+          margin: 20px 0;
+          border: 1px solid #eee;
+          border-left-width: 5px;
+          border-radius: 3px;
+      }
+
+      .bs-callout h4 {
+          margin-top: 0;
+          margin-bottom: 5px;
+      }
+
+      .bs-callout p:last-child {
+          margin-bottom: 0;
+      }
+
+      .bs-callout code {
+          border-radius: 3px;
+      }
+
+      .bs-callout + .bs-callout {
+          margin-top: -5px;
+      }
+
+      .bs-callout-default {
+          border-left-color: #777;
+      }
+
+      .bs-callout-default h4 {
+          color: #777;
+      }
+
+      .bs-callout-primary {
+          border-left-color: #428bca;
+      }
+
+      .bs-callout-primary h4 {
+          color: #428bca;
+      }
+
+      .bs-callout-success {
+          border-left-color: #5cb85c;
+      }
+
+      .bs-callout-success h4 {
+          color: #5cb85c;
+      }
+
+      .bs-callout-danger {
+          border-left-color: #d9534f;
+      }
+
+      .bs-callout-danger h4 {
+          color: #d9534f;
+      }
+
+      .bs-callout-warning {
+          border-left-color: #f0ad4e;
+      }
+
+      .bs-callout-warning h4 {
+          color: #f0ad4e;
+      }
+
+      .bs-callout-info {
+          border-left-color: #5bc0de;
+      }
+
+      .bs-callout-info h4 {
+          color: #5bc0de;
+      }
+      /* Styling for Select2 with error */
+      div.has-error .select2-selection {
+          border-color: #d9534f !important;
+      }
+
+      div.has-success .select2-selection {
+          border-color: #5cb85c !important;
+      }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <div class="page-header">
+    <div class="row">
+      <div class="col-md-1">
+        <img src="/assets/images/logo.png" alt="YFU Photo Uploader"/>
+      </div>
+      <div class="col-md-11">
+        <h1>
+          YFU Photo Upload
+          <% if user_signed_in? %>
+            <a class="btn btn-link pull-right" href="/admin"><span class="glyphicon glyphicon-globe" style="font-size: 40px;"></span></a>
+          <% end %>
+        </h1>
+      </div>
+    </div>
+  </div>
+  <p>Please only upload photos of which you own the copyright, i.e. photos that you photographed yourself or if the
+    copyright has been transferred to you.<br/>
+  </p>
+
+  <p>You can upload 3 photos at a time. Please identify who you are and provide us with details about the content of
+    each photo.<br/>
+  </p><br/>
+
+  <div class="row">
+    <div class="form-group col-md-4">
+      <label for="name">Your full name*</label>
+      <input id="name" type="text" name="name" class="form-control name" placeholder="fe: Rachel Andresen" required/>
+      <div class="alert alert-danger" role="alert" style="display:none;">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        <span class="sr-only">Error:</span>
+        Enter your name
+      </div>
+    </div>
+    <div class="form-group col-md-4">
+      <label for="email">Your email*</label>
+      <input id="email" type="email" name="email" class="form-control email" placeholder="fe: randresen@mail.com" required/>
+      <div class="alert alert-danger" role="alert" style="display:none;">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        <span class="sr-only">Error:</span>
+        Enter a valid email
+      </div>
+    </div>
+    <div class="form-group col-md-4">
+      <label for="group">Your YFU organization's name*</label>
+      <br/>
+      <select id="group" name="organization" class="form-control org selector" data-placeholder="Select a YFU organization">
+        <option></option>
+      </select>
+      <div class="alert alert-danger" role="alert" style="display:none;">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        <span class="sr-only">Error:</span>
+        Pick an organization
+      </div>
+    </div>
+  </div>
+  <br/>
+  <div id="forms">
+
+  </div>
+  <button id="add-more" class="btn btn-default">Add another photo</button>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="bs-callout bs-callout-info col-md-12">
+        <h4><strong>Please note</strong></h4>
+
+        <p><strong>By uploading photos you are giving YFU International Educational Services, and all organizations
+          that use the YFU trademark, permission to use these files in all publications (e.g. web and print) for YFU
+          purposes.<br/>
+          You bear the responsibility to make sure that everyone depicted in your photos has agreed to publication of
+          the photo.</strong></p>
+
+        <div class="checkbox">
+          <label>
+            <input id="agree" name="agree" type="checkbox" required/> I agree to these terms.
+          </label>
+          <div class="alert alert-danger" role="alert" style="display:none;">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Please agree to the terms to upload
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br/>
+  <input type="submit" id="upload" name="submit" class="btn btn-primary" value="Upload pictures"/>
+  <div class="row">
+    <div class="col-md-12">
+      <hr>
+      <p class="small"> @ YFU International Educational Services Inc</p>
+    </div>
+  </div>
+
+</div>
+<div id="form-template" class="panel panel-default" style="display:none;">
+  <form role="form" action="upload_photo" method="post" class="panel-body">
+    <h3>
+      <span class="glyphicon glyphicon-upload"></span> Photo
+      <span class="glyphicon glyphicon-remove-circle pull-right remove-photo" style="color:rgba(255, 113, 100, 0.71);cursor:hand;"></span>
+    </h3>
+    <div class="alert alert-danger server-error" role="alert" style="display:none;">
+      <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+      <span class="sr-only">Error:</span>
+      <span class="message"></span>
+    </div>
+    <div class="progress" style="display:none">
+      <div class="progress-bar" style="width:0">0%</div>
+    </div>
+    <div class="row">
+
+      <div class="form-group col-md-4">
+        <label for="file">Select your photo*</label>
+        <br/>
+        <span class="btn btn-primary fileinput-button" style="position:relative;">
+            <i class="glyphicon glyphicon-plus"></i>
+            <span>Add photo</span>
+            <!-- The file input field used as target for the file upload widget -->
+            <input accept="image/*" id="file" type="file" name="file" class="file" style="opacity:0;position:absolute;left:0;right:0;top:0;bottom:0;height:100%;width:100%;" required>
+        </span>
+        <div class="alert alert-danger" role="alert" style="display:none;">
+          <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+          <span class="sr-only">Error:</span>
+          No photo selected
+        </div>
+      </div>
+      <div class="col-md-4" style="text-align: center">
+        <img class="preview img-responsive" style="display:none;max-height:200px;margin-top:-20px;"/>
+      </div>
+    </div>
+    <div class="row">
+
+      <div class="form-group col-md-4">
+        <label for="caption">Photo caption</label>
+        <input id="caption" type="text" name="caption" class="form-control caption"/>
+      </div>
+      <div class="form-group col-md-4">
+        <label for="country">Country where the photo was taken*</label>
+        <br/>
+        <select id="country" name="country" class="form-control country selector" data-placeholder="Select a country">
+          <option></option>
+        </select>
+        <div class="alert alert-danger" role="alert" style="display:none;">
+          <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+          <span class="sr-only">Error:</span>
+          Please select a country
+        </div>
+      </div>
+
+
+      <div class="form-group col-md-4">
+        <label for="year">Year the photo was taken*</label>
+        <select id="year" name="year" class="form-control year" required></select>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group col-md-4">
+        <label for="people">The names of the people in your picture</label>
+        <input id="people" type="text" name="people" class="form-control people" placeholder="fe: André Bozere, Anton Kan" required/>
+      </div>
+
+      <div class="form-group col-md-4">
+        <label for="keywords">Keywords for the photos</label>
+        <br/>
+        <select id="keywords" name="keywords" multiple class="form-control keywords selector" data-placeholder="Select keywords" data-tags="true">
+          <option></option>
+        </select>
+      </div>
+
+    </div>
+
+
+    <div class="row">
+      <div class="col-md-2">
+        <label>Categories</label>
+      </div>
+    </div>
+    <div class="row categories">
+    </div>
+  </form>
+</div>
+<script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0-beta.3/js/select2.min.js"></script>
+<script src="/assets/javascripts/jQuery-File-Upload/vendor/jquery.ui.widget.js"></script>
+<script src="/assets/javascripts/jQuery-File-Upload/jquery.iframe-transport.js"></script>
+<script src="/assets/javascripts/jQuery-File-Upload/jquery.fileupload.js"></script>
+<script src="/assets/javascripts/JQApi.js"></script>
+<script src="/assets/javascripts/photo_form.js"></script>
+</body>
+</html>
+<% #TODO: Give me credit checkbox %>

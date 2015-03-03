@@ -1,0 +1,21 @@
+<md-dialog class="keyword-details-dialog crud-dialog" ng-class="{error:error}">
+    <h2>Update Keyword: {{keyword.word}}</h2>
+    <md-content>
+        <md-input-container>
+            <label>Word</label>
+            <input ng-model="keyword.word">
+        </md-input-container>
+        <md-checkbox ng-model="keyword.is_predefined">
+            Predefined
+        </md-checkbox>
+    </md-content>
+    <div class="md-actions" layout="row">
+        <span flex></span>
+        <md-button aria-label="Update keyword" ng-click="save()" class="md-primary">
+            Save
+        </md-button>
+        <md-button aria-label="Cancel" ng-click="cancel()">
+            Cancel
+        </md-button>
+    </div>
+</md-dialog>

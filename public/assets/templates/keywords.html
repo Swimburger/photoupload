@@ -1,0 +1,19 @@
+<div ng-controller="KeywordsController as keywordsCtrl" class="keywords">
+    <h2>Predefined Keywords</h2>
+    <md-card ng-repeat="keyword in keywords | filter : {is_predefined:true}" class="keyword predefined"  ng-click="edit(keyword)">
+        <md-card-content>
+            {{keyword.word}}
+            <i class="mdi mdi-edit"></i>
+        </md-card-content>
+    </md-card>
+    <br/>
+    <md-button class="md-raised" ng-click="showUndefinedKeywords=!showUndefinedKeywords">Show Other Keywords</md-button>
+    <div ng-show="showUndefinedKeywords" class="fx-zoom-normal fx-speed-800">
+        <md-card  ng-repeat="keyword in keywords | filter : {is_predefined:false}" class="keyword"  ng-click="edit(keyword)">
+            <md-card-content>
+                {{keyword.word}}
+                <i class="mdi mdi-edit"></i>
+            </md-card-content>
+        </md-card>
+    </div>
+</div>

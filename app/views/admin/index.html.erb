@@ -1,0 +1,85 @@
+<html lang="en" ng-app="PhotoBrowser"  ng-controller="RootController as rootCtrl">
+<head>
+  <title>YFU Photo Browser | {{title}}</title>
+  <link rel="stylesheet" href="/assets/bower_components/angular-material/angular-material.min.css">
+  <link rel="stylesheet" href="/assets/bower_components/material-design-iconic-font/css/icons.css"/>
+  <link rel="stylesheet" href="/assets/stylesheets/app.css"/>
+</head>
+<body layout="column">
+    <md-toolbar layout="row">
+      <div class="md-toolbar-tools" layout-margin>
+        <span class="md-flex">YFU Photo Browser</span>
+        <span flex></span>
+        <md-button aria-label="Add categories or keywords" ng-hide="rootCtrl.selectedIndex==0" ng-click="create()">
+          <i class="mdi-2x mdi-add"></i>
+          <md-tooltip>
+            Add
+          </md-tooltip>
+        </md-button>
+        <md-button aria-label="Search photos" ng-show="rootCtrl.selectedIndex==0" ng-click="showSearch=!showSearch">
+          <i class="mdi-2x mdi-search"></i>
+          <md-tooltip>
+            Search
+          </md-tooltip>
+        </md-button>
+        <md-button aria-label="Upload photo" href="/">
+          <i class="mdi-2x mdi-file-upload"></i>
+          <md-tooltip>
+            Go to Photo Uploader
+          </md-tooltip>
+        </md-button>
+        <md-button aria-label="Show Help" ng-click="toggleHelp()">
+          <i class="mdi-2x mdi-help"></i>
+          <md-tooltip>
+            Help
+          </md-tooltip>
+        </md-button>
+      </div>
+    </md-toolbar>
+    <div ng-if="isAdmin">
+      <md-tabs md-selected="rootCtrl.selectedIndex">
+        <md-tab ng-repeat="tab in tabs" label="{{tab.title}}" md-on-select="onTabSelected(tab)">
+          <div class="tab-content tab{{$index}}" layout="column" layout-fill>
+            <ng-include src="tab.template" style="display:block;width:100%;"></ng-include>
+          </div>
+        </md-tab>
+      </md-tabs>
+    </div>
+    <div ng-if="!isAdmin">
+      <ng-include src="'/assets/templates/photos.html'" style="display:block;width:100%;"></ng-include>
+    </div>
+    <md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="help">
+      <md-toolbar class="md-theme-light">
+        <div class="md-toolbar-tools">
+          <span>Help</span>
+          <span flex></span>
+          <md-button aria-label="Close Help" ng-click="toggleHelp()"><i class="mdi-2x mdi-close"></i></md-button>
+        </div>
+      </md-toolbar>
+      <md-content class="md-padding center-text" layout="column" layout-align="start center">
+        <p>
+          If you encounter any issues or have questions, please contact the helpdesk.
+        </p>
+        <md-button href="mailto:helpdesk@yfu-is.org" target="_blank">Mail the helpdesk</md-button>
+      </md-content>
+      <div class="credits">
+        <p>This application is developed by <br/><a href="https://www.linkedin.com/in/nielsswimberghe/" target="_blank">Niels Swimberghe</a> for YFU-IS as part of an internship for NMCT.</p>
+        <a href="http://www.nmct.be" target="_blank"><img src="/assets/images/nmct.png" alt="NMCT" /></a>
+      </div>
+    </md-sidenav>
+    <div ng-view></div>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.13/angular.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.13/angular-animate.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.13/angular-aria.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.13/angular-resource.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.13/angular-route.min.js"></script>
+
+    <script src="/assets/bower_components/angular-material/angular-material.min.js"></script>
+
+    <script src="/assets/bower_components/ngFx/dist/ngFx.min.js"></script>
+
+    <!-- App -->
+    <script src="/assets/javascripts/PhotoAPI.js"></script>
+    <script src="/assets/javascripts/app.js"></script>
+</body>
+</html>

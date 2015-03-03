@@ -1,0 +1,137 @@
+<md-dialog class="photo-dialog" ng-class="[photo.status,mode]">
+    <div class="mask">
+        <span class="resolution">{{photo.height}}x{{photo.width}}</span>
+        <div class="actions" ng-hide="mode=='edit'">
+            <md-button aria-label="Show photo" ng-click="details()">
+                <i class="mdi-image mdi-2x"></i>
+                <md-tooltip>
+                    Show Image
+                </md-tooltip>
+            </md-button>
+            <md-button aria-label="Go to photo" ng-href="{{'/api/photos/'+photo.id+'/file/original'}}" target="_blank" ng-click="download(photo.id)">
+                <i class="mdi-file-download mdi-2x"></i>
+                <md-tooltip>
+                    Open Photo
+                </md-tooltip>
+            </md-button>
+            <md-button aria-label="Edit photo" ng-if="isAdmin" ng-click="edit()">
+                <i class="mdi-mode-edit mdi-2x"></i>
+                <md-tooltip>
+                    Edit Details
+                </md-tooltip>
+            </md-button>
+            <md-button aria-label="Delete photo" ng-if="isAdmin" ng-click="showRemoveWarning()">
+                <i class="mdi-delete mdi-2x"></i>
+                <md-tooltip>
+                    Delete Photo
+                </md-tooltip>
+            </md-button>
+            <md-button aria-label="Close dialog" ng-click="closeDialog()">
+                <i class="mdi-close mdi-2x"></i>
+                <md-tooltip>
+                    Minimize
+                </md-tooltip>
+            </md-button>
+        </div>
+        <div class="actions" ng-hide="mode!='edit'">
+            <md-button aria-label="Save edits" class="md-primary md-raised" ng-click="save()">
+                <i class="mdi-save mdi-2x"></i>
+                <md-tooltip>
+                    Save
+                </md-tooltip>
+            </md-button>
+            <md-button aria-label="Cancel edits" class="md-warn md-raised" ng-click="cancel()">
+                <i class="mdi-cancel mdi-2x"></i>
+                <md-tooltip>
+                    Cancel
+                </md-tooltip>
+            </md-button>
+        </div>
+        <img ng-src="/api/photos/{{photo.id}}/file/large" alt="{{photo.caption}}"/>
+        <h2 layout="row">
+            <span flex ng-show="photo.caption">{{photo.caption}}</span>
+            <span flex ng-hide="photo.caption">No caption</span>
+            <small ng-if="isAdmin">{{photo.status}}</small>
+        </h2>
+    </div>
+    <md-content ng-switch="mode" class="info">
+        <div ng-switch-default layout="row">
+            <ul flex>
+                <li>Country: {{photo.country.name}} <span ng-hide="photo.country">?</span></li>
+                <li>Year: {{photo.year}} <span ng-hide="photo.year">?</span></li>
+                <li>People in this picture: {{photo.people_in_photo}}</li>
+                <li>Keywords: {{joinKeywords(photo.keywords)}}</li>
+            </ul>
+            <ul flex>
+                <li>Categories: {{joinCategories(photo.categories)}}</li>
+                <li>YFU Organization: {{photo.organization.name}} <span ng-hide="photo.organization">?</span> </li>
+                <li>Uploaded by {{photo.uploaded_by_name}} <span ng-hide="photo.uploaded_by_name">?</span></li>
+                <li>Email: <a  ng-href="mailto:{{photo.uploaded_by_email}}">{{photo.uploaded_by_email}}</a> <span ng-hide="photo.uploaded_by_email">?</span></li>
+            </ul>
+        </div>
+        <form ng-switch-when="edit" name="photoForm" class="info" ng-class="{error:error}">
+            <div layout layout-sm="column" layout-margin>
+                <md-input-container flex>
+                    <label>Caption</label>
+                    <input ng-model="photo.caption">
+                </md-input-container>
+                <div class="select-container" flex>
+                    <label>Country</label>
+                    <md-select ng-model="photo.country" placeholder="Country" >
+                        <md-select-label>{{photo.country.name}}</md-select-label>
+                        <md-option ng-value="country" ng-repeat="country in countries">{{country.name}}</md-option>
+                    </md-select>
+                </div>
+                <div class="select-container" flex>
+                    <label>Year</label>
+                    <md-select ng-model="photo.year" placeholder="Year" flex>
+                        <md-option ng-value="year" ng-repeat="year in years">{{year}}</md-option>
+                    </md-select>
+                </div>
+            </div>
+            <div layout layout-sm="column" layout-margin>
+                <md-input-container flex>
+                    <label>People in photo</label>
+                    <input ng-model="photo.people_in_photo">
+                </md-input-container>
+                <div class="select-container" flex>
+                    <label>Keywords</label>
+                    <md-select multiple ng-model="photo.keywords" placeholder="Keywords">
+                        <md-select-label>
+                            <span ng-if="photo.keywords.length<1">Choose keywords></span>
+                            <span ng-if="photo.keywords.length>0">{{joinKeywords(photo.keywords)}}</span>
+                        </md-select-label>
+                        <md-optgroup label="Predefined">
+                            <md-option ng-value="keyword" ng-repeat="keyword in keywords | orderBy:'word' | filter: {is_predefined: true }">{{keyword.word}}</md-option>
+                        </md-optgroup>
+                        <md-optgroup label="Not Predefined">
+                            <md-option ng-value="keyword" ng-repeat="keyword in keywords | orderBy:'word' | filter: {is_predefined: false }">{{keyword.word}}</md-option>
+                        </md-optgroup>
+                    </md-select>
+                </div>
+            </div>
+            <div layout="center center" layout-wrap>
+                <md-checkbox ng-model="category.checked" ng-repeat="category in categories" name="{{category.name}}" flex="25" ng-change="console.log(category)">
+                    {{category.name}}
+                </md-checkbox>
+            </div>
+            <div>
+                Status:
+                <md-select ng-model="photo.status" placeholder="Status">
+                    <md-option ng-value="status" ng-repeat="status in statuses">{{status}}</md-option>
+                </md-select>
+            </div>
+        </form>
+        <div ng-switch-when="remove-warning" class="remove-warning" >
+            <h3 style="text-align: center;">Are you sure you want to delete this photo?</h3>
+            <div layout layout-align="center center">
+                <md-button class="md-warn" ng-click="remove()">
+                    Delete photo
+                </md-button>
+                <md-button ng-click="cancelRemove()">
+                    Cancel
+                </md-button>
+            </div>
+        </div>
+    </md-content>
+</md-dialog>
