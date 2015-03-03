@@ -20,9 +20,10 @@ ActiveRecord::Schema.define(version: 20150211195011) do
   end
 
   create_table "countries", force: :cascade do |t|
-    t.string   "name",       limit: 255
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.string   "name",         limit: 255
+    t.boolean  "show_in_form", limit: 1,   default: false
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
   end
 
   create_table "keywords", force: :cascade do |t|

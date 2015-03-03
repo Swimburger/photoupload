@@ -7,7 +7,7 @@ class KeywordsController < ApiController
   # GET /keywords.json
   def index
     @keywords = Keyword.select(:id,:word, :is_predefined)
-    if(params.has_key? :is_predefined)
+    if params.has_key? :is_predefined
       @keywords.where!(is_predefined:params[:is_predefined].to_b)
     end
     render json: @keywords

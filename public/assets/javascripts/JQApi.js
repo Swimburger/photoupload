@@ -21,7 +21,7 @@ var api = (function(){
         if(countries) {
             cback(countries);
         }else{
-            $.getJSON('/api/countries',function(data){
+            $.getJSON('/api/countries?show_in_form=true',function(data){
                 countries=data;
                 cback(data);
             })

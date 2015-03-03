@@ -6,7 +6,9 @@ class CountriesController < ApiController
   # GET /countries.json
   def index
     @countries = Country.select(:id,:name)
-
+    if params.has_key? :show_in_form
+      @countries.where!(show_in_form:params[:show_in_form].to_b)
+    end
     render json: @countries
   end
 
