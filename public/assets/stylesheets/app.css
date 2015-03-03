@@ -239,6 +239,9 @@ html {
     bottom:25px;
     width:100%;
 }
+.pagination button.active{
+    background-color:#fab43a!important;
+}
 .photo-dialog .info .select-container{
     min-width: 200px;
 }
