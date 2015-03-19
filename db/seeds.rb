@@ -1,4 +1,4 @@
-countries = [
+﻿countries = [
     {name: 'Andorra'},
     {name: 'United Arab Emirates'},
     {name: 'Afghanistan'},
@@ -316,7 +316,12 @@ keywords = [
 
 users = [
     {email:'nielsswimberghe@gmail.com', password: 'nielsswimberghe@gmail.com',roles:[:reader]},
-    {email:'nswimberghe@yfu-is.org', password: 'nswimberghe@yfu-is.org',roles:[:admin]}
+    {email:'nswimberghe@yfu-is.org', password: 'nswimberghe@yfu-is.org',roles:[:admin]},
+    {email:'fwolf@yfu-is.org', password: 'fwolf@yfu-is.org',roles:[:admin]},
+    {email:'jbeatty@yfu-is.org', password: 'jbeatty@yfu-is.org',roles:[:admin]},
+    {email:'jhalbardier@yfu-is.org', password: 'jhalbardier@yfu-is.org',roles:[:admin]},
+    {email:'abekte@yfu-is.org', password: 'abekte@yfu-is.org',roles:[:admin]},
+    {email:'kastrom@yfu-is.org', password: 'kastrom@yfu-is.org',roles:[:admin]}
 ]
 
 countries.each do |country|
