@@ -13,7 +13,11 @@ Before you get started you need to set up some things.
   >bundle install  
   ```    
   One of the packages is ['paperclip'](https://github.com/thoughtbot/paperclip).   
-  Please mind that ImageMagick needs to be installed as explained on their readme.   
+  Please mind that ImageMagick needs to be installed as explained on their readme.    
+  For linux:  
+  ```
+  >apt-get install imagemagick
+  ``` 
 2. Update config/database.yml to your database params, [example](http://stackoverflow.com/a/7306399/2919731).
 3. Create database, migrate, seed data, (if you have photos from the old uploader you can import them, see wiki import)   
   ```
