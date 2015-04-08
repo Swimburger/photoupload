@@ -40,11 +40,11 @@
       }
 
       .bs-callout-primary {
-          border-left-color: #428bca;
+          border-left-color: #642869;
       }
 
       .bs-callout-primary h4 {
-          color: #428bca;
+          color: #642869;
       }
 
       .bs-callout-success {
@@ -72,11 +72,11 @@
       }
 
       .bs-callout-info {
-          border-left-color: #5bc0de;
+          border-left-color: #642869;
       }
 
       .bs-callout-info h4 {
-          color: #5bc0de;
+          color: #642869;
       }
       /* Styling for Select2 with error */
       div.has-error .select2-selection {
@@ -86,6 +86,11 @@
       div.has-success .select2-selection {
           border-color: #5cb85c !important;
       }
+      .btn-primary {
+          color: #fff;
+          background-color: #642869;
+          border-color: #642869;
+      }
   </style>
 </head>
 <body>
@@ -94,10 +99,10 @@
   <div class="page-header">
     <div class="row">
       <div class="col-md-1">
-        <img src="/assets/images/logo.png" alt="YFU Photo Uploader"/>
+        <img class="image-responsive" height="100" width="100" src="/assets/images/logo.png" alt="YFU Photo Uploader"/>
       </div>
       <div class="col-md-11">
-        <h1>
+        <h1 style="padding-left: 30px;padding-top:10px;">
           YFU Photo Upload
           <% if user_signed_in? %>
             <a class="btn btn-link pull-right" href="/admin"><span class="glyphicon glyphicon-globe" style="font-size: 40px;"></span></a>
