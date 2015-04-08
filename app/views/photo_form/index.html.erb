@@ -4,6 +4,7 @@
   <title>YFU Photo Uploader</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0-beta.3/css/select2.min.css" />
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
   <style>
       .bs-callout {
           padding: 20px;
@@ -108,11 +109,10 @@
   <p>Please only upload photos of which you own the copyright, i.e. photos that you photographed yourself or if the
     copyright has been transferred to you.<br/>
   </p>
-
-  <p>You can upload 3 photos at a time. Please identify who you are and provide us with details about the content of
-    each photo.<br/>
-  </p><br/>
-
+  <p>
+    Please keep in mind that we only accept high quality pictures with a minimum width or height of 600px.<br/>
+    <br/>
+  </p>
   <div class="row">
     <div class="form-group col-md-4">
       <label for="name">Your full name*</label>
@@ -147,20 +147,17 @@
   </div>
   <br/>
   <div id="forms">
-
   </div>
   <button id="add-more" class="btn btn-default">Add another photo</button>
   <div class="row">
     <div class="col-md-12">
       <div class="bs-callout bs-callout-info col-md-12">
         <h4><strong>Please note</strong></h4>
-
         <p><strong>By uploading photos you are giving YFU International Educational Services, and all organizations
           that use the YFU trademark, permission to use these files in all publications (e.g. web and print) for YFU
           purposes.<br/>
           You bear the responsibility to make sure that everyone depicted in your photos has agreed to publication of
           the photo.</strong></p>
-
         <div class="checkbox">
           <label>
             <input id="agree" name="agree" type="checkbox" required/> I agree to these terms.
@@ -182,7 +179,6 @@
       <p class="small"> @ YFU International Educational Services Inc</p>
     </div>
   </div>
-
 </div>
 <div id="form-template" class="panel panel-default" style="display:none;">
   <form role="form" action="upload_photo" method="post" class="panel-body">
@@ -199,7 +195,6 @@
       <div class="progress-bar" style="width:0">0%</div>
     </div>
     <div class="row">
-
       <div class="form-group col-md-4">
         <label for="file">Select your photo*</label>
         <br/>
@@ -220,7 +215,6 @@
       </div>
     </div>
     <div class="row">
-
       <div class="form-group col-md-4">
         <label for="caption">Photo caption</label>
         <input id="caption" type="text" name="caption" class="form-control caption"/>
@@ -237,20 +231,16 @@
           Please select a country
         </div>
       </div>
-
-
       <div class="form-group col-md-4">
         <label for="year">Year the photo was taken*</label>
         <select id="year" name="year" class="form-control year" required></select>
       </div>
     </div>
-
     <div class="row">
       <div class="form-group col-md-4">
         <label for="people">The names of the people in your picture</label>
         <input id="people" type="text" name="people" class="form-control people" placeholder="fe: André Bozere, Anton Kan" required/>
       </div>
-
       <div class="form-group col-md-4">
         <label for="keywords">Keywords for the photos</label>
         <br/>
@@ -258,10 +248,7 @@
           <option></option>
         </select>
       </div>
-
     </div>
-
-
     <div class="row">
       <div class="col-md-2">
         <label>Categories</label>

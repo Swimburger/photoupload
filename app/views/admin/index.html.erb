@@ -1,6 +1,7 @@
 <html lang="en" ng-app="PhotoBrowser"  ng-controller="RootController as rootCtrl">
 <head>
   <title>YFU Photo Browser | {{title}}</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
   <link rel="stylesheet" href="/assets/bower_components/angular-material/angular-material.min.css">
   <link rel="stylesheet" href="/assets/bower_components/material-design-iconic-font/css/icons.css"/>
   <link rel="stylesheet" href="/assets/stylesheets/app.css"/>
@@ -26,6 +27,12 @@
           <i class="mdi-2x mdi-file-upload"></i>
           <md-tooltip>
             Go to Photo Uploader
+          </md-tooltip>
+        </md-button>
+        <md-button aria-label="Log out" href="/users/sign_out">
+          <i class="mdi-2x mdi-account-circle"></i>
+          <md-tooltip>
+            Log out
           </md-tooltip>
         </md-button>
         <md-button aria-label="Show Help" ng-click="toggleHelp()">
