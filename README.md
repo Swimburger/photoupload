@@ -85,5 +85,4 @@ Use the following as an example to create users.
 You can also remove users with the following command.    
 ```
 >rake user:remove mail='test@gmail.com'    
->rake user:remove mail='test@gmail.com'   
 ```    
