@@ -6,7 +6,9 @@ class YfuOrganizationsController < ApiController
   # GET /yfu_organizations.json
   def index
     @yfu_organizations = YfuOrganization.select(:id,:name)
-
+    if params.has_key? :show_in_form
+      @yfu_organizations.where!(show_in_form:params[:show_in_form].to_b)
+    end
     render json: @yfu_organizations
   end
 

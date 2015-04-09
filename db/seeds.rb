@@ -328,7 +328,7 @@ countries.each do |country|
     Country.find_or_create_by(name:country[:name],show_in_form:true)
 end
 organizations.each do |organization|
-    YfuOrganization.find_or_create_by(name:organization[:name])
+    YfuOrganization.find_or_create_by(name:organization[:name],show_in_form:true)
 end
 categories.each do |category|
     Category.find_or_create_by(name:category[:name])

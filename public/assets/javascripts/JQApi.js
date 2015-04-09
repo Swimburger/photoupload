@@ -11,7 +11,7 @@ var api = (function(){
         if(organizations) {
             cback(organizations);
         }else{
-            $.getJSON('/api/yfu_organizations',function(data){
+            $.getJSON('/api/yfu_organizations?show_in_form=true',function(data){
                 organizations=data;
                 cback(data);
             })
