@@ -264,7 +264,7 @@
         api.getCategories(function(categories){
             var html = '';
             $.each(categories,function(index,category){
-                html+='<div class="col-sm-2"><label><input name="categories[]" class="category" type="checkbox" value="'+category.name+'"/> '+category.name+' </label></div>';
+                html+='<div class="col-sm-3"><label><input name="categories[]" class="category" type="checkbox" value="'+category.name+'"/> '+category.name+' </label></div>';
             });
             $(html).appendTo($template.find('.categories'));
             categoriesLoaded=true;
