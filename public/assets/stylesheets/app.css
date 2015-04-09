@@ -2,7 +2,9 @@
 html {
     overflow: hidden;
 }
-
+.logo{
+    margin-right: 5px;
+}
 .md-tab-content {
     overflow: auto;
 }

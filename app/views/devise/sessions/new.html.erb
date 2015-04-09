@@ -6,10 +6,10 @@
       <div class="account-wall">
         <div id="my-tab-content" class="tab-content">
           <div class="tab-pane active" id="login">
-            <img class="profile-img" src="/assets/images/logo.png" alt="">
+            <img class="profile-img" src="/assets/images/logo.png" alt="YFU Logo" width="180" height="180">
             <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
                 <%= f.email_field :email, autofocus: true, placeholder: 'Username', class:'form-control', required:true %>
-                <%= f.password_field :password, autocomplete: 'off',class:'form-control', required:true%>
+                <%= f.password_field :password, autocomplete: 'off', placeholder: 'Password',class:'form-control', required:true%>
                 <% if devise_mapping.rememberable? -%>
                     <div class="checkbox">
                       <label>
