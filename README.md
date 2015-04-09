@@ -73,17 +73,17 @@ You can read more about the models and their relations at the [Models Wiki page]
 
 ## Authentication   
 For this application we use Devise as an authentication provider.   
-You can log in by browsing to '/users/sign_in'.    
-To create a user please use the Rails command line. There is no user CRUD provided.   
+You can log in by browsing to '/users/sign_in'.
 Use the following as an example to create users.
+* mail is the email to log in with
+* pwd is the password
+* role can be admin or reader   
 ```
->rails console
-irb>user = User.new
-irb>user.email = 'your.email@example.com'
-irb>user.password = 'yourpwd'
-irb>user.password_confirmation = 'yourpwd'
-irb>user.roles << :admin
-OR
-irb>user.roles << :reader
-irb>user.save
+>rake user:add mail='test@gmail.com' pwd='test@gmail.com' role='admin'   
+>rake user:add mail='test@gmail.com' pwd='test@gmail.com' role='reader'   
+```    
+You can also remove users with the following command.    
 ```
+>rake user:remove mail='test@gmail.com'    
+>rake user:remove mail='test@gmail.com'   
+```    
