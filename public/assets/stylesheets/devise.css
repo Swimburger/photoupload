@@ -42,11 +42,23 @@ form input[type="password"]
 }
 .profile-img
 {
-    width: 180px;
-    height: 180px;
     margin: 0 auto 10px;
     display: block;
     -moz-border-radius: 50%;
     -webkit-border-radius: 50%;
     border-radius: 50%;
+}
+html{
+    height: 100%;
+}
+body{
+    background: url('../images/bg.jpg') no-repeat center;
+    background-size: cover;
+    height: 100%;
+}
+::selection {
+    background: #AA6CAC; /* WebKit/Blink Browsers */
+}
+::-moz-selection {
+    background: #AA6CAC; /* Gecko Browsers */
 }

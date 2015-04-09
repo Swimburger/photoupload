@@ -274,3 +274,10 @@ html {
 .category{
     display:inline-block;font-size:20px;padding:5px;
 }
+
+::selection {
+    background: #AA6CAC; /* WebKit/Blink Browsers */
+}
+::-moz-selection {
+    background: #AA6CAC; /* Gecko Browsers */
+}
