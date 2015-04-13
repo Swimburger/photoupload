@@ -104,7 +104,7 @@
                             });
                             break;
                     }
-                }
+                };
 
                 $scope.toggleHelp = function() {
                     $mdSidenav('help').toggle();
@@ -120,21 +120,26 @@
                     photoCategories = PhotoCategory.query();
                 (function initScope(){
                     $scope.photos=Photo.query();
+
                     $scope.itemsPerPage = 10;
                     $scope.currentPage = $routeParams.page?$routeParams.page:0;
+
                     $scope.search = $routeParams.search? $routeParams.search: '';
-                    $scope.finalQuery='';
-                    $scope.finalOrder='';
-                    $scope.ascending=$routeParams.ascending? $routeParams.ascending:true;
+                    $scope.finalQuery=$scope.search;
+
+                    $scope.orderProperties=['upload_date','caption','country','organization','year','people','uploaded_by','height','width'];
+                    $scope.propertyToOrder = $routeParams.propertyToOrder? $routeParams.propertyToOrder:$scope.orderProperties[0];
+                    $scope.finalOrder=$scope.propertyToOrder;
+
+                    $scope.ascending=$routeParams.ascending=='true';
                     $scope.finalAscending=$scope.ascending;
+
                     $scope.minRes=$routeParams.minRes? $routeParams.minRes:0;
                     $scope.finalMinRes=$scope.minRes;
+
                     $scope.properties=['all','caption','country','organization','year','people','keywords','categories','uploaded by'];
-                    $scope.orderProperties=['caption','country','organization','year','people','uploaded by','height','width'];
-                    if($routeParams.propertyToOrder){
-                        $scope.propertyToOrder=$routeParams.propertyToOrder;
-                    }
                     $scope.propertyToSearch=$routeParams.propertyToSearch? $routeParams.propertyToSearch:$scope.properties[0];
+
                     $scope.statuses = statuses;
                     $scope.selectedStatus=$routeParams.status? $routeParams.status:'';
                     $scope.finalStatus=$scope.selectedStatus;

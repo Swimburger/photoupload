@@ -15,13 +15,13 @@
                 <label>Status</label>
                 <md-select ng-model="selectedStatus" placeholder="Status">
                     <md-option ng-value="''">All</md-option>
-                    <md-option ng-value="status" ng-repeat="status in statuses">{{ status }}</md-option>
+                    <md-option ng-value="status" ng-repeat="status in statuses">{{ status.replace('_',' ') }}</md-option>
                 </md-select>
             </div>
             <div class="select-container">
                 <label>Order by</label>
                 <md-select ng-model="propertyToOrder" placeholder="Sort">
-                    <md-option ng-value="property" ng-repeat="property in orderProperties">{{ property }}</md-option>
+                    <md-option ng-value="property" ng-repeat="property in orderProperties">{{ property.replace('_',' ') }}</md-option>
                 </md-select>
             </div>
             <md-checkbox ng-model="ascending">
