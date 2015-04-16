@@ -11,10 +11,12 @@ class PhotoFormController < ApplicationController
     year = params[:year]
     begin
       categories = explode(params[:categories],',').map { |category| Category.find_by_name(category)}
-      keywords = explode(params[:keywords],',').map { |keyword| Keyword.find_or_create_by!(word:keyword)}
+      keywords = []
+      if !params[:keywords].nil? && params[:keywords]!='null'
+        keywords = explode(params[:keywords],',').map { |keyword| Keyword.find_or_create_by!(word:keyword)}
+      end
       country = Country.find_by_name(params[:country])
       organization = YfuOrganization.find_by_name(params[:organization])
-
       photo = Photo.create!(
                        uploaded_by_name:name,
                        uploaded_by_email:email,
