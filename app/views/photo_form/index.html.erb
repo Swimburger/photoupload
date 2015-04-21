@@ -5,81 +5,14 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0-beta.3/css/select2.min.css"/>
   <link rel="icon" type="image/x-icon" href="/favicon.ico"/>
+  <link rel="stylesheet" href="/assets/stylesheets/fonts.css"/>
   <style>
-      @font-face {
-          font-family: "National";
-          src: url(../fonts/NationalWeb-Regular.eot),url(../fonts/NationalWeb-Regular.eot?#iefix) format("embedded-opentype"),url(../fonts/NationalWeb-Regular.woff) format("woff");
-          font-weight: 400;
-          font-weight: normal;
-          font-style: normal
-      }
-
-      @font-face {
-          font-family: "National";
-          src: url(../fonts/NationalWeb-Bold.eot),url(../fonts/NationalWeb-Bold.eot?#iefix) format("embedded-opentype"),url(../fonts/NationalWeb-Bold.woff) format("woff");
-          font-weight: 400;
-          font-weight: bold;
-          font-style: normal
-      }
-
-      @font-face {
-          font-family: "National";
-          src: url(../fonts/NationalWeb-RegularItalic.eot),url(../fonts/NationalWeb-RegularItalic.eot?#iefix) format("embedded-opentype"),url(../fonts/NationalWeb-RegularItalic.woff) format("woff");
-          font-weight: 400;
-          font-weight: normal;
-          font-style: italic
-      }
-
-      @font-face {
-          font-family: "National";
-          src: url(../fonts/NationalWeb-BoldItalic.eot),url(../fonts/NationalWeb-BoldItalic.eot?#iefix) format("embedded-opentype"),url(../fonts/NationalWeb-BoldItalic.woff) format("woff");
-          font-weight: 400;
-          font-weight: bold;
-          font-style: italic
-      }
-
-      @font-face {
-          font-family: "National LF";
-          src: url(../fonts/NationalWebLF-Regular.eot),url(../fonts/NationalWebLF-Regular.eot?#iefix) format("embedded-opentype"),url(../fonts/NationalWebLF-Regular.woff) format("woff");
-          font-weight: 400;
-          font-weight: normal;
-          font-style: normal
-      }
-
-      @font-face {
-          font-family: "National LF";
-          src: url(../fonts/NationalWebLF-Bold.eot),url(../fonts/NationalWebLF-Bold.eot?#iefix) format("embedded-opentype"),url(../fonts/NationalWebLF-Bold.woff) format("woff");
-          font-weight: 400;
-          font-weight: bold;
-          font-style: normal
-      }
-
-      @font-face {
-          font-family: "National LF";
-          src: url(../fonts/NationalWebLF-RegularItalic.eot),url(../fonts/NationalWebLF-RegularItalic.eot?#iefix) format("embedded-opentype"),url(../fonts/NationalWebLF-RegularItalic.woff) format("woff");
-          font-weight: 400;
-          font-weight: normal;
-          font-style: italic
-      }
-
-      @font-face {
-          font-family: "National LF";
-          src: url(../fonts/NationalWebLF-BoldItalic.eot),url(../fonts/NationalWebLF-BoldItalic.eot?#iefix) format("embedded-opentype"),url(../fonts/NationalWebLF-BoldItalic.woff) format("woff");
-          font-weight: 400;
-          font-weight: bold;
-          font-style: italic
-      }
       body {
           font-family: "National LF", Open Sans, Arial, Helvetica, sans-serif;
           font-size: 16px;
           color: #555555;
           font-weight: normal;
           line-height: 26px
-      }
-      h1{
-          padding-left: 30px;
-          padding-top: 10px;
-          font-family: "National", Open Sans, Arial, Helvetica, sans-serif;
       }
       .bs-callout {
           padding: 20px;
@@ -191,13 +124,12 @@
   <div class="page-header">
     <div class="row">
       <div class="col-md-1">
-        <img class="image-responsive" height="100" width="100" src="/assets/images/logo.png" alt="YFU Photo Uploader"/>
+        <img class="image-responsive" height="101" width="400" src="/assets/images/YFU_Land_Photo.jpg" alt="YFU Photo Uploader"/>
       </div>
       <div class="col-md-11">
-        <h1 style="padding-left: 30px;padding-top:10px;">
-          YFU Photo Upload
+        <h1>
           <% if user_signed_in? %>
-              <a class="btn btn-link pull-right" href="/admin"><span class="glyphicon glyphicon-globe" style="font-size: 40px;"></span></a>
+              <a class="btn btn-link pull-right" href="/admin"><span class="glyphicon glyphicon-globe" style="font-size: 40px; padding: 20px;"></span></a>
           <% end %>
         </h1>
       </div>

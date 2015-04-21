@@ -1,0 +1,63 @@
+@font-face {
+    font-family: "National";
+    src: url(../fonts/NationalWeb-Regular.eot),url(../fonts/NationalWeb-Regular.eot?#iefix) format("embedded-opentype"),url(../fonts/NationalWeb-Regular.woff) format("woff");
+    font-weight: 400;
+    font-weight: normal;
+    font-style: normal
+}
+
+@font-face {
+    font-family: "National";
+    src: url(../fonts/NationalWeb-Bold.eot),url(../fonts/NationalWeb-Bold.eot?#iefix) format("embedded-opentype"),url(../fonts/NationalWeb-Bold.woff) format("woff");
+    font-weight: 400;
+    font-weight: bold;
+    font-style: normal
+}
+
+@font-face {
+    font-family: "National";
+    src: url(../fonts/NationalWeb-RegularItalic.eot),url(../fonts/NationalWeb-RegularItalic.eot?#iefix) format("embedded-opentype"),url(../fonts/NationalWeb-RegularItalic.woff) format("woff");
+    font-weight: 400;
+    font-weight: normal;
+    font-style: italic
+}
+
+@font-face {
+    font-family: "National";
+    src: url(../fonts/NationalWeb-BoldItalic.eot),url(../fonts/NationalWeb-BoldItalic.eot?#iefix) format("embedded-opentype"),url(../fonts/NationalWeb-BoldItalic.woff) format("woff");
+    font-weight: 400;
+    font-weight: bold;
+    font-style: italic
+}
+
+@font-face {
+    font-family: "National LF";
+    src: url(../fonts/NationalWebLF-Regular.eot),url(../fonts/NationalWebLF-Regular.eot?#iefix) format("embedded-opentype"),url(../fonts/NationalWebLF-Regular.woff) format("woff");
+    font-weight: 400;
+    font-weight: normal;
+    font-style: normal
+}
+
+@font-face {
+    font-family: "National LF";
+    src: url(../fonts/NationalWebLF-Bold.eot),url(../fonts/NationalWebLF-Bold.eot?#iefix) format("embedded-opentype"),url(../fonts/NationalWebLF-Bold.woff) format("woff");
+    font-weight: 400;
+    font-weight: bold;
+    font-style: normal
+}
+
+@font-face {
+    font-family: "National LF";
+    src: url(../fonts/NationalWebLF-RegularItalic.eot),url(../fonts/NationalWebLF-RegularItalic.eot?#iefix) format("embedded-opentype"),url(../fonts/NationalWebLF-RegularItalic.woff) format("woff");
+    font-weight: 400;
+    font-weight: normal;
+    font-style: italic
+}
+
+@font-face {
+    font-family: "National LF";
+    src: url(../fonts/NationalWebLF-BoldItalic.eot),url(../fonts/NationalWebLF-BoldItalic.eot?#iefix) format("embedded-opentype"),url(../fonts/NationalWebLF-BoldItalic.woff) format("woff");
+    font-weight: 400;
+    font-weight: bold;
+    font-style: italic
+}
