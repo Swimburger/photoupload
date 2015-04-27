@@ -8,7 +8,15 @@ gem 'rails-api'
 gem 'spring', :group => :development
 
 
-gem 'mysql2'
+#gem 'sqlite3' for dev
+group :development do
+  gem 'sqlite3'
+end
+
+#gem 'mysql' for production
+group :production do
+  gem 'mysql2'
+end
 
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw]
 
