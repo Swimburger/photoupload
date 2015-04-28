@@ -31,12 +31,8 @@ Before you get started you need to set up some things.
   ```   
   ```
   >[rake import:old_photos]   
-  ```   
-4. Bower install components in public/assets   
   ```
-  public/assets>bower install
-  ```  
-5. Run rails   
+4. Run rails
   ```
   >rails s  
   ```  
